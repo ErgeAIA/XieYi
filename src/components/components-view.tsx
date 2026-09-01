@@ -11,6 +11,7 @@ import {
   componentsByCategory,
   type ComponentCategory,
 } from "@/content/components";
+import { exampleRegistry } from "@/components/examples/registry";
 
 export function ComponentsView({
   initialCat,
@@ -84,22 +85,43 @@ export function ComponentsView({
                 <p className="mb-1 text-xs font-medium text-muted-foreground">
                   示例
                 </p>
-                {c.example && c.example.trim() ? (
-                  <div
-                    className="preview rounded-md border bg-background p-4 text-sm [&_button]:cursor-default"
-                    dangerouslySetInnerHTML={{ __html: c.example }}
-                  />
-                ) : (
-                  <div className="flex items-center gap-3 rounded-md border border-dashed p-4 text-sm text-muted-foreground">
-                    <Skeleton className="h-5 w-24" />
-                    真实可交互示例待补（阶段 B 重写为 shadcn 组件）
-                  </div>
-                )}
+                <ExampleBlock nameEn={c.nameEn} html={c.example} />
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
+    </div>
+  );
+}
+
+function ExampleBlock({
+  nameEn,
+  html,
+}: {
+  nameEn: string;
+  html?: string;
+}) {
+  const Demo = exampleRegistry[nameEn];
+  if (Demo) {
+    return (
+      <div className="preview rounded-md border bg-background p-4 text-sm">
+        <Demo />
+      </div>
+    );
+  }
+  if (html && html.trim()) {
+    return (
+      <div
+        className="preview rounded-md border bg-background p-4 text-sm [&_button]:cursor-default"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    );
+  }
+  return (
+    <div className="flex items-center gap-3 rounded-md border border-dashed p-4 text-sm text-muted-foreground">
+      <Skeleton className="h-5 w-24" />
+      真实可交互示例待补（阶段 B 重写为 shadcn 组件）
     </div>
   );
 }
