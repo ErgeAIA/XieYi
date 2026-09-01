@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# local IDE / agent data (contains private working memory, never publish)
+.codebuddy/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
