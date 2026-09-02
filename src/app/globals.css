@@ -331,3 +331,42 @@ aside::-webkit-scrollbar-thumb:hover {
 html[data-motion="off"] aside {
   scrollbar-color: color-mix(in srgb, var(--foreground) 14%, transparent) transparent;
 }
+
+/* 首页 hero「写意」：逐字墨晕入场（blur→清晰、上移、淡入，错峰）+ 持续轻柔浮动「呼吸」。
+   受总开关（html[data-motion="off"]）与 prefers-reduced-motion 门控；关闭时两字静态可见。 */
+.hero-glyph {
+  display: inline-block;
+  will-change: transform, filter, opacity;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion="off"]) .hero-glyph {
+    animation:
+      xieyi-glyph-in 0.9s var(--motion-ease) both,
+      xieyi-glyph-float 4.8s var(--motion-ease-in-out) 1s infinite;
+  }
+  /* 第二字晚 0.14s 入场；其浮动也顺延，保证两段动画衔接。 */
+  html:not([data-motion="off"]) .hero-glyph:nth-child(2) {
+    animation-delay: 0.14s, 1.14s;
+  }
+}
+@keyframes xieyi-glyph-in {
+  from {
+    opacity: 0;
+    filter: blur(14px);
+    transform: translateY(0.5em) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes xieyi-glyph-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.07em);
+  }
+}

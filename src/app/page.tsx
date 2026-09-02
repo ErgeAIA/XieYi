@@ -35,8 +35,16 @@ export default function Home() {
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
             Vibe Coding 参考
           </p>
-          <h1 className="font-brush text-[7.5rem] font-semibold leading-none tracking-normal md:text-[9rem]">
-            写意
+          <h1
+            className="font-brush text-[7.5rem] font-semibold leading-none tracking-normal md:text-[9rem]"
+            aria-label="写意"
+          >
+            <span className="hero-glyph" aria-hidden="true">
+              写
+            </span>
+            <span className="hero-glyph" aria-hidden="true">
+              意
+            </span>
           </h1>
           <p className="max-w-[46ch] text-base leading-relaxed text-muted-foreground md:text-lg">
             用准确术语讲清组件与需求，让 AI 写出能直接交付的界面。

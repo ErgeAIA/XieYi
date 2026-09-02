@@ -95,7 +95,6 @@ async function main() {
     }
   }
 
-  const css = `@font-face{font-family:'LXGW WenKai';font-style:normal;font-display:swap}\n`;
   let out = "/* 自动生成：LXGW WenKai 霞鹜文楷 子集（仅含本站用字），自托管，脱离 CDN。\n";
   out += "   重新生成请运行 scripts/gen-lxgw.mjs。*/\n";
   out += `@font-face{font-family:'LXGW WenKai';font-style:normal;font-display:swap}\n`;
