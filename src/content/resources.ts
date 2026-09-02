@@ -148,7 +148,7 @@ export const resources: ResourceItem[] = [
     name: "Tailwind 文档",
     url: "https://tailwindcss.com/docs",
     category: "学习资料",
-    note: "原子类参考与配置指南。",
+    note: "原子类参考与配置参考。",
   },
   {
     name: "React 官方",

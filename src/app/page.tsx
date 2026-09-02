@@ -33,7 +33,7 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background" />
         <Reveal className="relative z-10 space-y-5 lg:col-span-7">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            Vibe Coding 指南
+            Vibe Coding 参考
           </p>
           <h1 className="font-brush text-6xl font-semibold tracking-normal md:text-7xl">
             写意
