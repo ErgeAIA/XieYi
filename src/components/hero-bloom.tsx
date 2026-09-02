@@ -3,13 +3,14 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Hero 背景：three.js 写实风「昙花一现」绽放。
- * - 花瓣由 THREE.Shape 勾出、按层径向排布；bloom 参数 0→1 驱动 花苞→盛开→凋谢→花苞 的循环。
- * - 含发光花蕊、中心光晕，以及少量暖色微尘衬托氛围（承接原 HeroEmber 的火山余烬基调）。
- * 性能与可访问性（同 HeroEmber）：
- * - 动态 import('three')，不进 SSR；DPR≤2；离屏/隐藏/关闭动效时暂停 RAF。
- * - prefers-reduced-motion 或 html[data-motion="off"] 时仅渲染单帧「盛开」静态画面。
- * - 跟随明/暗主题切换混合模式与不透明度。
+ * Hero 背景：three.js「昙花一现」绽放（参考图风格）。
+ * - 花瓣为 canvas 绘制的半透明冰蓝贴片，带银白发光边缘；按 4 层径向排布。
+ * - bloom 参数驱动 花苞→盛开→凋谢→花苞 循环，契合「昙花一现」。
+ * - 加淡蓝烟雾粒子托底，与发光花瓣呼应。
+ * 性能与可访问性：
+ * - 动态 import('three')，不进 SSR；DPR≤2；离屏/隐藏暂停 RAF。
+ * - prefers-reduced-motion 或 html[data-motion="off"] 时仅渲染单帧盛开静态画面。
+ * - 跟随明/暗主题切换混合模式：暗色加色辉光、明色正常混合。
  */
 export function HeroBloom({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,10 +31,10 @@ export function HeroBloom({ className }: { className?: string }) {
     const easeInOut = (x: number) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x));
 
     // 单周期：绽放 → 盛开停留 → 凋谢 → 花苞停留（模拟「昙花一现」）
-    const OPEN = 4.5;
-    const HOLD1 = 7;
-    const CLOSE = 4.5;
-    const HOLD0 = 3;
+    const OPEN = 5;
+    const HOLD1 = 8;
+    const CLOSE = 6;
+    const HOLD0 = 2.5;
     const CYCLE = OPEN + HOLD1 + CLOSE + HOLD0;
     const bloomAt = (t: number) => {
       const p = ((t % CYCLE) + CYCLE) % CYCLE;
@@ -57,63 +58,127 @@ export function HeroBloom({ className }: { className?: string }) {
       try {
         renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
       } catch {
-        return; // 不支持 WebGL 的环境静默跳过
+        return;
       }
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(w, h, false);
 
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(55, w / h, 0.1, 300);
-      camera.position.set(0, 0, 62);
+      const camera = new THREE.PerspectiveCamera(52, w / h, 0.1, 300);
+      camera.position.set(0, 0, 72);
 
-      // 花瓣纹理：中心暖白 → 边缘透明的径向渐变
-      const petalTex = (() => {
+      // 绘制单枚花瓣纹理：冰蓝半透明体 + 银白发光边缘
+      const drawPetal = (tint: "cool" | "warm" | "blue") => {
         const c = document.createElement("canvas");
-        c.width = c.height = 128;
+        c.width = 160;
+        c.height = 320;
         const ctx = c.getContext("2d")!;
-        const g = ctx.createRadialGradient(64, 100, 4, 64, 64, 80);
-        g.addColorStop(0, "rgba(255,250,238,0.98)");
-        g.addColorStop(0.35, "rgba(255,238,228,0.85)");
-        g.addColorStop(0.8, "rgba(255,226,236,0.32)");
-        g.addColorStop(1, "rgba(255,226,236,0)");
+        const w = c.width;
+        const h = c.height;
+
+        ctx.clearRect(0, 0, w, h);
+        const shape = new Path2D();
+        shape.moveTo(w * 0.5, h * 0.92);
+        shape.bezierCurveTo(w * 0.95, h * 0.62, w * 0.92, h * 0.22, w * 0.5, h * 0.04);
+        shape.bezierCurveTo(w * 0.08, h * 0.22, w * 0.05, h * 0.62, w * 0.5, h * 0.92);
+
+        // 内部渐变
+        const body = ctx.createRadialGradient(w * 0.5, h * 0.35, 4, w * 0.5, h * 0.45, h * 0.55);
+        if (tint === "warm") {
+          body.addColorStop(0, "rgba(255,250,245,0.82)");
+          body.addColorStop(0.45, "rgba(255,238,232,0.42)");
+          body.addColorStop(0.85, "rgba(255,225,230,0.12)");
+        } else if (tint === "blue") {
+          body.addColorStop(0, "rgba(235,248,255,0.82)");
+          body.addColorStop(0.45, "rgba(210,235,255,0.42)");
+          body.addColorStop(0.85, "rgba(195,220,255,0.12)");
+        } else {
+          body.addColorStop(0, "rgba(248,252,255,0.85)");
+          body.addColorStop(0.45, "rgba(225,240,255,0.45)");
+          body.addColorStop(0.85, "rgba(210,230,255,0.14)");
+        }
+        body.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = body;
+        ctx.fill(shape);
+
+        // 银白发光边缘（多层描边叠加出辉光）
+        ctx.save();
+        ctx.clip(shape);
+        ctx.strokeStyle = "rgba(255,255,255,0.55)";
+        ctx.lineWidth = 5;
+        ctx.shadowColor = "rgba(200,235,255,0.85)";
+        ctx.shadowBlur = 16;
+        ctx.stroke(shape);
+        ctx.strokeStyle = "rgba(255,255,255,0.85)";
+        ctx.lineWidth = 1.2;
+        ctx.shadowBlur = 6;
+        ctx.stroke(shape);
+        ctx.restore();
+
+        // 中间主脉
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        const vein = ctx.createLinearGradient(w * 0.5, h * 0.88, w * 0.5, h * 0.12);
+        vein.addColorStop(0, "rgba(255,255,255,0)");
+        vein.addColorStop(0.5, "rgba(255,255,255,0.22)");
+        vein.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.strokeStyle = vein;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        ctx.moveTo(w * 0.5, h * 0.88);
+        ctx.quadraticCurveTo(w * 0.52, h * 0.5, w * 0.5, h * 0.12);
+        ctx.stroke();
+        ctx.restore();
+
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return tex;
+      };
+
+      const textures = [drawPetal("cool"), drawPetal("blue"), drawPetal("warm")];
+
+      // 光晕纹理
+      const glowTex = (() => {
+        const c = document.createElement("canvas");
+        c.width = c.height = 256;
+        const ctx = c.getContext("2d")!;
+        const g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+        g.addColorStop(0, "rgba(220,245,255,0.55)");
+        g.addColorStop(0.35, "rgba(180,220,255,0.22)");
+        g.addColorStop(0.75, "rgba(160,210,255,0.06)");
+        g.addColorStop(1, "rgba(160,210,255,0)");
         ctx.fillStyle = g;
-        ctx.fillRect(0, 0, 128, 128);
+        ctx.fillRect(0, 0, 256, 256);
         return new THREE.CanvasTexture(c);
       })();
 
-      // 光晕 / 花蕊尖端 纹理
-      const glowTex = (() => {
+      // 烟雾纹理
+      const smokeTex = (() => {
         const c = document.createElement("canvas");
         c.width = c.height = 128;
         const ctx = c.getContext("2d")!;
         const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-        g.addColorStop(0, "rgba(255,244,222,0.6)");
-        g.addColorStop(0.5, "rgba(255,214,176,0.18)");
-        g.addColorStop(1, "rgba(255,200,160,0)");
+        g.addColorStop(0, "rgba(210,235,255,0.28)");
+        g.addColorStop(0.5, "rgba(200,230,255,0.10)");
+        g.addColorStop(1, "rgba(200,230,255,0)");
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, 128, 128);
         return new THREE.CanvasTexture(c);
       })();
 
       const flower = new THREE.Group();
-      flower.position.set(0, 2, 0);
+      // 放在右侧、放大到视觉焦点级别
+      flower.position.set(46, 2, 0);
+      flower.scale.setScalar(2.3);
       scene.add(flower);
 
       const petalMat = new THREE.MeshBasicMaterial({
-        map: petalTex,
+        map: textures[0],
         transparent: true,
         side: THREE.DoubleSide,
         depthWrite: false,
         opacity: 1,
       });
-
-      const makePetalShape = (len: number, wid: number) => {
-        const s = new THREE.Shape();
-        s.moveTo(0, 0);
-        s.bezierCurveTo(wid * 0.55, len * 0.28, wid * 0.5, len * 0.78, 0, len);
-        s.bezierCurveTo(-wid * 0.5, len * 0.78, -wid * 0.55, len * 0.28, 0, 0);
-        return s;
-      };
 
       type Petal = {
         tilt: import("three").Group;
@@ -125,24 +190,31 @@ export function HeroBloom({ className }: { className?: string }) {
       };
       const petals: Petal[] = [];
 
-      // 每层：count 片花瓣，从花心(+Y)向外生长；bloom 由 closedX(花苞, 指向相机)→openX(平铺朝外) 驱动
+      // 花苞状态：所有花瓣指向相机（+Z），即绕局部 X 旋转 -π/2
       const CLOSED = -Math.PI / 2;
       const addLayer = (
         count: number,
-        len: number,
-        wid: number,
+        w: number,
+        h: number,
         openTilt: number,
         openScale: number,
         offset: number,
+        texIdx: number,
       ) => {
+        const geo = new THREE.PlaneGeometry(w, h);
+        // 让贴图基部位于几何体原点，沿 +Y 生长
+        geo.translate(0, h * 0.5, 0);
+        const mat = petalMat.clone();
+        mat.map = textures[texIdx % textures.length];
+        mat.needsUpdate = true;
+
         for (let i = 0; i < count; i++) {
           const pivot = new THREE.Group();
           pivot.rotation.z = (i / count) * Math.PI * 2 + offset;
           const tilt = new THREE.Group();
           tilt.rotation.x = CLOSED;
-          const geo = new THREE.ShapeGeometry(makePetalShape(len, wid), 20);
-          const mesh = new THREE.Mesh(geo, petalMat);
-          tilt.add(mesh); // 基部位于花心(0,0,0)，沿 +Y 生长
+          const mesh = new THREE.Mesh(geo, mat);
+          tilt.add(mesh);
           pivot.add(tilt);
           flower.add(pivot);
           petals.push({
@@ -150,19 +222,20 @@ export function HeroBloom({ className }: { className?: string }) {
             closedX: CLOSED,
             openX: openTilt,
             openScale,
-            sway: 0.04 + Math.random() * 0.05,
+            sway: 0.03 + Math.random() * 0.04,
             phase: Math.random() * Math.PI * 2,
           });
         }
       };
-      addLayer(11, 16, 5.2, -0.05, 1.0, 0);
-      addLayer(9, 12.5, 4.6, -0.22, 0.92, Math.PI / 9);
-      addLayer(7, 8.5, 3.8, -0.5, 0.8, Math.PI / 7);
+      addLayer(13, 7.5, 18.5, -0.06, 1.0, 0, 0);
+      addLayer(11, 6.6, 15.5, -0.18, 0.95, Math.PI / 11, 1);
+      addLayer(9, 5.4, 12.0, -0.34, 0.88, Math.PI / 9, 2);
+      addLayer(7, 4.2, 8.5, -0.55, 0.78, Math.PI / 7, 0);
 
-      // 花蕊：细丝 + 发光尖端，整体随 bloom 缩放
+      // 花蕊：细丝 + 发光尖端
       const stamens = new THREE.Group();
       const stamenMat = new THREE.MeshBasicMaterial({
-        color: 0xfff0d8,
+        color: 0xfff8f0,
         transparent: true,
         opacity: 0.9,
       });
@@ -171,18 +244,19 @@ export function HeroBloom({ className }: { className?: string }) {
         transparent: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
-        color: 0xffe6b0,
+        color: 0xffe8c8,
+        opacity: 0.85,
       });
-      const STN = 16;
+      const STN = 18;
       for (let i = 0; i < STN; i++) {
         const g = new THREE.Group();
-        g.rotation.z = (i / STN) * Math.PI * 2;
-        g.rotation.x = -0.18;
-        const len = 7 + Math.random() * 2;
-        const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.1, len, 6), stamenMat);
+        g.rotation.z = (i / STN) * Math.PI * 2 + Math.random() * 0.3;
+        g.rotation.x = -0.16;
+        const len = 6.5 + Math.random() * 2.2;
+        const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.09, len, 6), stamenMat);
         cyl.position.y = len / 2;
         g.add(cyl);
-        const tip = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.7), tipMat);
+        const tip = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 1.4), tipMat);
         tip.position.y = len;
         g.add(tip);
         stamens.add(g);
@@ -194,62 +268,63 @@ export function HeroBloom({ className }: { className?: string }) {
         map: glowTex,
         transparent: true,
         depthWrite: false,
-        opacity: 0.5,
+        opacity: 0.55,
       });
       const halo = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), haloMat);
       halo.position.z = -3;
       flower.add(halo);
 
-      // 暖色微尘（承接余烬基调，少量、缓慢）
-      const MOTES = 140;
-      const mPos = new Float32Array(MOTES * 3);
-      const mBaseX = new Float32Array(MOTES);
-      const mSpeed = new Float32Array(MOTES);
-      const mPhase = new Float32Array(MOTES);
-      const mSway = new Float32Array(MOTES);
-      const top = 34;
-      const bottom = -34;
-      const spanX = 54;
-      const spanZ = 26;
-      for (let i = 0; i < MOTES; i++) {
-        const x = (Math.random() * 2 - 1) * spanX;
-        const y = Math.random() * (top - bottom) + bottom;
-        const z = (Math.random() * 2 - 1) * spanZ;
-        mPos[3 * i] = x;
-        mPos[3 * i + 1] = y;
-        mPos[3 * i + 2] = z;
-        mBaseX[i] = x;
-        mSpeed[i] = 1 + Math.random() * 2.5;
-        mPhase[i] = Math.random() * Math.PI * 2;
-        mSway[i] = 0.6 + Math.random() * 1.8;
+      // 烟雾粒子
+      const SMOKE = 120;
+      const sPos = new Float32Array(SMOKE * 3);
+      const sBaseX = new Float32Array(SMOKE);
+      const sBaseY = new Float32Array(SMOKE);
+      const sSpeed = new Float32Array(SMOKE);
+      const sPhase = new Float32Array(SMOKE);
+      const sScale = new Float32Array(SMOKE);
+      for (let i = 0; i < SMOKE; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const r = 8 + Math.random() * 34;
+        const x = Math.cos(a) * r + 46;
+        const y = Math.sin(a) * r * 0.7 + 2;
+        const z = (Math.random() - 0.5) * 16;
+        sPos[3 * i] = x;
+        sPos[3 * i + 1] = y;
+        sPos[3 * i + 2] = z;
+        sBaseX[i] = x;
+        sBaseY[i] = y;
+        sSpeed[i] = 0.4 + Math.random() * 1.2;
+        sPhase[i] = Math.random() * Math.PI * 2;
+        sScale[i] = 6 + Math.random() * 14;
       }
-      const mGeo = new THREE.BufferGeometry();
-      mGeo.setAttribute("position", new THREE.BufferAttribute(mPos, 3));
-      const mMat = new THREE.PointsMaterial({
-        size: 1.6,
-        map: glowTex,
-        color: 0xffd9a0,
+      const sGeo = new THREE.BufferGeometry();
+      sGeo.setAttribute("position", new THREE.BufferAttribute(sPos, 3));
+      const sMat = new THREE.PointsMaterial({
+        size: 1,
+        map: smokeTex,
+        color: 0xc8e6ff,
         transparent: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
         sizeAttenuation: true,
-        opacity: 0.5,
+        opacity: 0.28,
       });
-      const motes = new THREE.Points(mGeo, mMat);
-      scene.add(motes);
+      const smoke = new THREE.Points(sGeo, sMat);
+      scene.add(smoke);
+      const sPosAttr = sGeo.attributes.position as import("three").BufferAttribute;
 
       const applyTheme = () => {
         const dark = document.documentElement.classList.contains("dark");
-        petalMat.opacity = dark ? 0.95 : 0.82;
         petalMat.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+        petalMat.opacity = dark ? 0.95 : 0.82;
         petalMat.needsUpdate = true;
-        tipMat.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+        tipMat.blending = THREE.AdditiveBlending;
         tipMat.needsUpdate = true;
-        haloMat.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+        haloMat.blending = THREE.AdditiveBlending;
         haloMat.needsUpdate = true;
-        mMat.opacity = dark ? 0.5 : 0.3;
-        mMat.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
-        mMat.needsUpdate = true;
+        sMat.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
+        sMat.opacity = dark ? 0.28 : 0.18;
+        sMat.needsUpdate = true;
       };
       applyTheme();
       const themeObs = new MutationObserver(applyTheme);
@@ -259,16 +334,27 @@ export function HeroBloom({ className }: { className?: string }) {
       const update = (bloom: number, t: number) => {
         for (const p of petals) {
           const tiltX =
-            lerp(p.closedX, p.openX, bloom) + Math.sin(t * 0.6 + p.phase) * p.sway * (0.4 + bloom);
+            lerp(p.closedX, p.openX, bloom) +
+            Math.sin(t * 0.5 + p.phase) * p.sway * (0.3 + bloom);
           p.tilt.rotation.x = tiltX;
-          p.tilt.scale.setScalar(lerp(0.32, p.openScale, bloom));
+          p.tilt.scale.setScalar(lerp(0.28, p.openScale, bloom));
         }
-        stamens.scale.setScalar(lerp(0.2, 1, bloom));
-        stamens.rotation.y = t * 0.3;
-        haloMat.opacity = 0.2 + bloom * 0.5;
-        halo.scale.setScalar(lerp(26, 48, bloom));
-        flower.rotation.z = Math.sin(t * 0.05) * 0.12 + t * 0.01;
-        flower.position.y = 2 + Math.sin(t * 0.5) * 0.8;
+        stamens.scale.setScalar(lerp(0.18, 1, bloom));
+        stamens.rotation.y = t * 0.25;
+        haloMat.opacity = 0.25 + bloom * 0.55;
+        halo.scale.setScalar(lerp(22, 44, bloom));
+        flower.rotation.z = Math.sin(t * 0.04) * 0.1 + t * 0.006;
+        flower.position.y = 2 + Math.sin(t * 0.42) * 0.8;
+
+        for (let i = 0; i < SMOKE; i++) {
+          const y = sBaseY[i] + Math.sin(t * 0.15 + sPhase[i]) * 1.2 + ((t * sSpeed[i]) % 24) - 12;
+          const x = sBaseX[i] + Math.cos(t * 0.2 + sPhase[i]) * 1.8;
+          // 盛开时烟雾更淡，花苞时略浓
+          const breath = 0.7 + bloom * 0.3;
+          sPosAttr.setY(i, y * breath);
+          sPosAttr.setX(i, x);
+        }
+        sPosAttr.needsUpdate = true;
       };
 
       const startTime = performance.now();
@@ -285,7 +371,7 @@ export function HeroBloom({ className }: { className?: string }) {
       };
 
       if (paused) {
-        renderFrame(1, 0); // 静态盛开单帧
+        renderFrame(1, 0);
       } else {
         frame = requestAnimationFrame(loop);
       }
@@ -323,7 +409,6 @@ export function HeroBloom({ className }: { className?: string }) {
       document.addEventListener("visibilitychange", onVis);
       cleanupFns.push(() => document.removeEventListener("visibilitychange", onVis));
 
-      // 跟随站点动效开关：关闭时定格盛开静态帧，开启时恢复循环
       const onMotionChange = () => {
         paused = reduceMotion || motionOff();
         if (paused) {
@@ -357,8 +442,9 @@ export function HeroBloom({ className }: { className?: string }) {
             else m?.dispose();
           }
         });
-        petalTex.dispose();
+        textures.forEach((t) => t.dispose());
         glowTex.dispose();
+        smokeTex.dispose();
         renderer!.dispose();
       });
     })();

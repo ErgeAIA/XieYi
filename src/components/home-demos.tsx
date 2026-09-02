@@ -19,7 +19,7 @@ export function HomeHeroDemo() {
   const [push, setPush] = React.useState(true);
 
   return (
-    <div className="rounded-xl border bg-card p-4 md:p-5">
+    <div className="rounded-xl border border-white/15 bg-card/45 p-4 shadow-sm backdrop-blur-md md:p-5 dark:border-white/10 dark:bg-card/30">
       <Tabs defaultValue="button">
         <TabsList>
           <TabsTrigger value="button">按钮</TabsTrigger>
