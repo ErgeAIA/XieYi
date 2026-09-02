@@ -261,3 +261,29 @@ html:not([data-motion="off"]) .skeleton-shimmer::after {
 html[data-motion="off"] .page-enter {
   animation: none;
 }
+
+/* 三级（单个组件）进场：侧栏三级链接仅改 hash（#组件名），Next 视为页内锚点、
+   不重挂 template.tsx，故用 :target 让被点中的卡片播放聚焦脉冲作为进场反馈。
+   受总开关与 prefers-reduced-motion 门控。 */
+@keyframes xieyi-card-pop {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 0%, transparent);
+  }
+  30% {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--primary) 26%, transparent),
+      0 14px 40px -20px color-mix(in srgb, var(--primary) 55%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion="off"]) [data-spy-component]:target {
+    animation: xieyi-card-pop var(--motion-slow) var(--motion-ease) both;
+  }
+  /* hash 跳转平滑滚动，让三级点击从「瞬跳」变为「滑入」。 */
+  html:not([data-motion="off"]) {
+    scroll-behavior: smooth;
+  }
+}
