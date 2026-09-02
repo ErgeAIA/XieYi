@@ -59,27 +59,27 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* 明色：opensquilla/light (#005)，与 ember 同家族。
+/* 明色：opensquilla/light (#005)，与 ember 同家族；改用暖白以呼应火山橙强调色。
    强调色 #BA4D0F 上用白字，对比度 5.05，达 WCAG AA。 */
 :root {
-  --background: #f7f7f8;
-  --foreground: #1d1d1f;
-  --card: #ffffff;
-  --card-foreground: #1d1d1f;
-  --popover: #ffffff;
-  --popover-foreground: #1d1d1f;
+  --background: #fbf7f2;
+  --foreground: #211b16;
+  --card: #fffdfa;
+  --card-foreground: #211b16;
+  --popover: #fffdfa;
+  --popover-foreground: #211b16;
   --primary: #ba4d0f;
   --primary-hover: #a5440c;
   --primary-foreground: #ffffff;
-  --secondary: #f0f0f2;
-  --secondary-foreground: #1d1d1f;
-  --muted: #eaeaed;
-  --muted-foreground: #5f6066;
-  --accent: #eaeaed;
-  --accent-foreground: #1d1d1f;
+  --secondary: #f3ece3;
+  --secondary-foreground: #211b16;
+  --muted: #efe7dc;
+  --muted-foreground: #6e6357;
+  --accent: #f3ece3;
+  --accent-foreground: #211b16;
   --destructive: #c2382e;
-  --border: #e6e6e9;
-  --input: #d5d5da;
+  --border: #e8dfd2;
+  --input: #ddd2c2;
   --ring: #ba4d0f;
   --chart-1: #ba4d0f;
   --chart-2: #b6501c;
@@ -87,13 +87,13 @@
   --chart-4: #257552;
   --chart-5: #6b51c6;
   --radius: 0.625rem;
-  --sidebar: #f3f3f5;
-  --sidebar-foreground: #56565a;
+  --sidebar: #f6f0e8;
+  --sidebar-foreground: #6b5f52;
   --sidebar-primary: #ba4d0f;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eaeaed;
-  --sidebar-accent-foreground: #1d1d1f;
-  --sidebar-border: #ebebee;
+  --sidebar-accent: #efe7dc;
+  --sidebar-accent-foreground: #211b16;
+  --sidebar-border: #ece3d5;
   --sidebar-ring: #ba4d0f;
 }
 
