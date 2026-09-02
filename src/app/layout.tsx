@@ -24,7 +24,7 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "写意 · Vibe Coding 指南",
-  description: "写意者，以意运码，码落而器成。胸中之构，言而为品。",
+  description: "写意，以意运码，码落而器成。胸中之构，言而为品。",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
