@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap"
         />
       </head>
       <body className="min-h-screen bg-background text-foreground">
@@ -56,7 +56,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <aside className="sticky top-0 hidden h-screen w-80 shrink-0 self-start overflow-y-auto border-r border-sidebar-border bg-sidebar p-5 md:block">
                   <div className="mb-5 flex items-center gap-2 px-2">
                     <span className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-primary-hover shadow-sm" />
-                    <span className="font-heading text-lg font-semibold tracking-tight">
+                    <span className="font-brush text-lg font-semibold tracking-tight">
                       写意
                     </span>
                   </div>
