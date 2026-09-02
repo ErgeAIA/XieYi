@@ -9,6 +9,7 @@ import { MotionProvider } from "@/components/motion-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarNav } from "@/components/site-sidebar";
 import { ScrollSpyProvider } from "@/components/scroll-spy";
+import { NavSpyProvider } from "@/components/nav-spy";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <MotionProvider>
             <TooltipProvider>
               <ScrollSpyProvider>
+                <NavSpyProvider>
                 <div className="flex min-h-screen">
                 <aside className="sticky top-0 hidden h-screen w-80 shrink-0 self-start overflow-y-auto border-r border-sidebar-border bg-sidebar p-5 md:block">
                   <div className="mb-5 flex items-center gap-2 px-2">
@@ -77,7 +79,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                   <main className="flex-1 px-4 py-6 md:px-8">{children}</main>
                 </div>
               </div>
-            </ScrollSpyProvider>
+                </NavSpyProvider>
+              </ScrollSpyProvider>
             </TooltipProvider>
           </MotionProvider>
         </ThemeProvider>

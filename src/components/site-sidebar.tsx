@@ -9,7 +9,52 @@ import {
   componentsByCategory,
   type ComponentCategory,
 } from "@/content/components";
+import {
+  concepts,
+  conceptGroups,
+  conceptGroupMeta,
+} from "@/content/concepts";
+import {
+  resources,
+  resourceCategories,
+  resourceId,
+} from "@/content/resources";
+import { backendTopics } from "@/content/backend";
+import { pageExamples } from "@/components/examples/pages";
 import { useScrollSpy } from "@/components/scroll-spy";
+import { SidebarTree, type SidebarTreeSection } from "@/components/sidebar-tree";
+
+// 基础概念：二级=分组，三级=概念
+const conceptSections: SidebarTreeSection[] = conceptGroups.map((g) => ({
+  id: g,
+  label: conceptGroupMeta[g],
+  count: concepts.filter((c) => c.group === g).length,
+  items: concepts
+    .filter((c) => c.group === g)
+    .map((c) => ({ id: c.id, label: c.nameZh, en: c.nameEn })),
+}));
+
+// 参考资源：二级=分类，三级=资源
+const resourceSections: SidebarTreeSection[] = resourceCategories.map((cat) => ({
+  id: cat,
+  label: cat,
+  count: resources.filter((r) => r.category === cat).length,
+  items: resources
+    .filter((r) => r.category === cat)
+    .map((r) => ({ id: resourceId(r), label: r.name })),
+}));
+
+// 示例：扁平九例，二级即各示例
+const exampleSections: SidebarTreeSection[] = pageExamples.map((e) => ({
+  id: e.id,
+  label: e.title,
+}));
+
+// 后端相关：扁平六主题，二级即各主题
+const backendSections: SidebarTreeSection[] = backendTopics.map((t) => ({
+  id: t.id,
+  label: t.name,
+}));
 
 const CATEGORY_EN: Record<ComponentCategory, string> = {
   layout: "Layout",
@@ -64,6 +109,7 @@ export function SidebarNav() {
       <NavLink href="/concepts" active={pathname === "/concepts"}>
         基础概念
       </NavLink>
+      <SidebarTree route="/concepts" sections={conceptSections} />
 
       <div className="mt-1">
         <NavLink href="/components" active={isComponents}>
@@ -146,12 +192,15 @@ export function SidebarNav() {
       <NavLink href="/examples" active={pathname === "/examples"}>
         示例
       </NavLink>
+      <SidebarTree route="/examples" sections={exampleSections} />
       <NavLink href="/resources" active={pathname === "/resources"}>
         参考资源
       </NavLink>
+      <SidebarTree route="/resources" sections={resourceSections} />
       <NavLink href="/backend" active={pathname === "/backend"}>
         后端相关
       </NavLink>
+      <SidebarTree route="/backend" sections={backendSections} />
     </nav>
   );
 }

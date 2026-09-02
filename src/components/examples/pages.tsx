@@ -623,7 +623,12 @@ export function ExamplesGallery() {
         {pageExamples.map((e) => {
           const Comp = e.Comp;
           return (
-            <section key={e.id} id={e.id} className="scroll-mt-20 space-y-3">
+            <section
+              key={e.id}
+              id={e.id}
+              data-spy-group={e.id}
+              className="scroll-mt-20 space-y-3"
+            >
               <div>
                 <h2 className="text-lg font-medium">{e.title}</h2>
                 <p className="text-sm text-muted-foreground">{e.desc}</p>

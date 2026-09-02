@@ -21,8 +21,14 @@ export default function BackendPage() {
 
       <div className="space-y-4">
         {backendTopics.map((t, i) => (
-          <Reveal key={t.id} delay={i * 60}>
-            <Card className="hover-lift">
+          <section
+            key={t.id}
+            id={t.id}
+            data-spy-group={t.id}
+            className="scroll-mt-16"
+          >
+            <Reveal delay={i * 60}>
+              <Card className="hover-lift">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base">
                   {t.name}
@@ -48,6 +54,7 @@ export default function BackendPage() {
               </CardContent>
             </Card>
           </Reveal>
+          </section>
         ))}
       </div>
     </div>

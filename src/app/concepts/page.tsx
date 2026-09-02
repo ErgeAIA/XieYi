@@ -33,14 +33,23 @@ export default function ConceptsPage() {
         const items = filtered.filter((c) => c.group === g);
         if (items.length === 0) return null;
         return (
-          <section key={g} className="space-y-3">
+          <section
+            key={g}
+            id={g}
+            data-spy-group={g}
+            className="scroll-mt-16 space-y-3"
+          >
             <h2 className="text-sm font-medium text-muted-foreground">
               {conceptGroupMeta[g]}
             </h2>
             <div className="space-y-3">
               {items.map((c, i) => (
                 <Reveal key={c.id} delay={i * 50}>
-                  <Card className="hover-lift">
+                  <Card
+                    id={c.id}
+                    data-spy-item={c.id}
+                    className="hover-lift scroll-mt-24"
+                  >
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base">
                         {c.nameZh}

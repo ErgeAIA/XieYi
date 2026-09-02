@@ -5,6 +5,7 @@ import {
   resources,
   resourceCategories,
   resourceCategoryMeta,
+  resourceId,
 } from "@/content/resources";
 
 export const metadata: Metadata = {
@@ -27,7 +28,12 @@ export default function ResourcesPage() {
         const items = resources.filter((r) => r.category === cat);
         if (items.length === 0) return null;
         return (
-          <section key={cat} className="space-y-3">
+          <section
+            key={cat}
+            id={cat}
+            data-spy-group={cat}
+            className="scroll-mt-16 space-y-3"
+          >
             <h2 className="text-sm font-medium text-muted-foreground">
               {cat}
               <span className="ml-2 font-normal">
@@ -37,7 +43,11 @@ export default function ResourcesPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               {items.map((r, i) => (
                 <Reveal key={r.name} delay={i * 60}>
-                  <Card className="hover-lift">
+                  <Card
+                    id={resourceId(r)}
+                    data-spy-item={resourceId(r)}
+                    className="hover-lift scroll-mt-24"
+                  >
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base">
                         <a

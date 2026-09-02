@@ -14,6 +14,11 @@ export interface ResourceItem {
   note: string;
 }
 
+// 生成稳定的锚点 id（侧栏三级跳转用），与页面卡片 id 保持一致。
+export function resourceId(r: ResourceItem): string {
+  return r.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+}
+
 export const resourceCategories: ResourceCategory[] = [
   "组件库",
   "设计系统",

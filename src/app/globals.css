@@ -279,7 +279,8 @@ html[data-motion="off"] .page-enter {
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  html:not([data-motion="off"]) [data-spy-component]:target {
+  html:not([data-motion="off"]) [data-spy-component]:target,
+  html:not([data-motion="off"]) [data-spy-item]:target {
     animation: xieyi-card-pop var(--motion-slow) var(--motion-ease) both;
   }
   /* hash 跳转平滑滚动，让三级点击从「瞬跳」变为「滑入」。 */
