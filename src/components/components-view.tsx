@@ -48,30 +48,35 @@ export function ComponentsView({
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
-    const clear = () => setPinnedCat(null);
-    let debounce: number | undefined;
-    const onScroll = () => {
-      window.clearTimeout(debounce);
-      debounce = window.setTimeout(clear, 120);
+    // 滚动真正停止后才解钉，并把 activeCat 直接设为目标，避免末尾再闪一下
+    const clear = () => {
+      setActiveCat(pinCat);
+      setPinnedCat(null);
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("scrollend", clear, { once: true });
-    const hardTimer = window.setTimeout(clear, 3000);
+    const hardTimer = window.setTimeout(clear, 1500);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("scrollend", clear);
-      window.clearTimeout(debounce);
       window.clearTimeout(hardTimer);
     };
-  }, [initialCat, setPinnedCat]);
+  }, [initialCat, setPinnedCat, setActiveCat]);
 
-  // 分类区块 scroll-spy：当前分类展开、其余折叠
+  // 分类区块 scroll-spy：滚动途中冻结、停止后才提交，避免高个子菜单开合顶动布局
   React.useEffect(() => {
     const sections = Array.from(
       document.querySelectorAll<HTMLElement>("[data-spy-cat]")
     );
     if (!sections.length) return;
+
+    const currentCat = { current: null as string | null };
+    const first = { current: true };
+    let debounce: number | undefined;
+
+    const commit = () => {
+      if (currentCat.current) setActiveCat(currentCat.current);
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries.filter((e) => e.isIntersecting);
@@ -80,12 +85,33 @@ export function ComponentsView({
           (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
         );
         const cat = visible[0].target.getAttribute("data-spy-cat");
-        if (cat) setActiveCat(cat);
+        if (!cat) return;
+        currentCat.current = cat;
+        // 仅首帧(挂载/筛选重排后)立即同步，其余等滚动停止再提交
+        if (first.current) {
+          first.current = false;
+          commit();
+        }
       },
       { rootMargin: "-72px 0px -65% 0px", threshold: 0 }
     );
     sections.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+
+    const onScroll = () => {
+      if (first.current) return;
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(commit, 120);
+    };
+    const onScrollEnd = () => commit();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scrollend", onScrollEnd);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(debounce);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scrollend", onScrollEnd);
+    };
   }, [setActiveCat, q]);
 
   // 组件卡片 scroll-spy：高亮正在看的组件
