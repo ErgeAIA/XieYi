@@ -21,11 +21,11 @@
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
   --font-app-mono: var(--font-plex-mono, "IBM Plex Mono"), ui-monospace,
     SFMono-Regular, Menlo, monospace;
-  /* 标题：文艺宋体（Noto Serif SC 思源宋体，Google Fonts）；
+  /* 标题：霞鹜文楷（LXGW WenKai，jsDelivr 加载，按 unicode-range 子集按需下载）；
      品牌/hero：黄令东齐伋体（QIJI-Fallback，自托管于 public/fonts）。
      装饰性中文字体（song/brush）仅用于站点标题与品牌，禁止出现在组件示例中
      （见下方 .preview / .example-canvas 强制回落无衬线规则）。 */
-  --font-app-song: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --font-app-song: "LXGW WenKai", "Songti SC", "SimSun", serif;
   --font-app-brush: "QijiFallback", "Songti SC", serif;
 }
 
