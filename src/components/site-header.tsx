@@ -42,8 +42,8 @@ export function SiteHeader() {
       <Link href="/" className="flex flex-col gap-0.5 leading-tight">
         <span className="flex items-baseline gap-2">
           <span className="text-lg font-semibold tracking-tight">写意</span>
-          <span className="hidden text-xs text-muted-foreground sm:inline">
-            Xieyi
+          <span className="hidden text-xs tracking-wide text-muted-foreground sm:inline">
+            XIEYI
           </span>
         </span>
         <span className="hidden max-w-[36ch] truncate text-[11px] text-muted-foreground/70 lg:block">
