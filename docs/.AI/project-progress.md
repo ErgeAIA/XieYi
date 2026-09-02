@@ -11,6 +11,7 @@
 - **最后更新**：2026-09-02 **阶段 B M2 推进**：新增 4 个表单原语（checkbox/switch/select/radio-group）；注册表覆盖 21/28 含示例组件（M1 的 7 + M2 新增 14）；构建通过、lint 0；已推送 `40a2f8e`。剩余 7 个复杂组件（Date Picker/Dropdown Menu/Drawer/Chart/File Tree/Upload/Toast）待下一批。
 - **最后更新**：2026-09-02 **阶段 B M2b 完成**：补齐剩余 7 个复杂组件（Date Picker/Dropdown Menu/Drawer/Chart/File Tree/Upload/Toast）的可交互示例，注册表现已覆盖 **28/28** 含 `example` 的组件；示例内容自由设计，视觉风格参考 `ErgePrism/tools/shadcn-ui-showcase.html`、实现参考官方文档；全部用纯 React + 现有 ui 原语（Drawer 复用 Sheet）+ lucide 实现，不引入新依赖；构建通过、类型检查 0 错误（待提交推送）。
 - **最后更新**：2026-09-02 **AGENTS 文档体系重构 + 供应链策略绕过验证**：按"项目级 Agent 合作协议"协议重写 `AGENTS.md`（强制顺序：Permissions → 工具链版本 → 命令表 → 反直觉约定 → 自维护协议），并拆出 `docs/.AI` 三件套（project-progress / decision-log / debug-log）；验证 pnpm 供应链 `minimumReleaseAge` 策略的可绕过方式——直接 `node ./node_modules/next/dist/bin/next dev|build` 不经 pnpm，或 `pnpm install --config.minimumReleaseAge=0`。详见 `decision-log` DEC-001 / DEC-002、`debug-log` BUG-001。
+- **最后更新**：2026-09-02 **阶段 B M2c 完成**：① 39 个空白组件改为**分类感知的 Skeleton 占位**——`components-view.tsx` 新增 `ComponentPlaceholder`，`ExampleBlock` 按 `cat` 渲染（charts/layout/form/navigation/display/feedback/overlay/chat/extra 各异）；② `/examples` 重写为 **9 个页面级真实可交互布局**（`src/components/examples/pages.tsx` 的 `ExamplesGallery`：Dashboard 数据面板 / IDE 编辑器 / 表单填写 / 数据列表管理 / 登录注册 / 设置 / 看板 / 任务待办 / 时间轴），全用现有 ui 原语 + lucide，未引入新依赖。踩坑：服务端组件不能直接 import 非组件值（数组被打包成 client reference，`pageExamples.map` 失效），已把整段画廊移入 client 组件修正。构建通过、类型检查 0 错误、lint 0；待提交推送。
 - **最后更新**：2026-09-01 **阶段 A 完成（脚手架 + shadcn + 数据迁移 + 布局/侧栏/搜索）**：Next 16 + TS + Tailwind v4 + App Router + `src/`；16 个 shadcn ui 组件；从 ErgePrism 抽取 67 组件 / 21 概念到 `src/content`；三级侧栏 + 顶栏 ⌘K + 首页/概念/组件页；`pnpm run build` 通过、dev 6 路由返回 200。
 
 ## 阶段进度
@@ -35,8 +36,8 @@
 - 注册表扩至覆盖 21/28 含 `example` 组件（M1 的 7 + M2 新增 14）。已推送 `40a2f8e`。
 - 剩余 7 个复杂组件（Date Picker / Dropdown Menu / Drawer / Chart / File Tree / Upload / Toast）**已于 M2b 补齐**（Drawer 复用 Sheet 原语，其余内联实现，未引入新依赖）。
 
-- **B-① 组件示例重写（核心）**：M1 验证模式 + M2 铺开 + M2b 补齐复杂组件，注册表已覆盖 **28/28** 含 `example` 的组件；下一步补 39 个空白（Skeleton 占位或最小 demo）。
-- **B-② `/examples`**：9 个页面级示例做成真实布局。
+- **B-① 组件示例重写（核心）**：M1 验证模式 + M2 铺开 + M2b 补齐复杂组件（注册表覆盖 **28/28** 含 `example` 组件）+ M2c 补 39 个空白（分类感知 Skeleton 占位）。**已全部完成**。
+- **B-② `/examples`**：9 个页面级示例已做成真实布局（Dashboard/IDE/表单/数据列表/登录注册/设置/看板/待办/时间轴），见 M2c。**已完成**。
 - **B-③（可选）**：充实概念/组件内容、参考资源、后端相关。
 
 ## 关键数据事实
