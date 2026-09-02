@@ -41,9 +41,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <TooltipProvider>
             <ScrollSpyProvider>
               <div className="flex min-h-screen">
-                <aside className="sticky top-0 hidden h-screen shrink-0 self-start overflow-y-auto border-r bg-sidebar p-4 md:block">
-                  <div className="mb-4 px-3 text-lg font-semibold tracking-tight">
-                    写意
+                <aside className="sticky top-0 hidden h-screen w-80 shrink-0 self-start overflow-y-auto border-r border-sidebar-border bg-sidebar p-5 md:block">
+                  <div className="mb-5 flex items-center gap-2 px-2">
+                    <span className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-primary-hover shadow-sm" />
+                    <span className="text-lg font-semibold tracking-tight">
+                      写意
+                    </span>
                   </div>
                   <Suspense fallback={null}>
                     <SidebarNav />
