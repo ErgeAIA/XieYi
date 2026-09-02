@@ -106,23 +106,32 @@ export function SidebarNav() {
                 >
                   <div className="overflow-hidden">
                     <div className="ml-2.5 mt-1 flex flex-col gap-0.5 border-l border-sidebar-border pl-3">
-                      {componentsByCategory(cat).map((c) => {
+                      {componentsByCategory(cat).map((c, i) => {
                         const compActive = activeComponent === c.nameEn;
                         return (
-                          <Link
+                          <div
                             key={c.nameEn}
-                            href={`/components?cat=${cat}#${c.nameEn}`}
-                            className={`flex items-baseline gap-1.5 rounded-md px-2 py-1 text-xs transition-all duration-200 ${
-                              compActive
-                                ? "bg-primary/10 font-medium text-primary"
-                                : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
+                            className={`transition-all duration-200 ease-out ${
+                              open
+                                ? "translate-y-0 opacity-100"
+                                : "translate-y-1 opacity-0"
                             }`}
+                            style={{ transitionDelay: open ? `${i * 25}ms` : "0ms" }}
                           >
-                            {c.nameZh}
-                            <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
-                              {c.nameEn}
-                            </span>
-                          </Link>
+                            <Link
+                              href={`/components?cat=${cat}#${c.nameEn}`}
+                              className={`flex items-baseline gap-1.5 rounded-md px-2 py-1 text-xs transition-colors duration-200 ${
+                                compActive
+                                  ? "bg-primary/10 font-medium text-primary"
+                                  : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
+                              }`}
+                            >
+                              {c.nameZh}
+                              <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
+                                {c.nameEn}
+                              </span>
+                            </Link>
+                          </div>
                         );
                       })}
                     </div>
