@@ -387,3 +387,53 @@ html[data-motion="off"] aside {
     transform: translateY(-0.07em);
   }
 }
+
+/* 首页 hero 副标题打字机：逐字瞬时显现（无淡入），末端光标在打字期间闪烁、打完后淡出。
+   每个字为 .tw-char，按内联 --i 错峰；时序变量 --tw-step/--tw-start/--tw-total 由组件提供。
+   受总开关（html[data-motion="off"]）与 prefers-reduced-motion 门控；关闭时直接显示全文。 */
+.tw-char {
+  opacity: 1;
+}
+.tw-cursor {
+  display: inline-block;
+  width: 0.08em;
+  height: 1em;
+  margin-left: 0.08em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion="off"]) .tw-char {
+    opacity: 0;
+    animation: tw-reveal 1ms steps(1, end) forwards;
+    animation-delay: calc(var(--tw-start) + var(--i) * var(--tw-step));
+  }
+  html:not([data-motion="off"]) .tw-cursor {
+    opacity: 1;
+    animation:
+      tw-blink 0.7s steps(1, end) infinite,
+      tw-cursor-out 0.4s ease forwards;
+    animation-delay: 0s, var(--tw-total);
+  }
+}
+@keyframes tw-reveal {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes tw-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tw-cursor-out {
+  to {
+    opacity: 0;
+  }
+}

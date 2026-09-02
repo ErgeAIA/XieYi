@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
 import { HomeBento, HomeHeroDemo } from "@/components/home-demos";
 import { HeroEmber } from "@/components/hero-ember";
+import { Typewriter } from "@/components/typewriter";
 
 const entries = [
   {
@@ -47,7 +48,7 @@ export default function Home() {
             </span>
           </h1>
           <p className="max-w-[46ch] text-base leading-relaxed text-muted-foreground md:text-lg">
-            用准确术语讲清组件与需求，让 AI 写出能直接交付的界面。
+            <Typewriter text="用准确术语讲清组件与需求，让 AI 写出能直接交付的界面。" />
           </p>
           <div className="flex flex-wrap gap-3 pt-1">
             <Link href="/concepts" className={cn(buttonVariants())}>
