@@ -41,9 +41,11 @@ function NavLink({
           : "text-foreground/70 hover:bg-accent/50 hover:text-foreground"
       }`}
     >
-      {active && (
-        <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary" />
-      )}
+      <span
+        className={`absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
+          active ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
+        }`}
+      />
       {children}
     </Link>
   );
@@ -80,9 +82,11 @@ export function SidebarNav() {
                       : "text-foreground/70 hover:bg-accent/50 hover:text-foreground"
                   }`}
                 >
-                  {open && (
-                    <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary" />
-                  )}
+                  <span
+                    className={`absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
+                      open ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
+                    }`}
+                  />
                   <span className="flex items-baseline gap-1.5">
                     {componentCategoryMeta[cat]}
                     <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
@@ -93,29 +97,37 @@ export function SidebarNav() {
                     {componentsByCategory(cat).length}
                   </span>
                 </Link>
-                {open && (
-                  <div className="ml-2.5 mt-1 flex flex-col gap-0.5 border-l border-sidebar-border pl-3">
-                    {componentsByCategory(cat).map((c) => {
-                      const compActive = activeComponent === c.nameEn;
-                      return (
-                        <Link
-                          key={c.nameEn}
-                          href={`/components?cat=${cat}#${c.nameEn}`}
-                          className={`flex items-baseline gap-1.5 rounded-md px-2 py-1 text-xs transition-all duration-200 ${
-                            compActive
-                              ? "bg-primary/10 font-medium text-primary"
-                              : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
-                          }`}
-                        >
-                          {c.nameZh}
-                          <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
-                            {c.nameEn}
-                          </span>
-                        </Link>
-                      );
-                    })}
+                <div
+                  className={`grid transition-all duration-300 ease-out ${
+                    open
+                      ? "grid-rows-[1fr] opacity-100"
+                      : "grid-rows-[0fr] opacity-0"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="ml-2.5 mt-1 flex flex-col gap-0.5 border-l border-sidebar-border pl-3">
+                      {componentsByCategory(cat).map((c) => {
+                        const compActive = activeComponent === c.nameEn;
+                        return (
+                          <Link
+                            key={c.nameEn}
+                            href={`/components?cat=${cat}#${c.nameEn}`}
+                            className={`flex items-baseline gap-1.5 rounded-md px-2 py-1 text-xs transition-all duration-200 ${
+                              compActive
+                                ? "bg-primary/10 font-medium text-primary"
+                                : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
+                            }`}
+                          >
+                            {c.nameZh}
+                            <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
+                              {c.nameEn}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
