@@ -7,8 +7,21 @@ import {
   componentCategories,
   componentCategoryMeta,
   componentsByCategory,
+  type ComponentCategory,
 } from "@/content/components";
 import { useScrollSpy } from "@/components/scroll-spy";
+
+const CATEGORY_EN: Record<ComponentCategory, string> = {
+  layout: "Layout",
+  form: "Form",
+  navigation: "Navigation",
+  display: "Data Display",
+  feedback: "Feedback",
+  overlay: "Overlay",
+  charts: "Charts",
+  chat: "Chat",
+  extra: "Extended",
+};
 
 function NavLink({
   href,
@@ -70,7 +83,15 @@ export function SidebarNav() {
                   {open && (
                     <span className="absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary" />
                   )}
-                  {componentCategoryMeta[cat]}
+                  <span className="flex items-baseline gap-1.5">
+                    {componentCategoryMeta[cat]}
+                    <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
+                      {CATEGORY_EN[cat]}
+                    </span>
+                  </span>
+                  <span className="ml-auto rounded bg-muted px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground/70">
+                    {componentsByCategory(cat).length}
+                  </span>
                 </Link>
                 {open && (
                   <div className="ml-2.5 mt-1 flex flex-col gap-0.5 border-l border-sidebar-border pl-3">
@@ -80,16 +101,16 @@ export function SidebarNav() {
                         <Link
                           key={c.nameEn}
                           href={`/components?cat=${cat}#${c.nameEn}`}
-                          className={`relative rounded-md px-2 py-1 text-xs transition-all duration-200 ${
+                          className={`flex items-baseline gap-1.5 rounded-md px-2 py-1 text-xs transition-all duration-200 ${
                             compActive
-                              ? "font-medium text-primary"
+                              ? "bg-primary/10 font-medium text-primary"
                               : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
                           }`}
                         >
-                          {compActive && (
-                            <span className="absolute left-0 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-primary" />
-                          )}
                           {c.nameZh}
+                          <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
+                            {c.nameEn}
+                          </span>
                         </Link>
                       );
                     })}
