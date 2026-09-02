@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, Moon, Sun } from "lucide-react";
+import { Menu, Moon, Sun, Sparkles, ZapOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,11 +12,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useTheme } from "@/components/theme-provider";
+import { useMotionPref } from "@/components/motion-provider";
 import { CommandSearch } from "@/components/command-search";
 import { SidebarNav } from "@/components/site-sidebar";
 
 export function SiteHeader() {
   const { theme, toggle } = useTheme();
+  const { motionOn, toggle: toggleMotion } = useMotionPref();
 
   return (
     <header className="sticky top-0 z-30 flex min-h-14 items-center gap-3 border-b bg-background/80 px-4 py-2.5 backdrop-blur">
@@ -67,6 +69,20 @@ export function SiteHeader() {
           <Sun className="size-4" />
         ) : (
           <Moon className="size-4" />
+        )}
+      </Button>
+
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={toggleMotion}
+        aria-label={motionOn ? "关闭动效" : "开启动效"}
+        title={motionOn ? "关闭动效" : "开启动效"}
+      >
+        {motionOn ? (
+          <Sparkles className="size-4" />
+        ) : (
+          <ZapOff className="size-4" />
         )}
       </Button>
     </header>

@@ -194,7 +194,7 @@ export function ComponentsView({
                   key={c.nameEn}
                   id={c.nameEn}
                   data-spy-component={c.nameEn}
-                  className="scroll-mt-20"
+                  className="scroll-mt-20 hover-lift"
                 >
                   <CardHeader className="pb-2">
                     <CardTitle className="flex items-center gap-2 text-base">

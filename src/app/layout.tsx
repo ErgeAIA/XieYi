@@ -5,6 +5,7 @@ import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
+import { MotionProvider } from "@/components/motion-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarNav } from "@/components/site-sidebar";
 import { ScrollSpyProvider } from "@/components/scroll-spy";
@@ -35,6 +36,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${spaceGrotesk.variable} ${plexMono.variable} antialiased`}
     >
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('xieyi-motion');var r=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var on=s===null?!r:s!=='off';document.documentElement.setAttribute('data-motion',on?'on':'off');}catch(e){}})();`,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -51,9 +57,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <style>{`.reveal{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
         <ThemeProvider>
-          <TooltipProvider>
-            <ScrollSpyProvider>
-              <div className="flex min-h-screen">
+          <MotionProvider>
+            <TooltipProvider>
+              <ScrollSpyProvider>
+                <div className="flex min-h-screen">
                 <aside className="sticky top-0 hidden h-screen w-80 shrink-0 self-start overflow-y-auto border-r border-sidebar-border bg-sidebar p-5 md:block">
                   <div className="mb-5 flex items-center gap-2 px-2">
                     <span className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-primary-hover shadow-sm" />
@@ -71,7 +78,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 </div>
               </div>
             </ScrollSpyProvider>
-          </TooltipProvider>
+            </TooltipProvider>
+          </MotionProvider>
         </ThemeProvider>
       </body>
     </html>

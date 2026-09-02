@@ -14,24 +14,51 @@ const ThemeContext = React.createContext<ThemeContextValue>({
   toggle: () => {},
 });
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = React.useState<Theme>("light");
+const STORAGE_KEY = "xieyi-theme";
+const EVT = "xieyi-theme-change";
 
-  React.useEffect(() => {
-    const saved = localStorage.getItem("xieyi-theme") as Theme | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setTheme(saved ?? (prefersDark ? "dark" : "light"));
-  }, []);
+function readTheme(): Theme {
+  if (typeof document === "undefined") return "light"; // SSR 默认浅色
+  const saved = localStorage.getItem(STORAGE_KEY) as Theme | null;
+  if (saved === "light" || saved === "dark") return saved;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+}
+
+function subscribeTheme(cb: () => void) {
+  window.addEventListener(EVT, cb);
+  return () => window.removeEventListener(EVT, cb);
+}
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const theme = React.useSyncExternalStore<Theme>(
+    subscribeTheme,
+    readTheme,
+    () => "light",
+  );
 
   React.useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("xieyi-theme", theme);
+    try {
+      localStorage.setItem(STORAGE_KEY, theme);
+    } catch {
+      /* 隐私模式下忽略 */
+    }
   }, [theme]);
 
-  const toggle = React.useCallback(
-    () => setTheme((t) => (t === "dark" ? "light" : "dark")),
-    [],
-  );
+  const toggle = React.useCallback(() => {
+    const next: Theme = document.documentElement.classList.contains("dark")
+      ? "light"
+      : "dark";
+    document.documentElement.classList.toggle("dark", next === "dark");
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      /* 隐私模式下忽略 */
+    }
+    window.dispatchEvent(new Event(EVT));
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme, toggle }}>

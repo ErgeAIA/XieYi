@@ -166,23 +166,74 @@
   }
 }
 
-/* 滚动揭示动效：隐藏态仅在「允许动效」时生效，
-   偏好减少动效或关闭 JS 时内容从首帧即可见。 */
-.reveal {
-  transition-property: opacity, transform;
-  transition-duration: 700ms;
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+/* ===== 动效令牌（motion tokens） ===== */
+:root {
+  --motion-fast: 160ms;
+  --motion-base: 240ms;
+  --motion-slow: 520ms;
+  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* 总动画开关：data-motion="off" 时关闭全部 CSS 动画/过渡/平滑滚动。
+   默认（无属性）即开启；仅当用户手动关闭，或系统偏好 prefers-reduced-motion 时关闭。 */
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* 滚动揭示动效：隐藏态仅在「允许动效」时生效，
+   偏好减少动效或关闭 JS/动画时内容从首帧即可见。 */
+.reveal {
+  transition-property: opacity, transform;
+  transition-duration: var(--motion-slow);
+  transition-timing-function: var(--motion-ease);
+}
 @media (prefers-reduced-motion: no-preference) {
-  .reveal:not(.reveal-in) {
+  html:not([data-motion="off"]) .reveal:not(.reveal-in) {
     opacity: 0;
     transform: translateY(1rem);
   }
 }
+html[data-motion="off"] .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
 
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    transition: none;
+/* 交互抬升：卡片/可点项 hover 轻上浮 + 高亮描边 + 柔光（仅动效开启时）。 */
+html:not([data-motion="off"]) .hover-lift {
+  transition: transform var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease),
+    border-color var(--motion-base) var(--motion-ease);
+}
+html:not([data-motion="off"]) .hover-lift:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--primary) 38%, var(--border));
+  box-shadow: 0 10px 30px -16px
+    color-mix(in srgb, var(--primary) 55%, transparent);
+}
+
+/* 加载骨架：微光扫过（仅动效开启时）。 */
+@keyframes xieyi-shimmer {
+  100% {
+    transform: translateX(100%);
   }
+}
+html:not([data-motion="off"]) .skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--foreground) 7%, transparent),
+    transparent
+  );
+  animation: xieyi-shimmer 1.6s var(--motion-ease-in-out) infinite;
 }
