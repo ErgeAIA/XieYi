@@ -44,6 +44,32 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
+import {
+  Bell,
+  Calendar,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Folder,
+  FolderOpen,
+  MoreHorizontal,
+  Plus,
+  Trash2,
+  Upload,
+  X,
+} from "lucide-react";
 
 /* ---------- M1：代表性组件 ---------- */
 
@@ -404,6 +430,316 @@ function TableExample() {
   );
 }
 
+/* ---------- M2b：7 个复杂组件 ---------- */
+
+function ToastExample() {
+  const [toasts, setToasts] = React.useState<
+    { id: number; type: "success" | "info" | "error"; title: string; desc: string }[]
+  >([]);
+  const idRef = React.useRef(0);
+  const push = (
+    type: "success" | "info" | "error",
+    title: string,
+    desc: string,
+  ) => {
+    const id = ++idRef.current;
+    setToasts((t) => [...t, { id, type, title, desc }]);
+    window.setTimeout(() => {
+      setToasts((t) => t.filter((x) => x.id !== id));
+    }, 3200);
+  };
+  const dismiss = (id: number) => setToasts((t) => t.filter((x) => x.id !== id));
+  const meta = {
+    success: { icon: Check, cls: "text-primary" },
+    info: { icon: Bell, cls: "text-muted-foreground" },
+    error: { icon: X, cls: "text-destructive" },
+  } as const;
+  return (
+    <div className="relative min-h-[180px] w-full overflow-hidden rounded-md border border-dashed">
+      <div className="flex flex-wrap gap-2 p-4">
+        <Button size="sm" variant="outline" onClick={() => push("success", "已保存", "你的更改已成功保存。")}>成功</Button>
+        <Button size="sm" variant="outline" onClick={() => push("info", "新消息", "你有一条未读通知。")}>信息</Button>
+        <Button size="sm" variant="outline" onClick={() => push("error", "出错了", "操作失败，请重试。")}>错误</Button>
+      </div>
+      <div className="absolute right-3 bottom-3 flex w-64 flex-col gap-2">
+        {toasts.map((t) => {
+          const Icon = meta[t.type].icon;
+          return (
+            <div key={t.id} className="flex items-start gap-2 rounded-md border bg-popover p-3 text-sm shadow-sm">
+              <Icon className={`mt-0.5 size-4 shrink-0 ${meta[t.type].cls}`} />
+              <div className="min-w-0 flex-1">
+                <div className="font-medium">{t.title}</div>
+                <div className="text-xs text-muted-foreground">{t.desc}</div>
+              </div>
+              <button onClick={() => dismiss(t.id)} className="text-muted-foreground hover:text-foreground" aria-label="关闭">
+                <X className="size-3.5" />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function DropdownMenuExample() {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [open]);
+  return (
+    <div className="relative inline-block">
+      <Button variant="outline" onClick={() => setOpen((o) => !o)}>
+        操作
+        <ChevronDown className="size-4" />
+      </Button>
+      {open && (
+        <div ref={ref} className="absolute left-0 z-10 mt-1 w-44 rounded-md border bg-popover p-1 text-sm shadow-md">
+          <button className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-muted"><Plus className="size-4" />新建</button>
+          <button className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-muted"><FileText className="size-4" />重命名</button>
+          <button className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-muted"><MoreHorizontal className="size-4" />更多</button>
+          <div className="my-1 h-px bg-border" />
+          <button className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-destructive hover:bg-muted"><Trash2 className="size-4" />删除</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DrawerExample() {
+  return (
+    <Sheet>
+      <SheetTrigger render={<Button variant="outline" />}>打开抽屉</SheetTrigger>
+      <SheetContent side="right" className="w-80">
+        <SheetHeader>
+          <SheetTitle>项目设置</SheetTitle>
+          <SheetDescription>在这里调整当前项目的可见性与成员。</SheetDescription>
+        </SheetHeader>
+        <div className="flex-1 space-y-3 px-4 text-sm text-muted-foreground">
+          <p>抽屉（Drawer）常用于承载次要操作或详情，避免打断主流程。</p>
+          <p>点击遮罩或右上角按钮即可关闭。</p>
+        </div>
+        <SheetFooter className="flex-row justify-end gap-2">
+          <SheetClose render={<Button variant="outline" />}>取消</SheetClose>
+          <SheetClose render={<Button />}>保存</SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+function ChartExample() {
+  const data = [
+    { label: "一月", value: 40 },
+    { label: "二月", value: 65 },
+    { label: "三月", value: 50 },
+    { label: "四月", value: 80 },
+    { label: "五月", value: 72 },
+    { label: "六月", value: 95 },
+  ];
+  const max = Math.max(...data.map((d) => d.value));
+  return (
+    <div className="w-full max-w-md">
+      <div className="flex h-44 items-end gap-3">
+        {data.map((d) => (
+          <div key={d.label} className="flex flex-1 flex-col items-center gap-1">
+            <span className="text-xs text-muted-foreground">{d.value}</span>
+            <div
+              className="w-6 rounded-t bg-primary"
+              style={{ height: `${(d.value / max) * 120}px` }}
+              title={`${d.label}：${d.value}`}
+            />
+            <span className="text-xs text-muted-foreground">{d.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+type FileNode = { name: string; children?: FileNode[] };
+
+const treeData: FileNode[] = [
+  {
+    name: "src",
+    children: [
+      { name: "components", children: [{ name: "Button.tsx" }, { name: "Card.tsx" }] },
+      { name: "app", children: [{ name: "layout.tsx" }, { name: "page.tsx" }] },
+      { name: "lib", children: [{ name: "utils.ts" }] },
+    ],
+  },
+  { name: "package.json" },
+  { name: "README.md" },
+];
+
+function TreeNode({ node, depth }: { node: FileNode; depth: number }) {
+  const [open, setOpen] = React.useState(true);
+  const isFolder = !!node.children;
+  return (
+    <div>
+      <div
+        className="flex cursor-pointer items-center gap-1.5 rounded-sm py-1 pr-2 hover:bg-muted"
+        style={{ paddingLeft: depth * 14 + 4 }}
+        onClick={() => isFolder && setOpen((o) => !o)}
+      >
+        {isFolder ? (
+          open ? <FolderOpen className="size-4 text-muted-foreground" /> : <Folder className="size-4 text-muted-foreground" />
+        ) : (
+          <FileText className="size-4 text-muted-foreground" />
+        )}
+        <span className="text-sm">{node.name}</span>
+      </div>
+      {isFolder && open && (
+        <div>
+          {node.children?.map((c) => (
+            <TreeNode key={c.name} node={c} depth={depth + 1} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FileTreeExample() {
+  return (
+    <div className="w-full max-w-xs rounded-md border p-2">
+      {treeData.map((n) => (
+        <TreeNode key={n.name} node={n} depth={0} />
+      ))}
+    </div>
+  );
+}
+
+function UploadExample() {
+  const [files, setFiles] = React.useState<{ name: string; size: number }[]>([]);
+  const [drag, setDrag] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const addFiles = (list: FileList | null) => {
+    if (!list) return;
+    setFiles((prev) => [
+      ...prev,
+      ...Array.from(list).map((f) => ({ name: f.name, size: f.size })),
+    ]);
+  };
+  const fmt = (n: number) =>
+    n < 1024 ? `${n} B` : n < 1024 * 1024 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`;
+  return (
+    <div className="w-full max-w-sm space-y-3">
+      <div
+        onClick={() => inputRef.current?.click()}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDrag(true);
+        }}
+        onDragLeave={() => setDrag(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDrag(false);
+          addFiles(e.dataTransfer.files);
+        }}
+        className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-6 text-center text-sm text-muted-foreground transition-colors ${
+          drag ? "border-primary bg-secondary" : "border-border"
+        }`}
+      >
+        <Upload className="size-6" />
+        <div>点击或拖拽文件到此处上传</div>
+        <input ref={inputRef} type="file" multiple className="hidden" onChange={(e) => addFiles(e.target.files)} />
+      </div>
+      {files.length > 0 && (
+        <ul className="space-y-1 text-sm">
+          {files.map((f, i) => (
+            <li key={i} className="flex items-center gap-2 rounded-sm bg-muted px-2 py-1">
+              <FileText className="size-4 shrink-0 text-muted-foreground" />
+              <span className="flex-1 truncate">{f.name}</span>
+              <span className="text-xs text-muted-foreground">{fmt(f.size)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function DatePickerExample() {
+  const [open, setOpen] = React.useState(false);
+  const [selected, setSelected] = React.useState<Date | null>(null);
+  const [view, setView] = React.useState(() => new Date());
+  const ref = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [open]);
+
+  const year = view.getFullYear();
+  const month = view.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const cells: (number | null)[] = [
+    ...Array(firstDay).fill(null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+  const fmt = (d: Date) =>
+    d.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" });
+  const changeMonth = (delta: number) => setView(new Date(year, month + delta, 1));
+
+  return (
+    <div className="relative inline-block">
+      <Button variant="outline" onClick={() => setOpen((o) => !o)}>
+        <Calendar className="size-4" />
+        {selected ? fmt(selected) : "选择日期"}
+      </Button>
+      {open && (
+        <div ref={ref} className="absolute left-0 z-10 mt-1 w-64 rounded-md border bg-popover p-3 shadow-md">
+          <div className="mb-2 flex items-center justify-between">
+            <button onClick={() => changeMonth(-1)} className="rounded-sm p-1 hover:bg-muted" aria-label="上月"><ChevronLeft className="size-4" /></button>
+            <span className="text-sm font-medium">{year} 年 {month + 1} 月</span>
+            <button onClick={() => changeMonth(1)} className="rounded-sm p-1 hover:bg-muted" aria-label="下月"><ChevronRight className="size-4" /></button>
+          </div>
+          <div className="grid grid-cols-7 gap-0.5 text-center text-xs text-muted-foreground">
+            {["日", "一", "二", "三", "四", "五", "六"].map((d) => (
+              <div key={d} className="py-1">{d}</div>
+            ))}
+            {cells.map((c, i) => (
+              <div key={i}>
+                {c ? (
+                  <button
+                    onClick={() => {
+                      setSelected(new Date(year, month, c));
+                      setOpen(false);
+                    }}
+                    className={`flex size-7 items-center justify-center rounded-sm text-sm hover:bg-muted ${
+                      selected &&
+                      selected.getDate() === c &&
+                      selected.getMonth() === month &&
+                      selected.getFullYear() === year
+                        ? "bg-primary text-primary-foreground hover:bg-primary"
+                        : ""
+                    }`}
+                  >
+                    {c}
+                  </button>
+                ) : (
+                  <div className="size-7" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // 阶段 B：nameEn → 真实可交互 shadcn 组件。未注册的组件回退原 HTML / Skeleton。
 export const exampleRegistry: Record<string, React.ComponentType> = {
   Button: ButtonExample,
@@ -427,4 +763,11 @@ export const exampleRegistry: Record<string, React.ComponentType> = {
   Statistic: StatisticExample,
   Empty: EmptyExample,
   Table: TableExample,
+  "Date Picker": DatePickerExample,
+  "Dropdown Menu": DropdownMenuExample,
+  Drawer: DrawerExample,
+  Chart: ChartExample,
+  "File Tree": FileTreeExample,
+  Upload: UploadExample,
+  Toast: ToastExample,
 };
