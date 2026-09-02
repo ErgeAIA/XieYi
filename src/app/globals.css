@@ -2,6 +2,16 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* 品牌「写意」自托管字体：黄令东齐伋体（QIJI-Fallback，SIL OFL 1.1 免费商用）。
+   已从 18MB 全量子集化到仅含品牌与品牌哲学句用到的字（约 23KB）。 */
+@font-face {
+  font-family: "QijiFallback";
+  src: url("/fonts/qiji-fallback.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /* 字体：ember(#004) 指定的 Space Grotesk + IBM Plex Mono，两者无 CJK 字形，
@@ -11,11 +21,11 @@
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
   --font-app-mono: var(--font-plex-mono, "IBM Plex Mono"), ui-monospace,
     SFMono-Regular, Menlo, monospace;
-  /* 标题：文艺细宋（站酷小薇 ZCOOL XiaoWei），轻古风；
-     品牌/hero：毛笔楷书（马善政 Ma Shan Zheng），强国风；均 Google Fonts。 */
+  /* 标题：文艺细宋（站酷小薇 ZCOOL XiaoWei，Google Fonts）；
+     品牌/hero：黄令东齐伋体（QIJI-Fallback，自托管于 public/fonts）。 */
   --font-app-song: "ZCOOL XiaoWei", "Noto Serif SC", "Songti SC", "SimSun",
     serif;
-  --font-app-brush: "Ma Shan Zheng", "ZCOOL XiaoWei", "Songti SC", cursive;
+  --font-app-brush: "QijiFallback", "ZCOOL XiaoWei", "Songti SC", serif;
 }
 
 @theme inline {
