@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
 import { HomeBento, HomeHeroDemo } from "@/components/home-demos";
-import { HeroEmber } from "@/components/hero-ember";
+import { HeroBloom } from "@/components/hero-bloom";
 import { Typewriter } from "@/components/typewriter";
 
 const entries = [
@@ -30,7 +30,7 @@ export default function Home() {
     <div className="mx-auto max-w-6xl space-y-20 py-10 md:space-y-24 md:py-14">
       {/* Hero：非对称 split，左文案右实时预览；背景为 three.js 火山余烬粒子场 */}
       <section className="relative grid items-center gap-10 overflow-hidden rounded-3xl border border-border/60 bg-card/20 p-8 md:p-14 lg:grid-cols-12 lg:gap-14">
-        <HeroEmber className="pointer-events-none absolute inset-0 h-full w-full" />
+        <HeroBloom className="pointer-events-none absolute inset-0 h-full w-full" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-background" />
         <Reveal className="relative z-10 space-y-5 lg:col-span-7">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
