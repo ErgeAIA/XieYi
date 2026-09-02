@@ -35,14 +35,14 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`group relative flex items-center rounded-lg px-3 py-2 text-sm transition-all duration-200 ${
+      className={`group relative flex items-center rounded-lg px-3 py-2 text-sm transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
         active
           ? "bg-primary/10 font-medium text-primary"
           : "text-foreground/70 hover:bg-accent/50 hover:text-foreground"
       }`}
     >
       <span
-        className={`absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
+        className={`absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
           active ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
         }`}
       />
@@ -76,14 +76,14 @@ export function SidebarNav() {
               <div key={cat}>
                 <Link
                   href={`/components?cat=${cat}`}
-                  className={`group relative flex items-center rounded-lg px-2.5 py-1.5 text-sm transition-all duration-200 ${
+                  className={`group relative flex items-center rounded-lg px-2.5 py-1.5 text-sm transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
                     open
                       ? "bg-primary/10 font-medium text-primary"
                       : "text-foreground/70 hover:bg-accent/50 hover:text-foreground"
                   }`}
                 >
                   <span
-                    className={`absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
+                    className={`absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
                       open ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
                     }`}
                   />
@@ -98,7 +98,7 @@ export function SidebarNav() {
                   </span>
                 </Link>
                 <div
-                  className={`grid transition-all duration-300 ease-out ${
+                  className={`grid transition-all duration-[350ms] ease-[cubic-bezier(.16,1,.3,1)] ${
                     open
                       ? "grid-rows-[1fr] opacity-100"
                       : "grid-rows-[0fr] opacity-0"
@@ -111,7 +111,7 @@ export function SidebarNav() {
                         return (
                           <div
                             key={c.nameEn}
-                            className={`transition-all duration-200 ease-out ${
+                            className={`transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
                               open
                                 ? "translate-y-0 opacity-100"
                                 : "translate-y-1 opacity-0"
