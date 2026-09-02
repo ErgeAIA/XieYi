@@ -40,10 +40,10 @@ export default function Home() {
             aria-label="写意"
           >
             <span className="hero-glyph" aria-hidden="true">
-              写
+              <span className="hero-glyph-inner">写</span>
             </span>
             <span className="hero-glyph" aria-hidden="true">
-              意
+              <span className="hero-glyph-inner">意</span>
             </span>
           </h1>
           <p className="max-w-[46ch] text-base leading-relaxed text-muted-foreground md:text-lg">
