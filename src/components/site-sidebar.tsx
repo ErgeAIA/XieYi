@@ -53,7 +53,7 @@ function NavLink({
 
 export function SidebarNav() {
   const pathname = usePathname();
-  const { activeCat, activeComponent } = useScrollSpy();
+  const { activeCat, activeComponent, pinnedCat } = useScrollSpy();
   const isComponents = pathname === "/components";
 
   return (
@@ -71,7 +71,7 @@ export function SidebarNav() {
         </NavLink>
         <div className="ml-2 mt-1 flex flex-col gap-1">
           {componentCategories.map((cat) => {
-            const open = isComponents && activeCat === cat;
+            const open = isComponents && (pinnedCat ? pinnedCat === cat : activeCat === cat);
             return (
               <div key={cat}>
                 <Link

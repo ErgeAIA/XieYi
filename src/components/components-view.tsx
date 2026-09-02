@@ -9,6 +9,7 @@ import {
   componentCategories,
   componentCategoryMeta,
   componentsByCategory,
+  components,
   type ComponentCategory,
 } from "@/content/components";
 import { exampleRegistry } from "@/components/examples/registry";
@@ -20,20 +21,50 @@ export function ComponentsView({
   initialCat: ComponentCategory | null;
 }) {
   const [q, setQ] = React.useState("");
-  const { activeCat, setActiveCat, setActiveComponent } = useScrollSpy();
+  const { activeCat, setActiveCat, setActiveComponent, setPinnedCat } =
+    useScrollSpy();
   const s = q.trim().toLowerCase();
 
-  // 初始定位：优先锚点，其次分类
+  // 初始定位：优先锚点，其次分类。点击跳转时把目标分类钉住，
+  // 滚动过程中忽略 spy 的中间值，停止后再交还，避免中间菜单开合波动。
   React.useEffect(() => {
-    const target = window.location.hash
+    const hash = window.location.hash
       ? window.location.hash.slice(1)
-      : initialCat ?? undefined;
+      : undefined;
+    const target = hash ?? initialCat ?? undefined;
     if (!target) return;
+
+    let pinCat: string | null = null;
+    if (initialCat) {
+      pinCat = initialCat;
+    } else if (hash) {
+      const comp = components.find((c) => c.nameEn === hash);
+      pinCat = comp ? comp.cat : null;
+    }
+    if (pinCat) setPinnedCat(pinCat);
+
     requestAnimationFrame(() => {
       const el = document.getElementById(target);
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-  }, [initialCat]);
+
+    const clear = () => setPinnedCat(null);
+    let debounce: number | undefined;
+    const onScroll = () => {
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(clear, 120);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scrollend", clear, { once: true });
+    const hardTimer = window.setTimeout(clear, 3000);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scrollend", clear);
+      window.clearTimeout(debounce);
+      window.clearTimeout(hardTimer);
+    };
+  }, [initialCat, setPinnedCat]);
 
   // 分类区块 scroll-spy：当前分类展开、其余折叠
   React.useEffect(() => {

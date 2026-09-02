@@ -5,8 +5,10 @@ import * as React from "react";
 type ScrollSpyValue = {
   activeCat: string | null;
   activeComponent: string | null;
+  pinnedCat: string | null;
   setActiveCat: (c: string | null) => void;
   setActiveComponent: (c: string | null) => void;
+  setPinnedCat: (c: string | null) => void;
 };
 
 const ScrollSpyContext = React.createContext<ScrollSpyValue | null>(null);
@@ -16,6 +18,7 @@ export function ScrollSpyProvider({ children }: { children: React.ReactNode }) {
   const [activeComponent, setActiveComponentState] = React.useState<string | null>(
     null
   );
+  const [pinnedCat, setPinnedCatState] = React.useState<string | null>(null);
 
   const setActiveCat = React.useCallback((c: string | null) => {
     setActiveCatState((prev) => (prev === c ? prev : c));
@@ -23,10 +26,27 @@ export function ScrollSpyProvider({ children }: { children: React.ReactNode }) {
   const setActiveComponent = React.useCallback((c: string | null) => {
     setActiveComponentState((prev) => (prev === c ? prev : c));
   }, []);
+  const setPinnedCat = React.useCallback((c: string | null) => {
+    setPinnedCatState((prev) => (prev === c ? prev : c));
+  }, []);
 
   const value = React.useMemo<ScrollSpyValue>(
-    () => ({ activeCat, activeComponent, setActiveCat, setActiveComponent }),
-    [activeCat, activeComponent, setActiveCat, setActiveComponent]
+    () => ({
+      activeCat,
+      activeComponent,
+      pinnedCat,
+      setActiveCat,
+      setActiveComponent,
+      setPinnedCat,
+    }),
+    [
+      activeCat,
+      activeComponent,
+      pinnedCat,
+      setActiveCat,
+      setActiveComponent,
+      setPinnedCat,
+    ]
   );
 
   return (
