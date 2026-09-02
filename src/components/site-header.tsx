@@ -19,7 +19,7 @@ export function SiteHeader() {
   const { theme, toggle } = useTheme();
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur">
+    <header className="sticky top-0 z-30 flex min-h-14 items-center gap-3 border-b bg-background/80 px-4 py-2.5 backdrop-blur">
       <Sheet>
         <SheetTrigger
           render={
@@ -39,10 +39,15 @@ export function SiteHeader() {
         </SheetContent>
       </Sheet>
 
-      <Link href="/" className="flex items-baseline gap-2">
-        <span className="text-lg font-semibold tracking-tight">写意</span>
-        <span className="hidden text-xs text-muted-foreground sm:inline">
-          Xieyi
+      <Link href="/" className="flex flex-col gap-0.5 leading-tight">
+        <span className="flex items-baseline gap-2">
+          <span className="text-lg font-semibold tracking-tight">写意</span>
+          <span className="hidden text-xs text-muted-foreground sm:inline">
+            Xieyi
+          </span>
+        </span>
+        <span className="hidden max-w-[36ch] truncate text-[11px] text-muted-foreground/70 lg:block">
+          以意运码，码落而器成。胸中之构，言而为品。
         </span>
       </Link>
 

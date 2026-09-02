@@ -39,7 +39,7 @@ export default function Home() {
             写意
           </h1>
           <p className="max-w-[46ch] text-base leading-relaxed text-muted-foreground md:text-lg">
-            以意运码，码落而器成。用准确术语描述组件与需求，让 AI 写出可用的界面。
+            用准确术语讲清组件与需求，让 AI 写出能直接交付的界面。
           </p>
           <div className="flex flex-wrap gap-3 pt-1">
             <Link href="/concepts" className={cn(buttonVariants())}>
