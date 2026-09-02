@@ -33,6 +33,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="zh"
       className={`${spaceGrotesk.variable} ${plexMono.variable} antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+        />
+      </head>
       <body className="min-h-screen bg-background text-foreground">
         <noscript>
           <style>{`.reveal{opacity:1 !important;transform:none !important}`}</style>
@@ -44,7 +56,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <aside className="sticky top-0 hidden h-screen w-80 shrink-0 self-start overflow-y-auto border-r border-sidebar-border bg-sidebar p-5 md:block">
                   <div className="mb-5 flex items-center gap-2 px-2">
                     <span className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-primary-hover shadow-sm" />
-                    <span className="text-lg font-semibold tracking-tight">
+                    <span className="font-heading text-lg font-semibold tracking-tight">
                       写意
                     </span>
                   </div>

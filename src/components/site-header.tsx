@@ -41,7 +41,9 @@ export function SiteHeader() {
 
       <Link href="/" className="flex flex-col gap-0.5 leading-tight">
         <span className="flex items-baseline gap-2">
-          <span className="text-lg font-semibold tracking-tight">写意</span>
+          <span className="font-heading text-lg font-semibold tracking-tight">
+            写意
+          </span>
           <span className="hidden text-xs tracking-wide text-muted-foreground sm:inline">
             XIEYI
           </span>

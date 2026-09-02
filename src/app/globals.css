@@ -11,12 +11,16 @@
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
   --font-app-mono: var(--font-plex-mono, "IBM Plex Mono"), ui-monospace,
     SFMono-Regular, Menlo, monospace;
+  /* 标题/品牌用宋体（思源宋体），中文有书卷气、贴「写意」调性；
+     回落系统宋体，避免无 webfont 时退化成黑体。 */
+  --font-app-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC",
+    "SimSun", serif;
 }
 
 @theme inline {
   --font-sans: var(--font-app-sans);
   --font-mono: var(--font-app-mono);
-  --font-heading: var(--font-app-sans);
+  --font-heading: var(--font-app-serif);
   --font-display: var(--font-app-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -143,6 +147,10 @@
   }
   html {
     @apply font-sans;
+  }
+  /* 标题统一走宋体，与无衬线正文形成编辑式对比 */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-app-serif);
   }
 }
 
