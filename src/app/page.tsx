@@ -1,70 +1,99 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Reveal } from "@/components/motion/reveal";
+import { HomeBento, HomeHeroDemo } from "@/components/home-demos";
 
-const sections = [
+const entries = [
   {
     href: "/concepts",
     title: "基础概念",
-    desc: "Agent、Skill、Prompt、Context、Token……用准确术语和 AI 沟通。",
+    desc: "Agent、Skill、Prompt、Context、Token，用准确术语和 AI 沟通。",
   },
   {
     href: "/components",
     title: "前端组件",
-    desc: "67 个 shadcn/ui 组件，按 9 大类拆解，配使用场景与示例。",
+    desc: "67 个组件按 9 大类拆解，配使用场景与可交互示例。",
   },
   {
     href: "/examples",
     title: "示例",
-    desc: "Dashboard、IDE、登录、看板等完整页面级示例。",
+    desc: "Dashboard、IDE、看板、登录等 9 个完整页面级布局。",
   },
 ];
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-3xl space-y-10 py-8">
-      <section className="space-y-4">
-        <p className="text-sm font-medium text-muted-foreground">
-          Vibe Coding 指南
-        </p>
-        <h1 className="text-4xl font-semibold tracking-tight">写意</h1>
-        <p className="text-lg leading-relaxed text-muted-foreground">
-          写意者，以意运码，码落而器成。胸中之构，言而为品。
-        </p>
-        <p className="text-sm text-muted-foreground">
-          专注产品设计，把实现交给 AI——技术不再是门槛，创意得以舒展。
-        </p>
-        <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href="/concepts"
-            className={cn(buttonVariants({ variant: "default" }))}
-          >
-            从基础概念开始
-          </Link>
-          <Link
-            href="/components"
-            className={cn(buttonVariants({ variant: "outline" }))}
-          >
-            浏览前端组件
-          </Link>
-        </div>
+    <div className="mx-auto max-w-6xl space-y-20 py-10 md:space-y-24 md:py-14">
+      {/* Hero：非对称 split，左文案右实时预览 */}
+      <section className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+        <Reveal className="space-y-5 lg:col-span-7">
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            Vibe Coding 指南
+          </p>
+          <h1 className="text-5xl font-semibold tracking-tight md:text-6xl">
+            写意
+          </h1>
+          <p className="max-w-[46ch] text-base leading-relaxed text-muted-foreground md:text-lg">
+            以意运码，码落而器成。用准确术语描述组件与需求，让 AI 写出可用的界面。
+          </p>
+          <div className="flex flex-wrap gap-3 pt-1">
+            <Link href="/concepts" className={cn(buttonVariants())}>
+              从基础概念开始
+            </Link>
+            <Link
+              href="/components"
+              className={cn(buttonVariants({ variant: "outline" }))}
+            >
+              浏览前端组件
+            </Link>
+          </div>
+        </Reveal>
+
+        <Reveal className="lg:col-span-5" delay={120}>
+          <HomeHeroDemo />
+          <p className="mt-2 text-xs text-muted-foreground">
+            以上组件可直接操作，不是截图。
+          </p>
+        </Reveal>
       </section>
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        {sections.map((s) => (
-          <Link key={s.href} href={s.href} className="block">
-            <Card className="h-full transition-colors hover:border-foreground/20">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">{s.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
-                {s.desc}
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      {/* 入口目录：行列表（与 hero 的 split、下方的 bento 属不同版式家族） */}
+      <Reveal>
+        <section className="space-y-4">
+          <h2 className="text-2xl font-semibold tracking-tight">从这里开始</h2>
+          <div className="divide-y border-t">
+            {entries.map((e) => (
+              <Link
+                key={e.href}
+                href={e.href}
+                className="group flex items-center gap-4 py-5 transition-colors hover:bg-muted/40"
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="block text-base font-medium">
+                    {e.title}
+                  </span>
+                  <span className="mt-1 block text-sm text-muted-foreground">
+                    {e.desc}
+                  </span>
+                </span>
+                <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1" />
+              </Link>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+
+      {/* 组件速览：bento，4 个单元对应 4 项内容，无空单元格 */}
+      <Reveal>
+        <section className="space-y-4">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            组件可以直接操作
+          </h2>
+          <HomeBento />
+        </section>
+      </Reveal>
     </div>
   );
 }

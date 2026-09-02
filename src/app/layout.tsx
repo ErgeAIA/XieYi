@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarNav } from "@/components/site-sidebar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,13 +30,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="zh"
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      className={`${spaceGrotesk.variable} ${plexMono.variable} antialiased`}
     >
       <body className="min-h-screen bg-background text-foreground">
+        <noscript>
+          <style>{`.reveal{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
         <ThemeProvider>
           <TooltipProvider>
             <div className="flex min-h-screen">
-              <aside className="hidden w-60 shrink-0 border-r bg-muted/30 p-4 md:block">
+              <aside className="hidden w-60 shrink-0 border-r bg-sidebar p-4 md:block">
                 <div className="mb-4 px-3 text-lg font-semibold tracking-tight">
                   写意
                 </div>

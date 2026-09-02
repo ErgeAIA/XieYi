@@ -206,7 +206,7 @@ function ExampleBlock({
     <div className="space-y-3 rounded-md border border-dashed p-4">
       <ComponentPlaceholder cat={cat} />
       <p className="text-xs text-muted-foreground">
-        占位预览 · 阶段 B 待补真实可交互示例
+        示例补全中，可先参考上方的使用场景
       </p>
     </div>
   );
