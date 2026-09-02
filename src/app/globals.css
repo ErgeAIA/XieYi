@@ -288,3 +288,30 @@ html[data-motion="off"] .page-enter {
     scroll-behavior: smooth;
   }
 }
+
+/* 侧栏滚动条：细窄低调，避免原生滚动条突兀（受总开关门控）。 */
+aside {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 22%, transparent)
+    color-mix(in srgb, var(--foreground) 8%, transparent);
+  scrollbar-gutter: stable;
+}
+aside::-webkit-scrollbar {
+  width: 8px;
+}
+aside::-webkit-scrollbar-track {
+  background: transparent;
+}
+aside::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--foreground) 22%, transparent);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+aside::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--primary) 45%, transparent);
+  background-clip: padding-box;
+}
+html[data-motion="off"] aside {
+  scrollbar-color: color-mix(in srgb, var(--foreground) 14%, transparent) transparent;
+}

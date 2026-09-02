@@ -22,7 +22,12 @@ import {
 import { backendTopics } from "@/content/backend";
 import { pageExamples } from "@/components/examples/pages";
 import { useScrollSpy } from "@/components/scroll-spy";
-import { SidebarTree, type SidebarTreeSection } from "@/components/sidebar-tree";
+import { useNavSpy } from "@/components/nav-spy";
+import {
+  SidebarTree,
+  type SidebarTreeSection,
+  type SidebarTreeItem,
+} from "@/components/sidebar-tree";
 
 // 基础概念：二级=分组，三级=概念
 const conceptSections: SidebarTreeSection[] = conceptGroups.map((g) => ({
@@ -56,6 +61,7 @@ const backendSections: SidebarTreeSection[] = backendTopics.map((t) => ({
   label: t.name,
 }));
 
+// 前端组件：二级=分类（?cat=），三级=组件（#nameEn）
 const CATEGORY_EN: Record<ComponentCategory, string> = {
   layout: "Layout",
   form: "Form",
@@ -67,6 +73,19 @@ const CATEGORY_EN: Record<ComponentCategory, string> = {
   chat: "Chat",
   extra: "Extended",
 };
+const componentSections: SidebarTreeSection[] = componentCategories.map((cat) => ({
+  id: cat,
+  label: componentCategoryMeta[cat],
+  en: CATEGORY_EN[cat],
+  count: componentsByCategory(cat).length,
+  items: componentsByCategory(cat).map((c) => ({
+    id: c.nameEn,
+    label: c.nameZh,
+    en: c.nameEn,
+  })),
+}));
+const componentHref = (sec: SidebarTreeSection, item?: SidebarTreeItem) =>
+  item ? `/components?cat=${sec.id}#${item.id}` : `/components?cat=${sec.id}`;
 
 function NavLink({
   href,
@@ -98,8 +117,9 @@ function NavLink({
 
 export function SidebarNav() {
   const pathname = usePathname();
-  const { activeCat, activeComponent, pinnedCat } = useScrollSpy();
   const isComponents = pathname === "/components";
+  const { activeCat, activeComponent } = useScrollSpy();
+  const { activeGroup, activeItem } = useNavSpy();
 
   return (
     <nav className="flex flex-col gap-1 text-sm">
@@ -109,98 +129,49 @@ export function SidebarNav() {
       <NavLink href="/concepts" active={pathname === "/concepts"}>
         基础概念
       </NavLink>
-      <SidebarTree route="/concepts" sections={conceptSections} />
+      <SidebarTree
+        route="/concepts"
+        sections={conceptSections}
+        highlightId={activeItem}
+        groupActiveId={activeGroup}
+      />
 
-      <div className="mt-1">
-        <NavLink href="/components" active={isComponents}>
-          前端组件
-        </NavLink>
-        <div className="ml-2 mt-1 flex flex-col gap-1">
-          {componentCategories.map((cat) => {
-            const open = isComponents && (pinnedCat ? pinnedCat === cat : activeCat === cat);
-            return (
-              <div key={cat}>
-                <Link
-                  href={`/components?cat=${cat}`}
-                  className={`group relative flex items-center rounded-lg px-2.5 py-1.5 text-sm transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
-                    open
-                      ? "bg-primary/10 font-medium text-primary"
-                      : "text-foreground/70 hover:bg-accent/50 hover:text-foreground"
-                  }`}
-                >
-                  <span
-                    className={`absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
-                      open ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
-                    }`}
-                  />
-                  <span className="flex items-baseline gap-1.5">
-                    {componentCategoryMeta[cat]}
-                    <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
-                      {CATEGORY_EN[cat]}
-                    </span>
-                  </span>
-                  <span className="ml-auto rounded bg-muted px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground/70">
-                    {componentsByCategory(cat).length}
-                  </span>
-                </Link>
-                <div
-                  className={`grid transition-all duration-[350ms] ease-[cubic-bezier(.16,1,.3,1)] ${
-                    open
-                      ? "grid-rows-[1fr] opacity-100"
-                      : "grid-rows-[0fr] opacity-0"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <div className="ml-2.5 mt-1 flex flex-col gap-0.5 border-l border-sidebar-border pl-3">
-                      {componentsByCategory(cat).map((c, i) => {
-                        const compActive = activeComponent === c.nameEn;
-                        return (
-                          <div
-                            key={c.nameEn}
-                            className={`transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
-                              open
-                                ? "translate-y-0 opacity-100"
-                                : "translate-y-1 opacity-0"
-                            }`}
-                            style={{ transitionDelay: open ? `${i * 25}ms` : "0ms" }}
-                          >
-                            <Link
-                              href={`/components?cat=${cat}#${c.nameEn}`}
-                              className={`flex items-baseline gap-1.5 rounded-md px-2 py-1 text-xs transition-colors duration-200 ${
-                                compActive
-                                  ? "bg-primary/10 font-medium text-primary"
-                                  : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
-                              }`}
-                            >
-                              {c.nameZh}
-                              <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
-                                {c.nameEn}
-                              </span>
-                            </Link>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <NavLink href="/components" active={isComponents}>
+        前端组件
+      </NavLink>
+      <SidebarTree
+        route="/components"
+        sections={componentSections}
+        highlightId={activeComponent}
+        groupActiveId={activeCat}
+        buildHref={componentHref}
+      />
 
       <NavLink href="/examples" active={pathname === "/examples"}>
         示例
       </NavLink>
-      <SidebarTree route="/examples" sections={exampleSections} />
+      <SidebarTree
+        route="/examples"
+        sections={exampleSections}
+        groupActiveId={activeGroup}
+      />
       <NavLink href="/resources" active={pathname === "/resources"}>
         参考资源
       </NavLink>
-      <SidebarTree route="/resources" sections={resourceSections} />
+      <SidebarTree
+        route="/resources"
+        sections={resourceSections}
+        highlightId={activeItem}
+        groupActiveId={activeGroup}
+      />
       <NavLink href="/backend" active={pathname === "/backend"}>
         后端相关
       </NavLink>
-      <SidebarTree route="/backend" sections={backendSections} />
+      <SidebarTree
+        route="/backend"
+        sections={backendSections}
+        groupActiveId={activeGroup}
+      />
     </nav>
   );
 }
