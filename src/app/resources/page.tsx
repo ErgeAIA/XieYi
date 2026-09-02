@@ -37,7 +37,7 @@ export default function ResourcesPage() {
               </h2>
               <div className="grid gap-3 sm:grid-cols-2">
                 {items.map((r) => (
-                  <Card key={r.name}>
+                  <Card key={r.name} className="hover-lift">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base">
                         <a

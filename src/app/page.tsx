@@ -71,7 +71,7 @@ export default function Home() {
               <Link
                 key={e.href}
                 href={e.href}
-                className="group flex items-center gap-4 py-5 transition-colors hover:bg-muted/40"
+                className="group flex items-center gap-4 py-5 transition-colors hover:bg-muted/40 hover-lift"
               >
                 <span className="min-w-0 flex-1">
                   <span className="block text-base font-medium">

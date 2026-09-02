@@ -22,7 +22,7 @@ export default function BackendPage() {
       <div className="space-y-4">
         {backendTopics.map((t, i) => (
           <Reveal key={t.id} delay={i * 60}>
-            <Card>
+            <Card className="hover-lift">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base">
                   {t.name}

@@ -612,7 +612,7 @@ export function ExamplesGallery() {
           <a
             key={e.id}
             href={`#${e.id}`}
-            className="rounded-md border bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="hover-lift rounded-md border bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             {e.title}
           </a>
@@ -628,7 +628,7 @@ export function ExamplesGallery() {
                 <h2 className="text-lg font-medium">{e.title}</h2>
                 <p className="text-sm text-muted-foreground">{e.desc}</p>
               </div>
-              <div className="overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
+              <div className="hover-lift overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
                 <Comp />
               </div>
             </section>

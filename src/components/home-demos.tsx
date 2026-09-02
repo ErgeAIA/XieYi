@@ -93,7 +93,7 @@ export function HomeBento() {
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      <div className="rounded-xl border bg-primary/5 p-5 md:col-span-2">
+      <div className="hover-lift rounded-xl border bg-primary/5 p-5 md:col-span-2">
         <div className="mb-3 text-sm font-medium">按钮层级</div>
         <div className="flex flex-wrap gap-2">
           <Button size="sm">保存更改</Button>
@@ -109,7 +109,7 @@ export function HomeBento() {
         </div>
       </div>
 
-      <div className="rounded-xl border p-5">
+      <div className="hover-lift rounded-xl border p-5">
         <div className="mb-3 text-sm font-medium">开关</div>
         <label className="flex items-center justify-between gap-3 text-xs">
           <span>接收更新</span>
@@ -117,7 +117,7 @@ export function HomeBento() {
         </label>
       </div>
 
-      <div className="rounded-xl border bg-muted/40 p-5 md:col-span-2">
+      <div className="hover-lift rounded-xl border bg-muted/40 p-5 md:col-span-2">
         <div className="mb-3 text-sm font-medium">表单</div>
         <div className="space-y-3">
           <div className="space-y-1.5">
@@ -136,7 +136,7 @@ export function HomeBento() {
         </div>
       </div>
 
-      <div className="rounded-xl border p-5">
+      <div className="hover-lift rounded-xl border p-5">
         <div className="mb-3 text-sm font-medium">图表色阶</div>
         <div className="flex h-10 items-end gap-1.5">
           {[
