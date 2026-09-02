@@ -19,7 +19,7 @@ export default async function ComponentsPage({
   const { cat } = await searchParams;
   const initial = componentCategories.includes(cat as ComponentCategory)
     ? (cat as ComponentCategory)
-    : "layout";
+    : null;
 
   return (
     <div className="mx-auto max-w-5xl">

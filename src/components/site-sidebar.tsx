@@ -2,12 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   componentCategories,
   componentCategoryMeta,
   componentsByCategory,
 } from "@/content/components";
+import { useScrollSpy } from "@/components/scroll-spy";
 
 function NavLink({
   href,
@@ -34,8 +35,7 @@ function NavLink({
 
 export function SidebarNav() {
   const pathname = usePathname();
-  const params = useSearchParams();
-  const activeCat = params.get("cat");
+  const { activeCat, activeComponent } = useScrollSpy();
   const isComponents = pathname === "/components";
 
   return (
@@ -53,30 +53,37 @@ export function SidebarNav() {
         </NavLink>
         <div className="ml-3 mt-0.5 flex flex-col gap-0.5 border-l pl-2">
           {componentCategories.map((cat) => {
-            const active = isComponents && activeCat === cat;
+            const open = isComponents && activeCat === cat;
             return (
               <div key={cat}>
                 <Link
                   href={`/components?cat=${cat}`}
                   className={`block rounded px-2 py-1 transition-colors ${
-                    active
+                    open
                       ? "bg-accent font-medium text-accent-foreground"
                       : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {componentCategoryMeta[cat]}
                 </Link>
-                {active && (
+                {open && (
                   <div className="ml-2 mt-0.5 flex flex-col gap-0.5 border-l pl-2">
-                    {componentsByCategory(cat).map((c) => (
-                      <Link
-                        key={c.nameEn}
-                        href={`/components?cat=${cat}#${c.nameEn}`}
-                        className="block rounded px-2 py-0.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {c.nameZh}
-                      </Link>
-                    ))}
+                    {componentsByCategory(cat).map((c) => {
+                      const compActive = activeComponent === c.nameEn;
+                      return (
+                        <Link
+                          key={c.nameEn}
+                          href={`/components?cat=${cat}#${c.nameEn}`}
+                          className={`block rounded px-2 py-0.5 text-xs transition-colors ${
+                            compActive
+                              ? "font-medium text-foreground"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {c.nameZh}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>

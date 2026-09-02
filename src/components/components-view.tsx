@@ -12,39 +12,88 @@ import {
   type ComponentCategory,
 } from "@/content/components";
 import { exampleRegistry } from "@/components/examples/registry";
+import { useScrollSpy } from "@/components/scroll-spy";
 
 export function ComponentsView({
   initialCat,
 }: {
-  initialCat: ComponentCategory;
+  initialCat: ComponentCategory | null;
 }) {
-  const [cat, setCat] = React.useState<ComponentCategory>(initialCat);
   const [q, setQ] = React.useState("");
+  const { activeCat, setActiveCat, setActiveComponent } = useScrollSpy();
+  const s = q.trim().toLowerCase();
 
+  // 初始定位：优先锚点，其次分类
   React.useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hash) {
-      const el = document.getElementById(window.location.hash.slice(1));
-      el?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [cat]);
+    const target = window.location.hash
+      ? window.location.hash.slice(1)
+      : initialCat ?? undefined;
+    if (!target) return;
+    requestAnimationFrame(() => {
+      const el = document.getElementById(target);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [initialCat]);
 
-  const items = componentsByCategory(cat).filter((c) => {
-    const s = q.trim().toLowerCase();
-    if (!s) return true;
-    return (c.nameZh + c.nameEn + c.desc + c.usage).toLowerCase().includes(s);
-  });
+  // 分类区块 scroll-spy：当前分类展开、其余折叠
+  React.useEffect(() => {
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-spy-cat]")
+    );
+    if (!sections.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (!visible.length) return;
+        visible.sort(
+          (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
+        );
+        const cat = visible[0].target.getAttribute("data-spy-cat");
+        if (cat) setActiveCat(cat);
+      },
+      { rootMargin: "-72px 0px -65% 0px", threshold: 0 }
+    );
+    sections.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [setActiveCat, q]);
+
+  // 组件卡片 scroll-spy：高亮正在看的组件
+  React.useEffect(() => {
+    const cards = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-spy-component]")
+    );
+    if (!cards.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (!visible.length) return;
+        visible.sort(
+          (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
+        );
+        const id = visible[0].target.id;
+        if (id) setActiveComponent(id);
+      },
+      { rootMargin: "-72px 0px -70% 0px", threshold: 0 }
+    );
+    cards.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [setActiveComponent, q]);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-1.5">
           {componentCategories.map((c) => (
             <button
               key={c}
               type="button"
-              onClick={() => setCat(c)}
+              onClick={() => {
+                document
+                  .getElementById(c)
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
               className={`rounded-md px-2.5 py-1 text-sm transition-colors ${
-                cat === c
+                activeCat === c
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted text-muted-foreground hover:text-foreground"
               }`}
@@ -61,36 +110,69 @@ export function ComponentsView({
         />
       </div>
 
-      <div className="space-y-3">
-        {items.map((c) => (
-          <Card key={c.nameEn} id={c.nameEn} className="scroll-mt-20">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-base">
-                {c.nameZh}
-                <span className="text-xs font-normal text-muted-foreground">
-                  {c.nameEn}
-                </span>
-                <Badge variant="secondary" className="ml-auto text-xs">
-                  {componentCategoryMeta[c.cat]}
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <p>{c.desc}</p>
-              <div className="rounded-md bg-muted/50 p-3">
-                <p className="font-medium">使用场景</p>
-                <p className="text-muted-foreground">{c.usage}</p>
-              </div>
-              <div>
-                <p className="mb-1 text-xs font-medium text-muted-foreground">
-                  示例
-                </p>
-                <ExampleBlock nameEn={c.nameEn} cat={c.cat} html={c.example} />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {componentCategories.map((cat) => {
+        const items = componentsByCategory(cat).filter((c) => {
+          if (!s) return true;
+          return (
+            c.nameZh + c.nameEn + c.desc + c.usage
+          ).toLowerCase().includes(s);
+        });
+        if (!items.length) return null;
+        return (
+          <section
+            key={cat}
+            id={cat}
+            data-spy-cat={cat}
+            className="scroll-mt-16 space-y-3"
+          >
+            <h2 className="text-lg font-semibold tracking-tight text-foreground">
+              {componentCategoryMeta[cat]}
+              <span className="ml-2 text-xs font-normal text-muted-foreground">
+                {items.length} 个
+              </span>
+            </h2>
+            <div className="space-y-3">
+              {items.map((c) => (
+                <Card
+                  key={c.nameEn}
+                  id={c.nameEn}
+                  data-spy-component={c.nameEn}
+                  className="scroll-mt-20"
+                >
+                  <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      {c.nameZh}
+                      <span className="text-xs font-normal text-muted-foreground">
+                        {c.nameEn}
+                      </span>
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        {componentCategoryMeta[c.cat]}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3 text-sm">
+                    <p>{c.desc}</p>
+                    <div className="rounded-md bg-muted/50 p-3">
+                      <p className="font-medium">使用场景</p>
+                      <p className="text-muted-foreground">{c.usage}</p>
+                    </div>
+                    <div>
+                      <p className="mb-1 text-xs font-medium text-muted-foreground">
+                        示例
+                      </p>
+                      <ExampleBlock
+                        nameEn={c.nameEn}
+                        cat={c.cat}
+                        html={c.example}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }
