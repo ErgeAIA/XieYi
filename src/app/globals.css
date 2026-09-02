@@ -21,11 +21,12 @@
     "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
   --font-app-mono: var(--font-plex-mono, "IBM Plex Mono"), ui-monospace,
     SFMono-Regular, Menlo, monospace;
-  /* 标题：文艺细宋（站酷小薇 ZCOOL XiaoWei，Google Fonts）；
-     品牌/hero：黄令东齐伋体（QIJI-Fallback，自托管于 public/fonts）。 */
-  --font-app-song: "ZCOOL XiaoWei", "Noto Serif SC", "Songti SC", "SimSun",
-    serif;
-  --font-app-brush: "QijiFallback", "ZCOOL XiaoWei", "Songti SC", serif;
+  /* 标题：文艺宋体（Noto Serif SC 思源宋体，Google Fonts）；
+     品牌/hero：黄令东齐伋体（QIJI-Fallback，自托管于 public/fonts）。
+     装饰性中文字体（song/brush）仅用于站点标题与品牌，禁止出现在组件示例中
+     （见下方 .preview / .example-canvas 强制回落无衬线规则）。 */
+  --font-app-song: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --font-app-brush: "QijiFallback", "Songti SC", serif;
 }
 
 @theme inline {
@@ -163,6 +164,21 @@
   /* 标题统一走文艺宋体，与无衬线正文形成国风对比 */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-app-song);
+  }
+
+  /* 组件示例 / 页面级示例：装饰中文字体（song/brush）一律回落无衬线，
+     保证任何组件内部标题、正文都使用基础 UI 字体，不带入国风装饰字体。 */
+  .preview,
+  .example-canvas {
+    font-family: var(--font-app-sans);
+  }
+  .preview :is(h1, h2, h3, h4, h5, h6),
+  .example-canvas :is(h1, h2, h3, h4, h5, h6),
+  .preview .font-heading,
+  .example-canvas .font-heading,
+  .preview .font-brush,
+  .example-canvas .font-brush {
+    font-family: var(--font-app-sans);
   }
 }
 

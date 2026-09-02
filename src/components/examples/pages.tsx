@@ -633,7 +633,7 @@ export function ExamplesGallery() {
                 <h2 className="text-lg font-medium">{e.title}</h2>
                 <p className="text-sm text-muted-foreground">{e.desc}</p>
               </div>
-              <div className="hover-lift overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
+              <div className="example-canvas hover-lift overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
                 <Comp />
               </div>
             </section>

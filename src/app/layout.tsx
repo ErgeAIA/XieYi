@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
         />
       </head>
       <body className="min-h-screen bg-background text-foreground">
