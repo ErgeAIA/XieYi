@@ -43,13 +43,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }}
         />
         <link
-          rel="preconnect"
-          href="https://cdn.jsdelivr.net"
-          crossOrigin="anonymous"
-        />
-        <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css"
+          href="/fonts/lxgw-wenkai/lxgw-wenkai.css"
         />
       </head>
       <body className="min-h-screen bg-background text-foreground">
