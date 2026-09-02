@@ -27,17 +27,17 @@ export default function ResourcesPage() {
         const items = resources.filter((r) => r.category === cat);
         if (items.length === 0) return null;
         return (
-          <Reveal key={cat}>
-            <section className="space-y-3">
-              <h2 className="text-sm font-medium text-muted-foreground">
-                {cat}
-                <span className="ml-2 font-normal">
-                  · {resourceCategoryMeta[cat]}
-                </span>
-              </h2>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {items.map((r) => (
-                  <Card key={r.name} className="hover-lift">
+          <section key={cat} className="space-y-3">
+            <h2 className="text-sm font-medium text-muted-foreground">
+              {cat}
+              <span className="ml-2 font-normal">
+                · {resourceCategoryMeta[cat]}
+              </span>
+            </h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {items.map((r, i) => (
+                <Reveal key={r.name} delay={i * 60}>
+                  <Card className="hover-lift">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base">
                         <a
@@ -54,10 +54,10 @@ export default function ResourcesPage() {
                       {r.note}
                     </CardContent>
                   </Card>
-                ))}
-              </div>
-            </section>
-          </Reveal>
+                </Reveal>
+              ))}
+            </div>
+          </section>
         );
       })}
     </div>

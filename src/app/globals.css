@@ -237,3 +237,27 @@ html:not([data-motion="off"]) .skeleton-shimmer::after {
   );
   animation: xieyi-shimmer 1.6s var(--motion-ease-in-out) infinite;
 }
+
+/* 页面进场：路由切换时右侧内容淡入 + 轻微上移（由 app/template.tsx 包裹触发，
+   每次导航重新挂载从而重播）。受总开关与 prefers-reduced-motion 门控。 */
+.page-enter {
+  animation: xieyi-page-enter var(--motion-base) var(--motion-ease) both;
+}
+@keyframes xieyi-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}
+html[data-motion="off"] .page-enter {
+  animation: none;
+}

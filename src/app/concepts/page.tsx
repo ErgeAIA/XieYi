@@ -38,8 +38,8 @@ export default function ConceptsPage() {
               {conceptGroupMeta[g]}
             </h2>
             <div className="space-y-3">
-              {items.map((c) => (
-                <Reveal key={c.id}>
+              {items.map((c, i) => (
+                <Reveal key={c.id} delay={i * 50}>
                   <Card className="hover-lift">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base">
