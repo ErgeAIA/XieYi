@@ -35,7 +35,7 @@ export default function Home() {
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
             Vibe Coding 指南
           </p>
-          <h1 className="font-brush text-5xl font-semibold tracking-normal md:text-6xl">
+          <h1 className="font-brush text-6xl font-semibold tracking-normal md:text-7xl">
             写意
           </h1>
           <p className="max-w-[46ch] text-base leading-relaxed text-muted-foreground md:text-lg">
