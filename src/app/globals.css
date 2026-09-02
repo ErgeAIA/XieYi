@@ -333,10 +333,10 @@ html[data-motion="off"] aside {
 }
 
 /* 首页 hero「写意」：逐字墨晕入场（放慢到 1.5s，blur→清晰、上移、淡入，错峰）
-   + 持续轻柔浮动「呼吸」+ 入场后的火星微光掠过（呼应余烬背景）+ 悬停笔锋回应（轻微放大/微旋）。
+   + 持续轻柔浮动「呼吸」+ 悬停笔锋回应（轻微放大/微旋）。
    受总开关（html[data-motion="off"]）与 prefers-reduced-motion 门控；关闭时两字静态可见。
    结构：外层 .hero-glyph 负责入场与浮动（transform），内层 .hero-glyph-inner 负责
-   文字渐变/微光（background-position）与悬停变换（transform），分元素避免 transform 冲突。 */
+   悬停变换（transform），分元素避免 transform 冲突。 */
 .hero-glyph,
 .hero-glyph-inner {
   display: inline-block;
@@ -345,7 +345,7 @@ html[data-motion="off"] aside {
   will-change: transform, filter, opacity;
 }
 .hero-glyph-inner {
-  will-change: transform, background-position;
+  will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
   /* 外层：入场放慢到 1.5s；浮动在入场结束后（1.7s）才启动。 */
@@ -358,28 +358,9 @@ html[data-motion="off"] aside {
   html:not([data-motion="off"]) .hero-glyph:nth-child(2) {
     animation-delay: 0.18s, 1.88s;
   }
-  /* 内层：墨色文字 + 暖色微光带，入场后周期性掠过；悬停轻微放大并微旋（笔锋感）。 */
+  /* 内层：仅承载悬停变换（轻微放大并微旋，笔锋感），与外层浮动分元素互不干扰。 */
   html:not([data-motion="off"]) .hero-glyph-inner {
-    background-image: linear-gradient(
-      100deg,
-      var(--foreground) 0%,
-      var(--foreground) 40%,
-      color-mix(in srgb, #ffb877 65%, #fff) 50%,
-      var(--foreground) 60%,
-      var(--foreground) 100%
-    );
-    background-size: 220% 100%;
-    background-position: 130% 0;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    animation: xieyi-glyph-shimmer 6s var(--motion-ease-in-out) 1.7s infinite;
     transition: transform 0.3s var(--motion-ease);
-  }
-  /* 第二字入场晚 0.18s，其微光也顺延，保证入场→微光的衔接。 */
-  html:not([data-motion="off"]) .hero-glyph:nth-child(2) .hero-glyph-inner {
-    animation-delay: 1.88s;
   }
   html:not([data-motion="off"]) .hero-glyph-inner:hover {
     transform: scale(1.06) rotate(-2.5deg);
@@ -404,17 +385,5 @@ html[data-motion="off"] aside {
   }
   50% {
     transform: translateY(-0.07em);
-  }
-}
-/* 火星微光掠过：暖色高光带从右向左扫过字面，每 6s 一次，扫完即停。 */
-@keyframes xieyi-glyph-shimmer {
-  0% {
-    background-position: 130% 0;
-  }
-  55% {
-    background-position: -30% 0;
-  }
-  100% {
-    background-position: -30% 0;
   }
 }
