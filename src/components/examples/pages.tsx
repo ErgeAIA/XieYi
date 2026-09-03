@@ -540,46 +540,50 @@ function TodoExample() {
   const remove = (id: number) => setItems((p) => p.filter((i) => i.id !== id));
   const left = items.filter((i) => !i.done).length;
   return (
-    <Card className="max-w-md">
-      <CardHeader>
-        <CardTitle className="text-base">任务清单</CardTitle>
-        <CardDescription>剩余 {left} 项</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="flex gap-2">
-          <Input
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="添加任务…"
-            onKeyDown={(e) => e.key === "Enter" && add()}
-          />
-          <Button onClick={add}>添加</Button>
-        </div>
-        <ul className="space-y-1">
-          {items.map((it) => (
-            <li
-              key={it.id}
-              className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-muted"
-            >
-              <Checkbox checked={it.done} onCheckedChange={() => toggle(it.id)} />
-              <span
-                className={`flex-1 text-sm ${
-                  it.done ? "text-muted-foreground line-through" : ""
-                }`}
-              >
-                {it.text}
-              </span>
-              <button
-                onClick={() => remove(it.id)}
-                className="text-xs text-muted-foreground hover:text-destructive"
-              >
-                删除
-              </button>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+    <section className="example-canvas">
+      <Reveal>
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle className="text-base">任务清单</CardTitle>
+            <CardDescription>剩余 {left} 项</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex gap-2">
+              <Input
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="添加任务…"
+                onKeyDown={(e) => e.key === "Enter" && add()}
+              />
+              <Button onClick={add}>添加</Button>
+            </div>
+            <ul className="space-y-1">
+              {items.map((it) => (
+                <li
+                  key={it.id}
+                  className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-muted"
+                >
+                  <Checkbox checked={it.done} onCheckedChange={() => toggle(it.id)} />
+                  <span
+                    className={`flex-1 text-sm ${
+                      it.done ? "text-muted-foreground line-through" : ""
+                    }`}
+                  >
+                    {it.text}
+                  </span>
+                  <button
+                    onClick={() => remove(it.id)}
+                    className="text-xs text-muted-foreground hover:text-destructive"
+                  >
+                    删除
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </Reveal>
+    </section>
   );
 }
 
