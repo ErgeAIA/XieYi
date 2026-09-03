@@ -594,21 +594,26 @@ function TimelineExample() {
     { date: "09-01", title: "项目启动", desc: "完成需求评审与技术方案" },
     { date: "09-02", title: "脚手架搭建", desc: "Next.js + Tailwind + shadcn 落地" },
     { date: "09-03", title: "示例编写", desc: "组件示例与页面级布局" },
+    { date: "09-04", title: "内部评审", desc: "设计走查与无障碍核对" },
     { date: "09-05", title: "发布上线", desc: "部署到生产环境" },
   ];
   return (
-    <div className="max-w-md">
-      <ol className="relative space-y-4 border-l pl-4">
-        {events.map((e, i) => (
-          <li key={i} className="relative">
-            <span className="absolute -left-[21px] top-1 size-3 rounded-full border-2 border-primary bg-background" />
-            <div className="text-xs text-muted-foreground">{e.date}</div>
-            <div className="text-sm font-medium">{e.title}</div>
-            <div className="text-sm text-muted-foreground">{e.desc}</div>
-          </li>
-        ))}
-      </ol>
-    </div>
+    <section className="example-canvas">
+      <Reveal>
+        <div className="max-w-md">
+          <ol className="relative space-y-4 border-l pl-4">
+            {events.map((e, i) => (
+              <li key={i} className="relative">
+                <span className="absolute -left-[21px] top-1 size-3 rounded-full border-2 border-primary bg-background" />
+                <div className="text-xs text-muted-foreground">{e.date}</div>
+                <div className="text-sm font-medium">{e.title}</div>
+                <div className="text-sm text-muted-foreground">{e.desc}</div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Reveal>
+    </section>
   );
 }
 
