@@ -393,73 +393,77 @@ function AuthExample() {
 
 function SettingsExample() {
   return (
-    <Card className="max-w-xl">
-      <CardHeader>
-        <CardTitle>设置</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="general">
-          <TabsList>
-            <TabsTrigger value="general">通用</TabsTrigger>
-            <TabsTrigger value="notify">通知</TabsTrigger>
-            <TabsTrigger value="security">安全</TabsTrigger>
-          </TabsList>
-          <TabsContent value="general" className="space-y-4 pt-4">
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">昵称</label>
-              <Input defaultValue="写意用户" />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">语言</label>
-              <Select defaultValue="zh">
-                <SelectTrigger>
-                  <SelectValue placeholder="语言" />
-                </SelectTrigger>
-                <SelectPortal>
-                  <SelectPositioner>
-                    <SelectPopup>
-                      <SelectList>
-                        <SelectItem value="zh">简体中文</SelectItem>
-                        <SelectItem value="en">English</SelectItem>
-                      </SelectList>
-                    </SelectPopup>
-                  </SelectPositioner>
-                </SelectPortal>
-              </Select>
-            </div>
-          </TabsContent>
-          <TabsContent value="notify" className="space-y-3 pt-4">
-            {[
-              ["邮件通知", "接收重要更新邮件"],
-              ["推送通知", "在浏览器接收推送"],
-              ["站内信", "接收站内消息"],
-            ].map(([t, d], i) => (
-              <div
-                key={i}
-                className="flex items-center justify-between rounded-md border p-3"
-              >
-                <div>
-                  <div className="text-sm font-medium">{t}</div>
-                  <div className="text-xs text-muted-foreground">{d}</div>
+    <section className="example-canvas">
+      <Reveal>
+        <Card className="max-w-xl">
+          <CardHeader>
+            <CardTitle>设置</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="general">
+              <TabsList>
+                <TabsTrigger value="general">通用</TabsTrigger>
+                <TabsTrigger value="notify">通知</TabsTrigger>
+                <TabsTrigger value="security">安全</TabsTrigger>
+              </TabsList>
+              <TabsContent value="general" className="space-y-4 pt-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">昵称</label>
+                  <Input defaultValue="写意用户" />
                 </div>
-                <Switch defaultChecked={i !== 1} />
-              </div>
-            ))}
-          </TabsContent>
-          <TabsContent value="security" className="space-y-4 pt-4">
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">当前密码</label>
-              <Input type="password" />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">新密码</label>
-              <Input type="password" />
-            </div>
-            <Button>更新密码</Button>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">语言</label>
+                  <Select defaultValue="zh">
+                    <SelectTrigger>
+                      <SelectValue placeholder="语言" />
+                    </SelectTrigger>
+                    <SelectPortal>
+                      <SelectPositioner>
+                        <SelectPopup>
+                          <SelectList>
+                            <SelectItem value="zh">简体中文</SelectItem>
+                            <SelectItem value="en">English</SelectItem>
+                          </SelectList>
+                        </SelectPopup>
+                      </SelectPositioner>
+                    </SelectPortal>
+                  </Select>
+                </div>
+              </TabsContent>
+              <TabsContent value="notify" className="space-y-3 pt-4">
+                {[
+                  ["邮件通知", "接收重要更新邮件"],
+                  ["推送通知", "在浏览器接收推送"],
+                  ["站内信", "接收站内消息"],
+                ].map(([t, d], i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between rounded-md border p-3"
+                  >
+                    <div>
+                      <div className="text-sm font-medium">{t}</div>
+                      <div className="text-xs text-muted-foreground">{d}</div>
+                    </div>
+                    <Switch defaultChecked={i !== 1} />
+                  </div>
+                ))}
+              </TabsContent>
+              <TabsContent value="security" className="space-y-4 pt-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">当前密码</label>
+                  <Input type="password" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">新密码</label>
+                  <Input type="password" />
+                </div>
+                <Button>更新密码</Button>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </Reveal>
+    </section>
   );
 }
 
