@@ -1080,35 +1080,121 @@ export const pageExamples: PageExample[] = [
     id: "stacked",
     title: "堆叠布局",
     desc: "顶部栏 + 竖向堆叠的内容块",
+    usage: "应用主框架、项目概览页、个人主页、设置中心外壳、仪表盘容器",
     keywords: "stacked 堆叠 布局 应用壳 顶栏 内容块 纵向 栏目 设置 项目 应用框架",
+    prompt: `请生成一个「堆叠布局（Stacked Layout）」页面，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 顶部应用栏（app bar）：左侧品牌名（如「写意」），右侧横向导航（首页 / 项目 / 文档，当前项高亮、其余 muted），底部细边框分隔。
+- 下方竖向堆叠内容块区（单列、最大宽度约 960px 居中或占满）：
+  - 区块一：页面标题（如「我的项目」）+ 一句 muted 描述（「共 12 个项目，3 个进行中」）。
+  - 区块二：项目卡网格（桌面 2 列、移动 1 列），每张卡含项目名 + 更新时间（muted）。
+  - 区块三：信息块（如「最近动态」），内部纵向列表（头像 / 姓名 + 动作描述）。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体，不引入装饰字体；顶部栏浅底（bg-muted/30），内容区留白充足、区块之间用空间区隔。
+
+响应式：
+- <640px 项目卡单列，导航可收起为抽屉或简化为横向滚动。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: StackedExample,
   },
   {
     id: "multi-column",
     title: "多栏布局",
     desc: "左导航 + 内容 + 右信息",
+    usage: "博客与文档站、内容门户、知识库、电商分类页、后台整体框架",
     keywords: "multi-column 多栏 多列 布局 侧边栏 网格 左导航 右信息 内容 栏目",
+    prompt: `请生成一个「多栏布局（Multi-column Layout）」页面，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 三栏网格（约 160px / 1fr / 200px）：
+  - 左栏：竖向分类导航（全部 / 设计 / 开发 / 运营…），当前项高亮（品牌色浅底），其余 hover 浅底。
+  - 中栏：内容列表（如文章标题卡片，纵向排布），顶部一个列表标题（「文章列表」）。
+  - 右栏：信息栏（如「关于」说明文字、标签云或统计）。
+- 整体细边框分隔各栏，圆角外框。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；侧栏浅底（bg-muted/30）；中栏卡片细边框、hover 抬升反馈。
+
+响应式：
+- <1024px 隐藏左右侧栏，内容占满；<768px 分类导航改为顶部横向滚动 Tab。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: MultiColumnExample,
   },
   {
     id: "headings",
     title: "标题",
     desc: "页面 / 卡片 / 章节三级标题",
+    usage: "页面排版规范、组件文档、设置分组标题、表单区块标题、内容层级示范",
     keywords: "heading 标题 页面标题 卡片标题 章节标题 排版 typography 层级 h1 h2 h3",
+    prompt: `请生成一个「标题层级（Headings）」排版示例，技术栈 React + Tailwind CSS。
+
+内容（桌面 ≥1024px）：
+- 页面级标题（h2/h3 量级，text-lg font-semibold）+ 一句 muted 描述，用于整页主标题区。
+- 卡片级标题（h4 量级，text-base font-semibold）+ 描述，放在带边框圆角的卡片内，代表表单 / 区块标题。
+- 小节标题（h5 量级，text-sm font-medium，大写 + letter-spacing + muted 色），下方接说明文字，用于「高级选项」等次级分组。
+
+样式约束：
+- 仅用 design token 类（text-foreground、text-muted-foreground、border 等），禁止硬编码颜色值。
+- 无衬线系统字体；标题层级仅靠字号 / 字重 / 颜色区分，不引入装饰字体；层级之间留白充足。
+
+响应式：
+- 移动端标题字号可略降，层级关系保持一致。
+
+数据为静态文案。输出完整可运行组件。`,
     Comp: HeadingsExample,
   },
   {
     id: "alerts",
     title: "警报",
     desc: "带描述 / 列表 / 操作 / 链接 / 强调边框 / 关闭",
+    usage: "表单提交反馈、系统通知横幅、操作成功提示、错误告警、引导性提示、全局消息",
     keywords: "alert 警报 提示 通知 警告 错误 成功 横幅 banner 描述 列表 操作 关闭 强调边框",
+    prompt: `请生成一个「警报（Alerts）」组件示例，技术栈 React + Tailwind CSS。
+
+展示多种形态（桌面 ≥1024px），每种一行：
+- 描述型：图标 + 标题 + 一段描述（如「已保存草稿 / 2 分钟前自动保存」）。
+- 列表型：警告图标 + 标题 + 无序列表（如「2 项待处理」）。
+- 操作型：图标 + 文案 + 右侧主色按钮（如「立即升级」）。
+- 链接型：成功图标 + 文案 + 右侧品牌色带箭头链接（「查看详情」）。
+- 强调边框型：左侧 4px 品牌色竖条（border-l-4 border-primary）+ 图标 + 文案，突出关键信息。
+- 可关闭型：错误色边框 + 图标 + 文案 + 右上角关闭按钮（点击移除，前端 state）。
+
+样式约束：
+- 仅用 design token 类（bg-background、border、text-muted-foreground、text-primary、text-destructive 等），图标可用 text-primary / text-amber-500 / text-emerald-500 / text-destructive 区分语义；禁止硬编码其他颜色值。
+- 无衬线系统字体；圆角细边框；图标用 lucide-react。
+
+响应式：
+- 移动端操作 / 链接型改为纵向堆叠（按钮 / 链接换行）。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: AlertsExample,
   },
   {
     id: "empty",
     title: "空状态",
     desc: "图标 + 标题 + 描述 + 操作",
+    usage: "无数据占位、搜索无结果、引导新建、列表空白、首次使用引导",
     keywords: "empty 空状态 无数据 占位 引导 新建 搜索无结果 空 图标",
+    prompt: `请生成一个「空状态（Empty States）」组件示例，技术栈 React + Tailwind CSS。
+
+展示两种常见形态（桌面 ≥1024px）：
+- 主引导型：居中卡片，虚线边框（border-dashed），顶部大号 muted 图标（如 Inbox），标题（「还没有任何项目」），描述（「创建你的第一个项目开始吧」），下方主色按钮（图标 + 「新建项目」）。
+- 轻量型：更小尺寸虚线虚框，居中图标（如 Search）+ 一句 muted 文案（「未找到匹配的结果」），无按钮。
+
+样式约束：
+- 仅用 design token 类（bg-background、border-dashed、text-muted-foreground、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；图标用 lucide-react，尺寸适中（size-8 / size-6）；主色按钮用 text-primary 背景。
+
+响应式：
+- 移动端卡片占满宽度，内边距适度缩小。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: EmptyStatesExample,
   },
 ];
