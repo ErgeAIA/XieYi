@@ -2,6 +2,7 @@
 export type ResourceCategory =
   | "组件库"
   | "设计系统"
+  | "图标库"
   | "AI 工具"
   | "动画组件"
   | "学习资料"
@@ -22,6 +23,7 @@ export function resourceId(r: ResourceItem): string {
 export const resourceCategories: ResourceCategory[] = [
   "组件库",
   "设计系统",
+  "图标库",
   "AI 工具",
   "动画组件",
   "学习资料",
@@ -31,6 +33,7 @@ export const resourceCategories: ResourceCategory[] = [
 export const resourceCategoryMeta: Record<ResourceCategory, string> = {
   组件库: "开箱即用的组件集合",
   设计系统: "底层样式与无样式原语",
+  图标库: "统一风格的界面图标集",
   "AI 工具": "用 AI 生成与可视化搭建",
   动画组件: "带动效的进阶组件（供后续美化参考）",
   学习资料: "官方文档与教程",
@@ -90,16 +93,36 @@ export const resources: ResourceItem[] = [
     note: "原子化 CSS 框架，shadcn 的样式基础。",
   },
   {
-    name: "Lucide Icons",
-    url: "https://lucide.dev",
-    category: "设计系统",
-    note: "本站使用的开源图标库，风格统一简洁。",
-  },
-  {
     name: "React Aria",
     url: "https://react-spectrum.adobe.com/react-aria",
     category: "设计系统",
     note: "Adobe 的无障碍交互原语，复杂组件参考。",
+  },
+
+  // 图标库
+  {
+    name: "Lucide Icons",
+    url: "https://lucide.dev",
+    category: "图标库",
+    note: "本站使用的开源图标库（lucide-react），线形风格统一简洁。",
+  },
+  {
+    name: "Phosphor Icons",
+    url: "https://phosphoricons.com",
+    category: "图标库",
+    note: "六种粗细一脉相承（thin 到 fill），@phosphor-icons/react 开箱即用。",
+  },
+  {
+    name: "HugeIcons",
+    url: "https://hugeicons.com",
+    category: "图标库",
+    note: "四千余套描边图标，风格圆润，免费档即可覆盖常用品类。",
+  },
+  {
+    name: "Iconify",
+    url: "https://iconify.design",
+    category: "图标库",
+    note: "聚合 200+ 图标集的统一 API，中途换库不用改代码。",
   },
 
   // AI 工具
