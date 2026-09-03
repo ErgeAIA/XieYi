@@ -184,6 +184,12 @@ export const resources: ResourceItem[] = [
     category: "学习资料",
     note: "React 概念、Hooks 与最佳实践。",
   },
+  {
+    name: "Next.js 文档",
+    url: "https://nextjs.org/docs",
+    category: "学习资料",
+    note: "本站框架的官方文档，App Router、渲染与部署讲得最透；配套 Learn 免费课程（nextjs.org/learn）。",
+  },
 
   // 社区
   {
