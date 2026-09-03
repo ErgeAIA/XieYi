@@ -279,11 +279,9 @@ html:not([data-motion="off"]) .skeleton-shimmer::after {
 @keyframes xieyi-page-enter {
   from {
     opacity: 0;
-    transform: translateY(0.4rem);
   }
   to {
     opacity: 1;
-    transform: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -346,6 +344,32 @@ aside::-webkit-scrollbar-thumb:hover {
   background-clip: padding-box;
 }
 html[data-motion="off"] aside {
+  scrollbar-color: color-mix(in srgb, var(--foreground) 14%, transparent) transparent;
+}
+
+/* 复制代码块滚动条：细窄低调，与侧栏一致，避免原生横向滚动条突兀。 */
+.copy-block {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 22%, transparent)
+    color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+.copy-block::-webkit-scrollbar {
+  height: 8px;
+}
+.copy-block::-webkit-scrollbar-track {
+  background: transparent;
+}
+.copy-block::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--foreground) 22%, transparent);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.copy-block::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--primary) 45%, transparent);
+  background-clip: padding-box;
+}
+html[data-motion="off"] .copy-block {
   scrollbar-color: color-mix(in srgb, var(--foreground) 14%, transparent) transparent;
 }
 

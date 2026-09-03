@@ -98,6 +98,24 @@ export function GroupLabel({
   );
 }
 
+/**
+ * 卡片内字段标签（定义 / 类比 / 推荐 / 关键术语 等）。
+ * 统一为 font-semibold + 前景色，比 muted 正文更显眼、层级更清晰。
+ */
+export function FieldLabel({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <span className={cn("font-semibold text-foreground", className)}>
+      {children}
+    </span>
+  );
+}
+
 /** 统一空态（无搜索结果 / 分类下无内容等）。 */
 export function EmptyState({
   children,

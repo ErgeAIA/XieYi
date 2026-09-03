@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
-import { PageContainer, PageHeader } from "@/components/page-shell";
+import { PageContainer, PageHeader, FieldLabel } from "@/components/page-shell";
+import { CopyBlock } from "@/components/copy-block";
 import { backendTopics } from "@/content/backend";
 
 export const metadata: Metadata = {
@@ -39,16 +40,20 @@ export default function BackendPage() {
               <CardContent className="space-y-3 text-sm">
                 <p>{t.explain}</p>
                 <div>
-                  <span className="font-medium">关键术语：</span>
+                  <FieldLabel>关键术语：</FieldLabel>
                   <span className="font-mono text-xs text-muted-foreground">
                     {t.terms.join(" · ")}
                   </span>
                 </div>
                 <div className="rounded-md bg-muted/50 p-3">
-                  <p className="font-medium">可以这样问 AI</p>
-                  <p className="mt-1 font-mono text-xs leading-relaxed">
-                    {t.examplePrompt}
+                  <p>
+                    <FieldLabel>可以这样问 AI</FieldLabel>
                   </p>
+                  <CopyBlock
+                    value={t.examplePrompt}
+                    className="mt-1"
+                    label="提问示例"
+                  />
                 </div>
               </CardContent>
             </Card>

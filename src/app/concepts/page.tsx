@@ -9,8 +9,10 @@ import {
   PageContainer,
   PageHeader,
   GroupLabel,
+  FieldLabel,
   EmptyState,
 } from "@/components/page-shell";
+import { CopyBlock } from "@/components/copy-block";
 import { concepts, conceptGroups, conceptGroupMeta } from "@/content/concepts";
 
 export default function ConceptsPage() {
@@ -67,23 +69,29 @@ export default function ConceptsPage() {
                     </CardHeader>
                     <CardContent className="space-y-2 text-sm">
                       <p>
-                        <span className="font-medium">定义：</span>
+                        <FieldLabel>定义：</FieldLabel>
                         {c.definition}
                       </p>
                       <p>
-                        <span className="font-medium">类比：</span>
+                        <FieldLabel>类比：</FieldLabel>
                         {c.analogy}
                       </p>
                       <div className="rounded-md bg-muted/50 p-3">
-                        <p className="font-medium">与 AI 协作</p>
-                        <p className="text-muted-foreground">{c.aiUsage.strategy}</p>
-                        <p className="mt-1 rounded bg-background p-2 font-mono text-xs">
-                          {c.aiUsage.example}
+                        <p>
+                          <FieldLabel>与 AI 协作</FieldLabel>
                         </p>
+                        <p className="text-muted-foreground">{c.aiUsage.strategy}</p>
+                        <CopyBlock
+                          value={c.aiUsage.example}
+                          className="mt-1"
+                          label="与 AI 协作示例"
+                        />
                       </div>
                       {c.recommendations && c.recommendations.length > 0 && (
                         <div className="rounded-md bg-muted/50 p-3">
-                          <p className="font-medium">推荐</p>
+                          <p>
+                            <FieldLabel>推荐</FieldLabel>
+                          </p>
                           <ul className="mt-1 space-y-1">
                             {c.recommendations.map((r, ri) => {
                               const external = r.url?.startsWith("http");
