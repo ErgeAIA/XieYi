@@ -14,6 +14,20 @@ import {
 } from "@/content/components";
 import { exampleRegistry } from "@/components/examples/registry";
 import { useScrollSpy } from "@/components/scroll-spy";
+import { SectionTitle, EmptyState } from "@/components/page-shell";
+import { Reveal } from "@/components/motion/reveal";
+
+// 读取 --scroll-offset（如 4.5rem）换算为像素，作为 scroll-spy 的 rootMargin 顶部，
+// 与 .scroll-anchor 的 scroll-margin-top 共用单一真源；解析失败回退 72px。
+function getScrollOffsetPx() {
+  if (typeof document === "undefined") return 72;
+  const styles = getComputedStyle(document.documentElement);
+  const rem = parseFloat(styles.getPropertyValue("--scroll-offset"));
+  const fontSize = parseFloat(styles.fontSize);
+  const offsetPx =
+    Number.isFinite(rem) && Number.isFinite(fontSize) ? rem * fontSize : 72;
+  return Number.isFinite(offsetPx) ? offsetPx : 72;
+}
 
 export function ComponentsView({
   initialCat,
@@ -93,7 +107,7 @@ export function ComponentsView({
           commit();
         }
       },
-      { rootMargin: "-72px 0px -65% 0px", threshold: 0 }
+      { rootMargin: `-${getScrollOffsetPx()}px 0px -65% 0px`, threshold: 0 }
     );
     sections.forEach((el) => observer.observe(el));
 
@@ -130,14 +144,24 @@ export function ComponentsView({
         const id = visible[0].target.id;
         if (id) setActiveComponent(id);
       },
-      { rootMargin: "-72px 0px -70% 0px", threshold: 0 }
+      { rootMargin: `-${getScrollOffsetPx()}px 0px -70% 0px`, threshold: 0 }
     );
     cards.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [setActiveComponent, q]);
 
+  const hasResults = componentCategories.some((cat) =>
+    componentsByCategory(cat).filter((c) => {
+      if (!s) return true;
+      return (c.nameZh + c.nameEn + c.desc + c.usage)
+        .toLowerCase()
+        .includes(s);
+    }).length > 0
+  );
+
   return (
     <div className="space-y-6">
+      {!hasResults && <EmptyState>没有匹配的组件。</EmptyState>}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-1.5">
           {componentCategories.map((c) => (
@@ -180,22 +204,22 @@ export function ComponentsView({
             key={cat}
             id={cat}
             data-spy-cat={cat}
-            className="scroll-mt-16 space-y-3"
+            className="scroll-anchor space-y-3"
           >
-            <h2 className="text-lg font-semibold tracking-tight text-foreground">
+            <SectionTitle>
               {componentCategoryMeta[cat]}
               <span className="ml-2 text-xs font-normal text-muted-foreground">
                 {items.length} 个
               </span>
-            </h2>
+            </SectionTitle>
             <div className="space-y-3">
-              {items.map((c) => (
-                <Card
-                  key={c.nameEn}
-                  id={c.nameEn}
-                  data-spy-component={c.nameEn}
-                  className="scroll-mt-20 hover-lift"
-                >
+              {items.map((c, i) => (
+                <Reveal key={c.nameEn} delay={i * 50}>
+                  <Card
+                    id={c.nameEn}
+                    data-spy-component={c.nameEn}
+                    className="hover-lift scroll-anchor"
+                  >
                   <CardHeader className="pb-2">
                     <CardTitle className="flex items-center gap-2 text-base">
                       {c.nameZh}
@@ -225,6 +249,7 @@ export function ComponentsView({
                     </div>
                   </CardContent>
                 </Card>
+                </Reveal>
               ))}
             </div>
           </section>

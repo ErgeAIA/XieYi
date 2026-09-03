@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { ComponentsView } from "@/components/components-view";
-import {
-  componentCategories,
-  type ComponentCategory,
-} from "@/content/components";
+import { PageContainer, PageHeader } from "@/components/page-shell";
+import { componentCategories, type ComponentCategory } from "@/content/components";
 
 export const metadata: Metadata = {
   title: "前端组件 · 写意",
@@ -22,9 +20,9 @@ export default async function ComponentsPage({
     : null;
 
   return (
-    <div className="mx-auto max-w-5xl">
-      <h1 className="mb-4 text-2xl font-semibold tracking-tight">前端组件</h1>
+    <PageContainer>
+      <PageHeader title="前端组件" />
       <ComponentsView initialCat={initial} />
-    </div>
+    </PageContainer>
   );
 }
