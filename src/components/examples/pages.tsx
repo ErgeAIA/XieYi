@@ -1127,7 +1127,7 @@ function PromptBlock({ prompt }: { prompt: string }) {
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="prompt" className="border-b-0">
-        <AccordionTrigger className="text-xs text-muted-foreground hover:text-foreground">
+        <AccordionTrigger className="text-xs font-medium text-primary hover:text-primary/80 [&_svg]:text-primary">
           给 AI 的提示词（点击展开）
         </AccordionTrigger>
         <AccordionContent className="space-y-2">
