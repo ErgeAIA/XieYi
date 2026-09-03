@@ -19,6 +19,7 @@ import { backendTopics } from "@/content/backend";
 import { pageExamples } from "@/components/examples/pages";
 import { useScrollSpy } from "@/components/scroll-spy";
 import { useNavSpy } from "@/components/nav-spy";
+import { frameworks, frameworkGroups, frameworkGroupMeta } from "@/content/frameworks";
 import { TreeMenu, type TreeNode } from "@/components/sidebar-tree";
 
 const CATEGORY_EN: Record<ComponentCategory, string> = {
@@ -87,6 +88,31 @@ export function SidebarNav() {
           route: "/examples",
           href: `/examples#${e.id}`,
           spyGroup: e.id,
+        })),
+      },
+      {
+        id: "frameworks",
+        label: "框架",
+        href: "/frameworks",
+        route: "/frameworks",
+        count: frameworks.length,
+        children: frameworkGroups.map((g) => ({
+          id: g,
+          label: frameworkGroupMeta[g],
+          route: "/frameworks",
+          href: `/frameworks#${g}`,
+          spyGroup: g,
+          count: frameworks.filter((f) => f.group === g).length,
+          children: frameworks
+            .filter((f) => f.group === g)
+            .map((f) => ({
+              id: f.id,
+              label: f.name,
+              en: f.nameEn,
+              route: "/frameworks",
+              href: `/frameworks#${f.id}`,
+              spyItem: f.id,
+            })),
         })),
       },
       {

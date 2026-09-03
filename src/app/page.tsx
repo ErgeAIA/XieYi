@@ -15,6 +15,11 @@ const entries = [
     desc: "Agent、Skill、Prompt、Context、Token，用准确术语和 AI 沟通。",
   },
   {
+    href: "/frameworks",
+    title: "框架",
+    desc: "前端元框架、后端语言与框架、全栈方案，以及怎么和 AI 协作选型。",
+  },
+  {
     href: "/components",
     title: "前端组件",
     desc: "67 个组件按 9 大类拆解，配使用场景与可交互示例。",
