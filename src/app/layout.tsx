@@ -10,6 +10,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarNav } from "@/components/site-sidebar";
 import { ScrollSpyProvider } from "@/components/scroll-spy";
 import { NavSpyProvider } from "@/components/nav-spy";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                   <SiteHeader />
                   <main className="flex-1 px-4 md:px-8">{children}</main>
                 </div>
+                <ScrollToTop />
               </div>
                 </NavSpyProvider>
               </ScrollSpyProvider>
