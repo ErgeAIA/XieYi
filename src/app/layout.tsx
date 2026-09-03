@@ -70,7 +70,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 </aside>
                 <div className="flex min-w-0 flex-1 flex-col">
                   <SiteHeader />
-                  <main className="flex-1 px-4 py-6 md:px-8">{children}</main>
+                  <main className="flex-1 px-4 md:px-8">{children}</main>
                 </div>
               </div>
                 </NavSpyProvider>
