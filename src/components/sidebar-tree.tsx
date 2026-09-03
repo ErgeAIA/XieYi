@@ -140,36 +140,56 @@ export function TreeMenu({
     }
   };
 
-  const isActive = (node: TreeNode, depth: number): boolean => {
-    // 叶子命中：最具体的一级优先高亮。
-    if (
-      activeItemId &&
-      node.spyItem != null &&
-      node.spyItem === activeItemId
-    )
-      return true;
+  // 高亮只给「最具体的命中节点」：叶子 > 分组 > 一级路由。
+  // 祖先只保持展开，不额外加背景。
+  const activeLeafId = React.useMemo(() => {
+    if (!activeItemId) return null;
+    const walk = (list: TreeNode[]): string | null => {
+      for (const n of list) {
+        if (n.spyItem === activeItemId) return n.id;
+        if (n.children) {
+          const found = walk(n.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+    return walk(nodes);
+  }, [nodes, activeItemId]);
 
-    // 分组/扁平子项命中（滚动到某分组）。
-    if (
-      activeGroupId &&
-      node.spyGroup != null &&
-      node.spyGroup === activeGroupId
-    )
-      return true;
+  const activeGroupNodeId = React.useMemo(() => {
+    if (activeLeafId) return null;
+    if (!activeGroupId) return null;
+    const walk = (list: TreeNode[]): string | null => {
+      for (const n of list) {
+        if (n.spyGroup === activeGroupId) return n.id;
+        if (n.children) {
+          const found = walk(n.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+    return walk(nodes);
+  }, [nodes, activeGroupId, activeLeafId]);
 
-    // 一级当前路由恒高亮：作为「所在页面」定位，不依赖是否已有子分组命中。
-    // 这样示例 / 组件 / 后端 / 资源等带子分组的页面，顶层菜单也能稳定显示背景。
-    if (depth === 0 && node.route === pathname) return true;
+  const activeRouteId = React.useMemo(() => {
+    if (activeLeafId || activeGroupNodeId) return null;
+    const n = nodes.find((n) => n.route === pathname);
+    return n?.id ?? null;
+  }, [nodes, pathname, activeLeafId, activeGroupNodeId]);
 
-    return false;
-  };
+  const isActive = (node: TreeNode): boolean =>
+    node.id === activeLeafId ||
+    node.id === activeGroupNodeId ||
+    node.id === activeRouteId;
 
   const renderNode = (node: TreeNode, depth: number) => {
     const hasChildren = !!node.children && node.children.length > 0;
     const open = openSet.has(node.id);
     const instant = instantSet.has(node.id);
     // 仅当前命中节点（叶子/分组/一级路由）高亮，祖先只保持展开，不加背景。
-    const active = isActive(node, depth);
+    const active = isActive(node);
 
     if (!hasChildren) {
       return (
