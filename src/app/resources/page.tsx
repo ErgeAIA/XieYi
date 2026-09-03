@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
+import { PageContainer, PageHeader, GroupLabel } from "@/components/page-shell";
 import {
   resources,
   resourceCategories,
@@ -16,13 +17,11 @@ export const metadata: Metadata = {
 
 export default function ResourcesPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-10">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">参考资源</h1>
-        <p className="text-sm text-muted-foreground">
-          与 AI 沟通组件或前后端时，可对照这些资源给出更准确的需求。点击名称跳转。
-        </p>
-      </div>
+    <PageContainer>
+      <PageHeader
+        title="参考资源"
+        description="与 AI 沟通组件或前后端时，可对照这些资源给出更准确的需求。点击名称跳转。"
+      />
 
       {resourceCategories.map((cat) => {
         const items = resources.filter((r) => r.category === cat);
@@ -32,21 +31,21 @@ export default function ResourcesPage() {
             key={cat}
             id={cat}
             data-spy-group={cat}
-            className="scroll-mt-16 space-y-3"
+            className="scroll-anchor space-y-3"
           >
-            <h2 className="text-sm font-medium text-muted-foreground">
+            <GroupLabel>
               {cat}
               <span className="ml-2 font-normal">
                 · {resourceCategoryMeta[cat]}
               </span>
-            </h2>
+            </GroupLabel>
             <div className="grid gap-3 sm:grid-cols-2">
               {items.map((r, i) => (
                 <Reveal key={r.name} delay={i * 60}>
                   <Card
                     id={resourceId(r)}
                     data-spy-item={resourceId(r)}
-                    className="hover-lift scroll-mt-24"
+                    className="hover-lift scroll-anchor"
                   >
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base">
@@ -70,6 +69,6 @@ export default function ResourcesPage() {
           </section>
         );
       })}
-    </div>
+    </PageContainer>
   );
 }
