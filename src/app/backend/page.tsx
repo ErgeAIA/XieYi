@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
+import { PageContainer, PageHeader } from "@/components/page-shell";
 import { backendTopics } from "@/content/backend";
 
 export const metadata: Metadata = {
@@ -11,13 +12,11 @@ export const metadata: Metadata = {
 
 export default function BackendPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-10">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">后端相关</h1>
-        <p className="text-sm text-muted-foreground">
-          对前后端不熟时，用准确术语和 AI 对齐后端概念，让它生成对的代码。
-        </p>
-      </div>
+    <PageContainer>
+      <PageHeader
+        title="后端相关"
+        description="对前后端不熟时，用准确术语和 AI 对齐后端概念，让它生成对的代码。"
+      />
 
       <div className="space-y-4">
         {backendTopics.map((t, i) => (
@@ -25,7 +24,7 @@ export default function BackendPage() {
             key={t.id}
             id={t.id}
             data-spy-group={t.id}
-            className="scroll-mt-16"
+            className="scroll-anchor"
           >
             <Reveal delay={i * 60}>
               <Card className="hover-lift">
@@ -57,6 +56,6 @@ export default function BackendPage() {
           </section>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 }
