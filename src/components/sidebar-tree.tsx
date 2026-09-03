@@ -160,7 +160,7 @@ export function TreeMenu({
           style={{ paddingLeft: `${depth * 12 + 10}px` }}
         >
           <span
-            className={`absolute left-0 top-1/2 h-3.5 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
+            className={`pointer-events-none absolute left-0 top-1/2 h-3.5 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
               active ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`}
           />
@@ -185,7 +185,7 @@ export function TreeMenu({
           style={{ paddingLeft: `${depth * 12 + 2}px`, paddingRight: 8 }}
         >
           <span
-            className={`absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
+            className={`pointer-events-none absolute left-0 top-1/2 h-4 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
               active ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`}
           />
@@ -232,26 +232,18 @@ export function TreeMenu({
           </Link>
         </div>
         <div
-          className={`grid ${
-            instant
-              ? "transition-none"
-              : "transition-all duration-[350ms] ease-[cubic-bezier(.16,1,.3,1)]"
-          } ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+          className={`overflow-hidden transition-all duration-[350ms] ease-[cubic-bezier(.16,1,.3,1)] ${
+            instant ? "transition-none" : ""
+          } ${
+            open
+              ? "max-h-[2000px] opacity-100"
+              : "max-h-0 opacity-0 pointer-events-none"
+          }`}
         >
-          <div className="overflow-hidden">
-            <div className="flex flex-col gap-0.5">
-              {node.children!.map((child, i) => (
-                <div
-                  key={child.id}
-                  className={`transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] ${
-                    open ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
-                  }`}
-                  style={{ transitionDelay: open ? `${i * 15}ms` : "0ms" }}
-                >
-                  {renderNode(child, depth + 1)}
-                </div>
-              ))}
-            </div>
+          <div className="flex flex-col gap-0.5">
+            {node.children!.map((child) => (
+              <div key={child.id}>{renderNode(child, depth + 1)}</div>
+            ))}
           </div>
         </div>
       </div>

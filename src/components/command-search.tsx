@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/command";
 import { concepts } from "@/content/concepts";
 import { components } from "@/content/components";
+import { pageExamples } from "@/components/examples/pages";
 
 export function CommandSearch() {
   const [open, setOpen] = React.useState(false);
@@ -42,14 +43,14 @@ export function CommandSearch() {
         className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-3 text-sm text-muted-foreground transition-colors hover:bg-muted"
       >
         <SearchIcon className="size-4" />
-        <span>搜索组件 / 概念…</span>
+        <span>搜索组件 / 概念 / 示例…</span>
         <kbd className="ml-auto rounded border bg-muted px-1.5 text-[10px] font-medium">
           ⌘K
         </kbd>
       </button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="输入组件名、概念名…" />
+        <CommandInput placeholder="输入组件名、概念名、示例内容…" />
         <CommandList>
           <CommandEmpty>未找到结果。</CommandEmpty>
           <CommandGroup heading="基础概念">
@@ -76,6 +77,20 @@ export function CommandSearch() {
                 <span>{c.nameZh}</span>
                 <span className="ml-2 text-xs text-muted-foreground">
                   {c.nameEn}
+                </span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+          <CommandGroup heading="示例">
+            {pageExamples.map((e) => (
+              <CommandItem
+                key={e.id}
+                value={`${e.title} ${e.desc} ${e.keywords}`}
+                onSelect={() => go(`/examples#${e.id}`)}
+              >
+                <span>{e.title}</span>
+                <span className="ml-2 text-xs text-muted-foreground">
+                  {e.desc}
                 </span>
               </CommandItem>
             ))}

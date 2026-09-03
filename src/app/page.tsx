@@ -28,7 +28,7 @@ const entries = [
 export default function Home() {
   return (
     <div className="mx-auto max-w-6xl space-y-20 py-10 md:space-y-24 md:py-14">
-      {/* Hero：非对称 split，左文案右实时预览；背景为 three.js 火山余烬粒子场 */}
+      {/* Hero：非对称 split，左文案右实时预览；背景为 2D Canvas 墨润开动画 */}
       <section className="relative grid items-center gap-10 overflow-hidden rounded-3xl border border-border/60 bg-card/20 p-8 md:p-14 lg:grid-cols-12 lg:gap-14">
         <HeroBloom className="pointer-events-none absolute inset-0 h-full w-full" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_45%,rgba(0,0,0,0.22),transparent_60%)] dark:bg-[radial-gradient(circle_at_70%_45%,rgba(0,0,0,0.50),transparent_60%)]" />

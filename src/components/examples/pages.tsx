@@ -555,49 +555,79 @@ export const pageExamples = [
     id: "dashboard",
     title: "Dashboard 数据面板",
     desc: "指标卡 + 趋势图 + 动态流",
+    keywords:
+      "dashboard 数据面板 指标 统计 图表 趋势 访问 用户 转化 营收 动态 卡片 概览",
     Comp: DashboardExample,
   },
   {
     id: "ide",
     title: "IDE 编辑器布局",
     desc: "文件树 + 代码区 + 预览三栏",
+    keywords: "ide 编辑器 代码 文件树 资源管理器 预览 高亮 终端 布局",
     Comp: IdeExample,
   },
   {
     id: "form",
     title: "表单填写页面",
     desc: "输入、文本域、下拉、勾选",
+    keywords:
+      "form 表单 输入 input 文本域 textarea 下拉 select 勾选 checkbox 提交 创建 校验",
     Comp: FormExample,
   },
   {
     id: "data",
     title: "数据列表管理",
     desc: "搜索 + 表格 + 删除确认",
+    keywords:
+      "data 数据 列表 表格 table 搜索 筛选 删除 对话框 确认 分页 行 状态",
     Comp: DataTableExample,
   },
   {
     id: "auth",
     title: "登录 / 注册页",
     desc: "Tab 切换的认证卡片",
+    keywords: "auth 登录 注册 login 认证 账号 密码 邮箱 tab 切换 卡片",
     Comp: AuthExample,
   },
   {
     id: "settings",
     title: "设置页",
     desc: "分组 Tab 与开关项",
+    keywords: "settings 设置 偏好 通用 通知 安全 开关 switch 语言 昵称 分组",
     Comp: SettingsExample,
   },
-  { id: "kanban", title: "看板", desc: "待办 / 进行中 / 已完成", Comp: KanbanExample },
-  { id: "todo", title: "任务待办", desc: "增删改的清单", Comp: TodoExample },
+  {
+    id: "kanban",
+    title: "看板",
+    desc: "待办 / 进行中 / 已完成",
+    keywords: "kanban 看板 任务 卡片 拖拽 列 待办 进行中 已完成 流程",
+    Comp: KanbanExample,
+  },
+  {
+    id: "todo",
+    title: "任务待办",
+    desc: "增删改的清单",
+    keywords: "todo 任务 待办 清单 勾选 添加 删除 完成 列表 增删改",
+    Comp: TodoExample,
+  },
   {
     id: "timeline",
     title: "时间轴",
     desc: "垂直时间线",
+    keywords: "timeline 时间轴 时间线 事件 历史 节点 垂直 里程碑 进度",
     Comp: TimelineExample,
   },
 ];
 
 export function ExamplesGallery() {
+  const [q, setQ] = React.useState("");
+  const s = q.trim().toLowerCase();
+  const list = s
+    ? pageExamples.filter((e) =>
+        `${e.title} ${e.desc} ${e.keywords}`.toLowerCase().includes(s),
+      )
+    : pageExamples;
+
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <header className="space-y-2">
@@ -607,20 +637,40 @@ export function ExamplesGallery() {
         </p>
       </header>
 
-      <nav className="flex flex-wrap gap-2">
-        {pageExamples.map((e) => (
-          <a
-            key={e.id}
-            href={`#${e.id}`}
-            className="hover-lift rounded-md border bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {e.title}
-          </a>
-        ))}
-      </nav>
+      <div className="flex flex-wrap items-center gap-3">
+        <Input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="搜索示例内容…"
+          className="max-w-xs"
+        />
+        {s && (
+          <span className="text-xs text-muted-foreground">
+            找到 {list.length} 个
+          </span>
+        )}
+      </div>
+
+      {list.length === 0 ? (
+        <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
+          未找到与「{q}」匹配的示例。
+        </p>
+      ) : (
+        <nav className="flex flex-wrap gap-2">
+          {list.map((e) => (
+            <a
+              key={e.id}
+              href={`#${e.id}`}
+              className="hover-lift rounded-md border bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {e.title}
+            </a>
+          ))}
+        </nav>
+      )}
 
       <div className="space-y-10">
-        {pageExamples.map((e) => {
+        {list.map((e) => {
           const Comp = e.Comp;
           return (
             <section
