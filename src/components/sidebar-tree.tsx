@@ -140,22 +140,38 @@ export function TreeMenu({
     }
   };
 
-  const isActive = (node: TreeNode): boolean => {
+  const isActive = (node: TreeNode, depth: number): boolean => {
+    // 叶子命中：优先且唯一高亮，祖先不再加背景。
     if (
-      (node.spyItem != null && node.spyItem === activeItemId) ||
-      (node.spyGroup != null && node.spyGroup === activeGroupId)
+      activeItemId &&
+      node.spyItem != null &&
+      node.spyItem === activeItemId
     )
       return true;
-    return node.children?.some((c) => isActive(c)) ?? false;
+
+    // 无叶子命中时，分组/扁平项才高亮。
+    const noLeaf = !activeItemId;
+    if (
+      noLeaf &&
+      activeGroupId &&
+      node.spyGroup != null &&
+      node.spyGroup === activeGroupId
+    )
+      return true;
+
+    // 无 spy 命中时，一级当前路由兜底高亮。
+    if (noLeaf && !activeGroupId && depth === 0 && node.route === pathname)
+      return true;
+
+    return false;
   };
 
   const renderNode = (node: TreeNode, depth: number) => {
     const hasChildren = !!node.children && node.children.length > 0;
     const open = openSet.has(node.id);
     const instant = instantSet.has(node.id);
-    // 一级菜单额外按当前路由兜底高亮；子孙命中时递归点亮父级。
-    const active =
-      isActive(node) || (depth === 0 && node.route === pathname);
+    // 仅当前命中节点（叶子/分组/一级路由）高亮，祖先只保持展开，不加背景。
+    const active = isActive(node, depth);
 
     if (!hasChildren) {
       return (
