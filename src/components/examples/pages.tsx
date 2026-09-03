@@ -41,6 +41,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Reveal } from "@/components/motion/reveal";
 
 function Avatar({ name }: { name: string }) {
   return (
@@ -54,10 +55,10 @@ function Avatar({ name }: { name: string }) {
 
 function DashboardExample() {
   const stats = [
-    { label: "今日访问", value: "1,284", delta: "+12%" },
-    { label: "新增用户", value: "86", delta: "+5%" },
-    { label: "转化率", value: "3.2%", delta: "-0.4%" },
-    { label: "营收", value: "¥9,420", delta: "+8%" },
+    { label: "今日访问", value: "1,284", delta: "+12%", up: true },
+    { label: "新增用户", value: "86", delta: "+5%", up: true },
+    { label: "转化率", value: "3.2%", delta: "-0.4%", up: false },
+    { label: "营收", value: "¥9,420", delta: "+8%", up: true },
   ];
   const bars = [40, 65, 50, 80, 72, 95];
   const max = Math.max(...bars);
@@ -65,69 +66,80 @@ function DashboardExample() {
     { who: "李雷", what: "发布了新组件 Button", time: "2 分钟前" },
     { who: "韩梅梅", what: "更新了设置页", time: "15 分钟前" },
     { who: "系统", what: "完成每日备份", time: "1 小时前" },
+    { who: "张伟", what: "合并了 PR #42", time: "3 小时前" },
   ];
   return (
-    <div className="space-y-4">
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((s) => (
-          <Card key={s.label}>
-            <CardHeader className="pb-2">
-              <CardDescription>{s.label}</CardDescription>
-              <CardTitle className="text-2xl">{s.value}</CardTitle>
+    <section className="example-canvas space-y-6">
+      <Reveal>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-lg font-semibold">概览</h3>
+          <Button size="sm">导出报表</Button>
+        </div>
+      </Reveal>
+      <Reveal>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((s) => (
+            <Card key={s.label}>
+              <CardHeader className="pb-2">
+                <CardDescription>{s.label}</CardDescription>
+                <CardTitle className="text-2xl">{s.value}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <span
+                  className={
+                    s.up
+                      ? "text-xs text-muted-foreground"
+                      : "text-xs text-destructive"
+                  }
+                >
+                  {s.delta} 较昨日
+                </span>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Reveal>
+      <Reveal>
+        <div className="grid gap-4 lg:grid-cols-3">
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="text-base">访问趋势</CardTitle>
             </CardHeader>
             <CardContent>
-              <span
-                className={
-                  s.delta.startsWith("-")
-                    ? "text-xs text-destructive"
-                    : "text-xs text-muted-foreground"
-                }
-              >
-                {s.delta} 较昨日
-              </span>
+              <div className="flex h-40 items-end gap-3">
+                {bars.map((b, i) => (
+                  <div key={i} className="flex flex-1 flex-col items-center gap-1">
+                    <div
+                      className="w-6 rounded-t bg-primary"
+                      style={{ height: `${(b / max) * 120}px` }}
+                    />
+                    <span className="text-xs text-muted-foreground">{`${i + 1}月`}</span>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
-        ))}
-      </div>
-      <div className="grid gap-3 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-base">访问趋势</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex h-40 items-end gap-3">
-              {bars.map((b, i) => (
-                <div key={i} className="flex flex-1 flex-col items-center gap-1">
-                  <div
-                    className="w-6 rounded-t bg-primary"
-                    style={{ height: `${(b / max) * 120}px` }}
-                  />
-                  <span className="text-xs text-muted-foreground">{`${i + 1}月`}</span>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">最近动态</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {activity.map((a, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <Avatar name={a.who} />
+                  <div className="text-sm">
+                    <div>
+                      <span className="font-medium">{a.who}</span> {a.what}
+                    </div>
+                    <div className="text-xs text-muted-foreground">{a.time}</div>
+                  </div>
                 </div>
               ))}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">最近动态</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {activity.map((a, i) => (
-              <div key={i} className="flex items-start gap-2">
-                <Avatar name={a.who} />
-                <div className="text-sm">
-                  <div>
-                    <span className="font-medium">{a.who}</span> {a.what}
-                  </div>
-                  <div className="text-xs text-muted-foreground">{a.time}</div>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+            </CardContent>
+          </Card>
+        </div>
+      </Reveal>
+    </section>
   );
 }
 
@@ -629,14 +641,7 @@ export function ExamplesGallery() {
     : pageExamples;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">示例</h1>
-        <p className="text-sm text-muted-foreground">
-          完整页面级示例，把组件嵌入真实场景。以下均为可交互的真实布局。
-        </p>
-      </header>
-
+    <div className="space-y-8">
       <div className="flex flex-wrap items-center gap-3">
         <Input
           value={q}
@@ -677,13 +682,13 @@ export function ExamplesGallery() {
               key={e.id}
               id={e.id}
               data-spy-group={e.id}
-              className="scroll-mt-20 space-y-3"
+              className="scroll-anchor space-y-3"
             >
               <div>
                 <h2 className="text-lg font-medium">{e.title}</h2>
                 <p className="text-sm text-muted-foreground">{e.desc}</p>
               </div>
-              <div className="example-canvas hover-lift overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
+              <div className="hover-lift overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
                 <Comp />
               </div>
             </section>
