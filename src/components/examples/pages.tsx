@@ -146,7 +146,13 @@ function DashboardExample() {
 /* ---------- 2. IDE 编辑器布局 ---------- */
 
 function IdeExample() {
-  const files = ["src/App.tsx", "src/main.tsx", "package.json", "README.md"];
+  const files = [
+    { name: "src/App.tsx", active: true },
+    { name: "src/main.tsx", active: false },
+    { name: "package.json", active: false },
+    { name: "README.md", active: false },
+    { name: "tsconfig.json", active: false },
+  ];
   const code = [
     "export default function App() {",
     "  const [count, setCount] = useState(0);",
@@ -158,41 +164,47 @@ function IdeExample() {
     "}",
   ];
   return (
-    <div className="grid h-72 grid-cols-[140px_1fr_160px] overflow-hidden rounded-md border text-sm">
-      <div className="border-r bg-muted/30 p-2">
-        <div className="mb-1 px-1 text-xs font-medium text-muted-foreground">
-          资源管理器
-        </div>
-        {files.map((f, i) => (
-          <div
-            key={i}
-            className={`cursor-pointer rounded px-1 py-0.5 ${
-              i === 0 ? "bg-accent" : "hover:bg-muted"
-            }`}
-          >
-            {f}
+    <section className="example-canvas">
+      <Reveal>
+        <div className="grid h-72 grid-cols-[140px_1fr_170px] overflow-hidden rounded-md border text-sm">
+          <div className="border-r bg-muted/30 p-2">
+            <div className="mb-2 px-1 text-xs font-medium text-muted-foreground">
+              资源管理器
+            </div>
+            {files.map((f, i) => (
+              <div
+                key={i}
+                className={`cursor-pointer rounded px-1 py-0.5 ${
+                  f.active
+                    ? "bg-accent text-accent-foreground"
+                    : "hover:bg-muted"
+                }`}
+              >
+                {f.name}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="bg-background p-2 font-mono text-xs leading-relaxed">
-        {code.map((l, i) => (
-          <div key={i}>
-            <span className="mr-2 inline-block w-5 text-right text-muted-foreground">
-              {i + 1}
-            </span>
-            {l || " "}
+          <div className="bg-background p-2 font-mono text-xs leading-relaxed">
+            {code.map((l, i) => (
+              <div key={i}>
+                <span className="mr-2 inline-block w-5 text-right text-muted-foreground">
+                  {i + 1}
+                </span>
+                {l || " "}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="border-l bg-muted/30 p-2">
-        <div className="mb-1 px-1 text-xs font-medium text-muted-foreground">
-          预览
+          <div className="border-l bg-muted/30 p-2">
+            <div className="mb-2 px-1 text-xs font-medium text-muted-foreground">
+              预览
+            </div>
+            <div className="rounded bg-background p-3 text-center text-xs">
+              clicked 0 times
+            </div>
+          </div>
         </div>
-        <div className="rounded bg-background p-3 text-center text-xs">
-          clicked 0 times
-        </div>
-      </div>
-    </div>
+      </Reveal>
+    </section>
   );
 }
 
