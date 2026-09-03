@@ -134,15 +134,22 @@ export function TreeMenu({
     }
   };
 
-  const isActive = (node: TreeNode) =>
-    (node.spyItem != null && node.spyItem === activeItemId) ||
-    (node.spyGroup != null && node.spyGroup === activeGroupId);
+  const isActive = (node: TreeNode): boolean => {
+    if (
+      (node.spyItem != null && node.spyItem === activeItemId) ||
+      (node.spyGroup != null && node.spyGroup === activeGroupId)
+    )
+      return true;
+    return node.children?.some((c) => isActive(c)) ?? false;
+  };
 
   const renderNode = (node: TreeNode, depth: number) => {
     const hasChildren = !!node.children && node.children.length > 0;
     const open = openSet.has(node.id);
     const instant = instantSet.has(node.id);
-    const active = isActive(node);
+    // 一级菜单额外按当前路由兜底高亮；子孙命中时递归点亮父级。
+    const active =
+      isActive(node) || (depth === 0 && node.route === pathname);
 
     if (!hasChildren) {
       return (

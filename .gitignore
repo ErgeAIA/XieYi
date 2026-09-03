@@ -44,10 +44,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# build backups / logs / caches (generated, not source)
+# build backups / logs (generated, not source)
 .next-bak/
 .next-old/
 .next-verify/
 build-log.txt
 dev-server.err
+
+# codegraph local index (kept locally, not committed)
 .codegraph/
