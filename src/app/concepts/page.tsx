@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
@@ -80,6 +81,53 @@ export default function ConceptsPage() {
                           {c.aiUsage.example}
                         </p>
                       </div>
+                      {c.recommendations && c.recommendations.length > 0 && (
+                        <div className="rounded-md bg-muted/50 p-3">
+                          <p className="font-medium">推荐</p>
+                          <ul className="mt-1 space-y-1">
+                            {c.recommendations.map((r, ri) => {
+                              const external = r.url?.startsWith("http");
+                              const label = (
+                                <span>
+                                  {r.name}
+                                  {r.note ? (
+                                    <span className="ml-1 text-muted-foreground">
+                                      ：{r.note}
+                                    </span>
+                                  ) : null}
+                                </span>
+                              );
+                              return (
+                                <li key={ri} className="text-sm">
+                                  {r.url ? (
+                                    external ? (
+                                      <a
+                                        href={r.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-primary hover:underline"
+                                      >
+                                        {label}
+                                      </a>
+                                    ) : (
+                                      <Link
+                                        href={r.url}
+                                        className="text-primary hover:underline"
+                                      >
+                                        {label}
+                                      </Link>
+                                    )
+                                  ) : (
+                                    <span className="font-medium text-foreground">
+                                      {label}
+                                    </span>
+                                  )}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </Reveal>

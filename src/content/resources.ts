@@ -67,7 +67,7 @@ export const resources: ResourceItem[] = [
     name: "Element Plus",
     url: "https://element-plus.org",
     category: "组件库",
-    note: "Vue 生态主流组件库，跨框架对照时很有用。",
+    note: "Vue 生态组件库，跨框架对照时很有用。",
   },
 
   // 设计系统 / 底层原语
