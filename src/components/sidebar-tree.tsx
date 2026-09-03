@@ -127,7 +127,13 @@ export function TreeMenu({
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
           const el = document.getElementById(node.id);
-          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            // 一级菜单等没有对应锚点元素，点击后回到页顶，避免当前滚动位置
+            // 停留在原锚点导致页头被顶栏遮住。
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
           setInstantSet(new Set());
         })
       );
