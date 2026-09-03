@@ -42,6 +42,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Reveal } from "@/components/motion/reveal";
+import {
+  Info,
+  AlertTriangle,
+  CheckCircle2,
+  X,
+  ArrowRight,
+  Bell,
+  Inbox,
+  Search,
+  Plus,
+} from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
   return (
@@ -617,6 +628,226 @@ function TimelineExample() {
   );
 }
 
+/* ---------- 10. 堆叠布局（application shell: stacked） ---------- */
+
+function StackedExample() {
+  return (
+    <section className="example-canvas">
+      <div className="overflow-hidden rounded-md border">
+        <div className="flex items-center justify-between border-b bg-muted/30 px-4 py-2.5">
+          <span className="text-sm font-medium">写意</span>
+          <nav className="flex gap-3 text-xs text-muted-foreground">
+            <span>首页</span>
+            <span className="text-foreground">项目</span>
+            <span>文档</span>
+          </nav>
+        </div>
+        <div className="space-y-4 p-4">
+          <div>
+            <h3 className="text-lg font-semibold">我的项目</h3>
+            <p className="text-sm text-muted-foreground">
+              共 12 个项目，3 个进行中。
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {[
+              ["项目 A", "更新于 2 小时前"],
+              ["项目 B", "更新于昨天"],
+            ].map(([name, time]) => (
+              <div key={name} className="rounded-md border p-3">
+                <div className="text-sm font-medium">{name}</div>
+                <div className="text-xs text-muted-foreground">{time}</div>
+              </div>
+            ))}
+          </div>
+          <div className="rounded-md border p-3 text-sm">
+            <div className="font-medium">最近动态</div>
+            <div className="mt-2 space-y-2 text-muted-foreground">
+              <div>李雷 发布了新组件</div>
+              <div>韩梅梅 更新了设置页</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 11. 多栏布局（multi-column） ---------- */
+
+function MultiColumnExample() {
+  return (
+    <section className="example-canvas">
+      <div className="overflow-hidden rounded-md border">
+        <div className="grid md:grid-cols-[160px_1fr_200px]">
+          <aside className="hidden border-r bg-muted/30 p-3 text-sm md:block">
+            <div className="mb-2 text-xs font-medium text-muted-foreground">
+              分类
+            </div>
+            {["全部", "设计", "开发", "运营"].map((c, i) => (
+              <div
+                key={c}
+                className={`rounded px-2 py-1 ${
+                  i === 0
+                    ? "bg-accent text-accent-foreground"
+                    : "hover:bg-muted"
+                }`}
+              >
+                {c}
+              </div>
+            ))}
+          </aside>
+          <main className="space-y-3 p-3">
+            <div className="text-sm font-medium">文章列表</div>
+            {["如何设计组件库", "提示词的写法", "上线 checklist"].map((t) => (
+              <div key={t} className="rounded-md border p-3 text-sm">
+                {t}
+              </div>
+            ))}
+          </main>
+          <aside className="hidden border-l bg-muted/30 p-3 text-sm md:block">
+            <div className="mb-2 text-xs font-medium text-muted-foreground">
+              关于
+            </div>
+            <p className="text-muted-foreground">
+              多栏布局常用于内容站：左导航、中内容、右信息。
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 12. 标题（page / card / section headings） ---------- */
+
+function HeadingsExample() {
+  return (
+    <section className="example-canvas space-y-6">
+      <div>
+        <h3 className="text-xl font-semibold">团队设置</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          管理团队成员与权限。
+        </p>
+      </div>
+      <div className="rounded-md border p-4">
+        <h4 className="text-base font-semibold">基本信息</h4>
+        <p className="mt-1 text-sm text-muted-foreground">
+          用于对外展示的资料。
+        </p>
+      </div>
+      <div>
+        <h5 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+          高级选项
+        </h5>
+        <div className="mt-2 text-sm">下面是一些不常用的设置。</div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- 13. 警报（alerts：描述 / 列表 / 操作 / 链接 / 强调边框 / 关闭） ---------- */
+
+function AlertsExample() {
+  const [showDismiss, setShowDismiss] = React.useState(true);
+  return (
+    <section className="example-canvas space-y-3">
+      <div className="flex gap-3 rounded-md border p-3 text-sm">
+        <Info className="mt-0.5 size-4 shrink-0 text-primary" />
+        <div>
+          <div className="font-medium">已保存草稿</div>
+          <div className="text-muted-foreground">
+            你的更改已于 2 分钟前自动保存。
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-3 rounded-md border p-3 text-sm">
+        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500" />
+        <div>
+          <div className="font-medium">有 2 项待处理</div>
+          <ul className="mt-1 list-disc space-y-0.5 pl-4 text-muted-foreground">
+            <li>支付凭证待上传</li>
+            <li>联系人信息不完整</li>
+          </ul>
+        </div>
+      </div>
+      <div className="flex items-center justify-between gap-3 rounded-md border p-3 text-sm">
+        <div className="flex gap-3">
+          <Bell className="mt-0.5 size-4 shrink-0 text-primary" />
+          <div>
+            <div className="font-medium">新版本可用</div>
+            <div className="text-muted-foreground">v2.3.0 已发布，建议升级。</div>
+          </div>
+        </div>
+        <Button size="sm">立即升级</Button>
+      </div>
+      <div className="flex items-center justify-between gap-3 rounded-md border p-3 text-sm">
+        <div className="flex gap-3">
+          <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
+          <div>
+            <div className="font-medium">部署成功</div>
+            <div className="text-muted-foreground">已发布到生产环境。</div>
+          </div>
+        </div>
+        <a
+          href="#"
+          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+        >
+          查看详情 <ArrowRight className="size-3.5" />
+        </a>
+      </div>
+      <div className="flex gap-3 rounded-md border-l-4 border-primary p-3 text-sm">
+        <Info className="mt-0.5 size-4 shrink-0 text-primary" />
+        <div>
+          <div className="font-medium">提示</div>
+          <div className="text-muted-foreground">
+            强调边框常用于突出关键信息。
+          </div>
+        </div>
+      </div>
+      {showDismiss && (
+        <div className="flex items-start justify-between gap-3 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm">
+          <div className="flex gap-3">
+            <X className="mt-0.5 size-4 shrink-0 text-destructive" />
+            <div>
+              <div className="font-medium">无法连接到服务器</div>
+              <div className="text-muted-foreground">请检查网络后重试。</div>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowDismiss(false)}
+            className="text-muted-foreground hover:text-foreground"
+            aria-label="关闭"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ---------- 14. 空状态（empty states） ---------- */
+
+function EmptyStatesExample() {
+  return (
+    <section className="example-canvas space-y-4">
+      <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed p-8 text-center">
+        <Inbox className="size-8 text-muted-foreground" />
+        <div className="text-sm font-medium">还没有任何项目</div>
+        <div className="text-xs text-muted-foreground">创建你的第一个项目开始吧。</div>
+        <Button size="sm" className="mt-1">
+          <Plus className="size-4" /> 新建项目
+        </Button>
+      </div>
+      <div className="flex flex-col items-center gap-1.5 rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
+        <Search className="size-6" />
+        <div>未找到匹配的结果</div>
+      </div>
+    </section>
+  );
+}
+
 export const pageExamples = [
   {
     id: "dashboard",
@@ -683,6 +914,41 @@ export const pageExamples = [
     desc: "垂直时间线",
     keywords: "timeline 时间轴 时间线 事件 历史 节点 垂直 里程碑 进度",
     Comp: TimelineExample,
+  },
+  {
+    id: "stacked",
+    title: "堆叠布局",
+    desc: "顶部栏 + 竖向堆叠的内容块",
+    keywords: "stacked 堆叠 布局 应用壳 顶栏 内容块 纵向 栏目 设置 项目 应用框架",
+    Comp: StackedExample,
+  },
+  {
+    id: "multi-column",
+    title: "多栏布局",
+    desc: "左导航 + 内容 + 右信息",
+    keywords: "multi-column 多栏 多列 布局 侧边栏 网格 左导航 右信息 内容 栏目",
+    Comp: MultiColumnExample,
+  },
+  {
+    id: "headings",
+    title: "标题",
+    desc: "页面 / 卡片 / 章节三级标题",
+    keywords: "heading 标题 页面标题 卡片标题 章节标题 排版 typography 层级 h1 h2 h3",
+    Comp: HeadingsExample,
+  },
+  {
+    id: "alerts",
+    title: "警报",
+    desc: "带描述 / 列表 / 操作 / 链接 / 强调边框 / 关闭",
+    keywords: "alert 警报 提示 通知 警告 错误 成功 横幅 banner 描述 列表 操作 关闭 强调边框",
+    Comp: AlertsExample,
+  },
+  {
+    id: "empty",
+    title: "空状态",
+    desc: "图标 + 标题 + 描述 + 操作",
+    keywords: "empty 空状态 无数据 占位 引导 新建 搜索无结果 空 图标",
+    Comp: EmptyStatesExample,
   },
 ];
 

@@ -141,7 +141,7 @@ export function TreeMenu({
   };
 
   const isActive = (node: TreeNode, depth: number): boolean => {
-    // 叶子命中：优先且唯一高亮，祖先不再加背景。
+    // 叶子命中：最具体的一级优先高亮。
     if (
       activeItemId &&
       node.spyItem != null &&
@@ -149,19 +149,17 @@ export function TreeMenu({
     )
       return true;
 
-    // 无叶子命中时，分组/扁平项才高亮。
-    const noLeaf = !activeItemId;
+    // 分组/扁平子项命中（滚动到某分组）。
     if (
-      noLeaf &&
       activeGroupId &&
       node.spyGroup != null &&
       node.spyGroup === activeGroupId
     )
       return true;
 
-    // 无 spy 命中时，一级当前路由兜底高亮。
-    if (noLeaf && !activeGroupId && depth === 0 && node.route === pathname)
-      return true;
+    // 一级当前路由恒高亮：作为「所在页面」定位，不依赖是否已有子分组命中。
+    // 这样示例 / 组件 / 后端 / 资源等带子分组的页面，顶层菜单也能稳定显示背景。
+    if (depth === 0 && node.route === pathname) return true;
 
     return false;
   };
