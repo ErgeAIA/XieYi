@@ -215,57 +215,61 @@ function FormExample() {
   const [bio, setBio] = React.useState("");
   const [agree, setAgree] = React.useState(false);
   return (
-    <Card className="max-w-md">
-      <CardHeader>
-        <CardTitle>新建项目</CardTitle>
-        <CardDescription>填写项目基本信息</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium">项目名称</label>
-          <Input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="例如：写意"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium">描述</label>
-          <Textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            placeholder="简单介绍这个项目"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium">可见性</label>
-          <Select defaultValue="private">
-            <SelectTrigger>
-              <SelectValue placeholder="选择可见性" />
-            </SelectTrigger>
-            <SelectPortal>
-              <SelectPositioner>
-                <SelectPopup>
-                  <SelectList>
-                    <SelectItem value="private">私有</SelectItem>
-                    <SelectItem value="team">团队</SelectItem>
-                    <SelectItem value="public">公开</SelectItem>
-                  </SelectList>
-                </SelectPopup>
-              </SelectPositioner>
-            </SelectPortal>
-          </Select>
-        </div>
-        <label className="flex items-center gap-2 text-sm">
-          <Checkbox checked={agree} onCheckedChange={(v) => setAgree(!!v)} />
-          我同意服务条款
-        </label>
-      </CardContent>
-      <CardFooter className="justify-end gap-2">
-        <Button variant="outline">取消</Button>
-        <Button disabled={!name || !agree}>创建</Button>
-      </CardFooter>
-    </Card>
+    <section className="example-canvas">
+      <Reveal>
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle>新建项目</CardTitle>
+            <CardDescription>填写项目基本信息</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">项目名称</label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="例如：写意"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">描述</label>
+              <Textarea
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                placeholder="简单介绍这个项目"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">可见性</label>
+              <Select defaultValue="private">
+                <SelectTrigger>
+                  <SelectValue placeholder="选择可见性" />
+                </SelectTrigger>
+                <SelectPortal>
+                  <SelectPositioner>
+                    <SelectPopup>
+                      <SelectList>
+                        <SelectItem value="private">私有</SelectItem>
+                        <SelectItem value="team">团队</SelectItem>
+                        <SelectItem value="public">公开</SelectItem>
+                      </SelectList>
+                    </SelectPopup>
+                  </SelectPositioner>
+                </SelectPortal>
+              </Select>
+            </div>
+            <label className="flex items-center gap-2 text-sm">
+              <Checkbox checked={agree} onCheckedChange={(v) => setAgree(!!v)} />
+              我同意服务条款
+            </label>
+          </CardContent>
+          <CardFooter className="justify-end gap-2">
+            <Button variant="outline">取消</Button>
+            <Button disabled={!name || !agree}>创建</Button>
+          </CardFooter>
+        </Card>
+      </Reveal>
+    </section>
   );
 }
 
