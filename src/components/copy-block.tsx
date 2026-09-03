@@ -50,7 +50,7 @@ export function CopyBlock({
   value,
   className,
   label,
-  wrap = false,
+  wrap = true,
 }: {
   value: string;
   className?: string;

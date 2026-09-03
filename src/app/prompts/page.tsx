@@ -4,28 +4,25 @@ import * as React from "react";
 import {
   PageContainer,
   PageHeader,
+  GroupLabel,
   FieldLabel,
   EmptyState,
 } from "@/components/page-shell";
 import { CopyBlock } from "@/components/copy-block";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Reveal } from "@/components/motion/reveal";
 import {
   promptLibrary,
   promptCategoryOrder,
   promptCategoryMeta,
-  type PromptCategory,
   type PromptLibraryItem,
 } from "@/content/prompt-library";
 
-type Filter = PromptCategory | "全部";
-
 export default function PromptsPage() {
   const [q, setQ] = React.useState("");
-  const [cat, setCat] = React.useState<Filter>("全部");
 
   const filtered = promptLibrary.filter((p) => {
-    if (cat !== "全部" && p.category !== cat) return false;
     const s = q.trim().toLowerCase();
     if (!s) return true;
     return (
@@ -48,50 +45,25 @@ export default function PromptsPage() {
         }
       />
 
-      <div className="flex flex-wrap gap-2">
-        <FilterChip active={cat === "全部"} onClick={() => setCat("全部")}>
-          全部
-        </FilterChip>
-        {promptCategoryOrder.map((c) => (
-          <FilterChip key={c} active={cat === c} onClick={() => setCat(c)}>
-            {c}
-          </FilterChip>
-        ))}
-      </div>
-
-      <div className="columns-1 gap-3 sm:columns-2">
-        {filtered.map((p) => (
-          <PromptCard key={p.id} p={p} />
-        ))}
-      </div>
+      {promptCategoryOrder.map((c) => {
+        const items = filtered.filter((p) => p.category === c);
+        if (items.length === 0) return null;
+        return (
+          <section key={c} className="space-y-3">
+            <GroupLabel>{promptCategoryMeta[c]}</GroupLabel>
+            <div className="columns-1 gap-3 sm:columns-2">
+              {items.map((p, i) => (
+                <Reveal key={p.id} delay={i * 30}>
+                  <PromptCard p={p} />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        );
+      })}
 
       {filtered.length === 0 && <EmptyState>没有匹配的提示词。</EmptyState>}
     </PageContainer>
-  );
-}
-
-function FilterChip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={
-        "cursor-pointer rounded-full border px-3 py-1 text-sm transition-colors " +
-        (active
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground")
-      }
-    >
-      {children}
-    </button>
   );
 }
 
