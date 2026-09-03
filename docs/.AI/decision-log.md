@@ -38,3 +38,19 @@
 - **背景**：阶段 A 后首页做过多次动画迭代（火星微光掠过、three.js 昙花绽放、墨滴 WebGL 渗化）。当前 `src/app/page.tsx` 仅挂载 `HeroBloom`（墨滴）；`src/components/hero-ember.tsx`（three.js 火山余烬粒子）存在但**未挂任何页面**，属死代码。
 - **决策**：用户要求余烬动画暂时保留、不删，待「最终统一 pass」（阶段 C）时一并定夺去留（可能接入首页作备选，也可能删除）。
 - **涉及**：`src/components/hero-bloom.tsx`、`src/components/hero-ember.tsx`、`src/app/page.tsx`。
+
+---
+
+## DEC-004: 阶段 C 统一 pass 的范围与死代码清理
+
+- **日期**：2026-09-03
+- **背景**：阶段 C「最终统一 pass」在现有国风视觉语言（暖白底 + 火山橙 + 霞鹜文楷/齐伋体）内精修全站 6 路由，并清理早期动画迭代遗留的死代码。DEC-003 曾定 `HeroEmber`「暂留待定」，阶段 C 定夺为删除。
+- **决策**：
+  1. 抽共享布局原语 `src/components/page-shell.tsx`（`PageContainer`/`PageHeader`/`SectionTitle`/`GroupLabel`/`EmptyState`），作为全站版式统一的唯一来源。
+  2. 全站接入既有 `<Reveal>` 进场，并重构为模块级单例 `IntersectionObserver`（避免 60+ 卡片各建观察者）；经 `data-motion` + `prefers-reduced-motion` 双重降级。
+  3. 删除 `HeroEmber`（three.js 火山余烬，全仓 0 import）→ 移除 `three` + `@types/three` 依赖。
+  4. 删除 `motion` 包（源码 0 引用）。
+  5. 充实 `/examples` 9 个页面级布局，统一套用令牌类 + `example-canvas` 字体回落 + `Reveal`。
+- **不在本次（defer）**：页脚、营销站式顶栏大改、CAT 链接、移动端精修、组件级原始 HTML 示例令牌化（D6）。
+- **原因**：用户 2026-09-03 确认的范围边界（Q1–Q8）。
+- **涉及**：`src/components/page-shell.tsx`、`src/app/globals.css`、`src/app/layout.tsx`、`src/app/page.tsx`、`src/app/concepts|resources|backend|examples/page.tsx`、`src/components/components-view.tsx`、`src/components/motion/reveal.tsx`、`src/components/site-sidebar.tsx`（新增惰性 `SidebarExtras`）、`package.json`；计划路径 `docs/superpowers/plans/2026-09-03-stage-c-unified-pass.md`。

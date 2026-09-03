@@ -18,6 +18,7 @@
 - **最后更新**：2026-09-02 **阶段 B M2c 完成**：① 39 个空白组件改为**分类感知的 Skeleton 占位**——`components-view.tsx` 新增 `ComponentPlaceholder`，`ExampleBlock` 按 `cat` 渲染（charts/layout/form/navigation/display/feedback/overlay/chat/extra 各异）；② `/examples` 重写为 **9 个页面级真实可交互布局**（`src/components/examples/pages.tsx` 的 `ExamplesGallery`：Dashboard 数据面板 / IDE 编辑器 / 表单填写 / 数据列表管理 / 登录注册 / 设置 / 看板 / 任务待办 / 时间轴），全用现有 ui 原语 + lucide，未引入新依赖。踩坑：服务端组件不能直接 import 非组件值（数组被打包成 client reference，`pageExamples.map` 失效），已把整段画廊移入 client 组件修正。构建通过、类型检查 0 错误、lint 0；已推送 `8552f9d`。
 - **最后更新**：2026-09-02 **阶段 B B-③ 内容充实完成**：概念/组件内容在阶段 A 迁移时已充实，本次仅补两块真实缺口——① `src/content/resources.ts` 6 大类 22 项真实参考资源（含外链/说明）；② `src/content/backend.ts` 6 主题后端内容（API/数据库/认证鉴权/部署运行/缓存/文件存储，含解释+术语+示例 prompt）。`/resources`、`/backend` 两页重写为真实内容渲染。构建通过、tsc 0、lint 0；已推送 `fb6022a`。**真实布局/UI 美化/动画按用户要求统一留到最终 pass**。
 - **最后更新**：2026-09-01 **阶段 A 完成（脚手架 + shadcn + 数据迁移 + 布局/侧栏/搜索）**：Next 16 + TS + Tailwind v4 + App Router + `src/`；16 个 shadcn ui 组件；从 ErgePrism 抽取 67 组件 / 21 概念到 `src/content`；三级侧栏 + 顶栏 ⌘K + 首页/概念/组件页；`pnpm run build` 通过、dev 6 路由返回 200。
+- **最后更新**：2026-09-03 **阶段 C「最终统一 pass」完成（Task 1–12）**：抽共享布局原语 `page-shell.tsx`、全站接入单例 `Reveal`、删除 `HeroEmber`+`three`+`motion` 死代码、6 路由统一版式、充实 `/examples` 9 个页面级布局；`lint0`/`build0`/Playwright 明暗双主题 6 路由终验通过。详见 `decision-log` DEC-004 与计划 `docs/superpowers/plans/2026-09-03-stage-c-unified-pass.md`。
 
 ## 阶段进度
 
@@ -28,10 +29,11 @@
 
 阶段 B 全部完成：B-① 组件示例重写（注册表覆盖 28/28 含 example 组件 + 39 空白分类感知 Skeleton 占位）、B-② `/examples` 9 个页面级真实布局、B-③ 概念/组件内容 + 参考资源 + 后端内容均落地。
 
-### 阶段 C（待启动）：最终统一 pass
-- **目标**：全站 UI 美化 + 真实布局精修 + 动画统一。用户 2026-09-02 明确要求「等全站内容齐了再一起做」，现内容已齐（阶段 B 完成），该 pass 尚未启动。
-- **范围待定**：`HeroBloom`（墨滴）已就绪；`HeroEmber`（three.js 余烬）当前为未挂载死代码，统一 pass 时定夺去留（见 DEC-003）；LXGW 字体子集可能因近期新增中文需重跑 `node scripts/gen-lxgw.mjs`。
-总目标：把"HTML 片段示例"升级为**真实可交互 shadcn 组件**，补全示例，做 `/examples` 页面级布局。
+### 阶段 C（已完成，2026-09-03）：最终统一 pass
+- **目标**：在现有国风视觉语言内精修全站 6 路由、抽共享布局原语、全站接入 `Reveal`、删除死代码（HeroEmber + three + motion）、充实 9 个示例页。
+- **结果（Task 1–12）**：`page-shell.tsx` 五原语统一版式；`globals.css` 引入 `--scroll-offset`/`.scroll-anchor`；`layout.tsx` 收敛双 padding；`HeroEmber` 已删（DEC-004，原 DEC-003 定「暂留」现定夺为删）+ `three`/`@types/three`/`motion` 依赖移除；首页/概念/组件/资源/后端/示例 6 路由统一接入 `Reveal` 与共享原语；`SidebarExtras` 惰性扩展槽预留；`/examples` 9 个页面级真实布局（Dashboard/IDE/表单/数据列表/登录注册/设置/看板/待办/时间轴）。`lint0`/`build0`/Playwright 明暗双主题终验通过。
+- **defer（后续阶段）**：页脚、营销站式顶栏大改、CAT 链接、移动端精修、组件级原始 HTML 示例令牌化（D6）。
+- **计划与决策**：`docs/superpowers/plans/2026-09-03-stage-c-unified-pass.md`、`docs/.AI/decision-log.md` DEC-004。
 
 **已确认决策（2026-09-02）**：
 - 范围：先验证模式（6~8 个代表性组件）→ 铺开 28 → 补 39 空白 + B-②（风险最低路径）。
