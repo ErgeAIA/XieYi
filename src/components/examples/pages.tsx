@@ -355,33 +355,37 @@ function DataTableExample() {
 
 function AuthExample() {
   return (
-    <div className="flex justify-center">
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <CardTitle>欢迎回来</CardTitle>
-          <CardDescription>登录或注册写意账号</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="login">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">登录</TabsTrigger>
-              <TabsTrigger value="register">注册</TabsTrigger>
-            </TabsList>
-            <TabsContent value="login" className="space-y-3 pt-4">
-              <Input placeholder="邮箱" />
-              <Input type="password" placeholder="密码" />
-              <Button className="w-full">登录</Button>
-            </TabsContent>
-            <TabsContent value="register" className="space-y-3 pt-4">
-              <Input placeholder="用户名" />
-              <Input placeholder="邮箱" />
-              <Input type="password" placeholder="密码" />
-              <Button className="w-full">注册</Button>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+    <section className="example-canvas">
+      <Reveal>
+        <div className="flex justify-center">
+          <Card className="w-full max-w-sm">
+            <CardHeader className="text-center">
+              <CardTitle>欢迎回来</CardTitle>
+              <CardDescription>登录或注册写意账号</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="login">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="login">登录</TabsTrigger>
+                  <TabsTrigger value="register">注册</TabsTrigger>
+                </TabsList>
+                <TabsContent value="login" className="space-y-3 pt-4">
+                  <Input placeholder="邮箱" />
+                  <Input type="password" placeholder="密码" />
+                  <Button className="w-full">登录</Button>
+                </TabsContent>
+                <TabsContent value="register" className="space-y-3 pt-4">
+                  <Input placeholder="用户名" />
+                  <Input placeholder="邮箱" />
+                  <Input type="password" placeholder="密码" />
+                  <Button className="w-full">注册</Button>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        </div>
+      </Reveal>
+    </section>
   );
 }
 
