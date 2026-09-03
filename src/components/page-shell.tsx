@@ -87,12 +87,16 @@ export function SectionTitle({
 export function GroupLabel({
   children,
   className,
+  ...rest
 }: {
   children: React.ReactNode;
   className?: string;
-}) {
+} & React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h2 className={cn("text-sm font-medium text-muted-foreground", className)}>
+    <h2
+      className={cn("text-sm font-medium text-muted-foreground", className)}
+      {...rest}
+    >
       {children}
     </h2>
   );

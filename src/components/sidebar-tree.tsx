@@ -60,6 +60,14 @@ export function TreeMenu({
   const [openSet, setOpenSet] = React.useState<Set<string>>(new Set());
   const [instantSet, setInstantSet] = React.useState<Set<string>>(new Set());
 
+  // 点击权威性高亮：点中哪个菜单，哪个立即高亮，直到用户主动滚动才交还给 scroll-spy。
+  // 这样「基础概念」这类无独立区块的顶层节点也能在被点击时稳定高亮自身。
+  const [manualActiveId, setManualActiveId] = React.useState<string | null>(
+    null
+  );
+  const programmatic = React.useRef(false);
+  const programmaticTimer = React.useRef<number | undefined>(undefined);
+
   // 深链 / 初始定位：进入页面（或跨路由切换）时展开当前路由顶层节点；
   // 若 URL 含 hash / ?cat=，则展开到对应叶子并精确定位。
   // 依赖 pathname：SidebarNav 在 layout 中持久挂载，路由切换不会重挂本组件，
@@ -87,6 +95,7 @@ export function TreeMenu({
     }
     setOpenSet(open);
     setInstantSet(new Set(open));
+    setManualActiveId(null);
     if (leaf) {
       const t = window.setTimeout(() => {
         const el = document.getElementById(leaf!.id);
@@ -123,6 +132,14 @@ export function TreeMenu({
       const ids = [node.id, ...ancestors(node.id)];
       setOpenSet((prev) => new Set([...prev, ...ids]));
       setInstantSet(new Set(ids));
+      // 点击权威性：立即高亮被点中的节点，直到用户主动滚动才交还 spy。
+      // 程序化平滑滚动期间不清除；用标记 + 兜底定时器防 scrollend 丢失。
+      setManualActiveId(node.id);
+      programmatic.current = true;
+      window.clearTimeout(programmaticTimer.current);
+      programmaticTimer.current = window.setTimeout(() => {
+        programmatic.current = false;
+      }, 1200);
       history.replaceState(null, "", node.href);
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
@@ -179,10 +196,25 @@ export function TreeMenu({
     return n?.id ?? null;
   }, [nodes, pathname, activeLeafId, activeGroupNodeId]);
 
+  // 用户主动滚动（非点击触发的程序化滚动）后，交还 scroll-spy 决定高亮。
+  React.useEffect(() => {
+    const onScrollEnd = () => {
+      if (programmatic.current) {
+        programmatic.current = false;
+        return;
+      }
+      setManualActiveId(null);
+    };
+    window.addEventListener("scrollend", onScrollEnd);
+    return () => window.removeEventListener("scrollend", onScrollEnd);
+  }, []);
+
   const isActive = (node: TreeNode): boolean =>
-    node.id === activeLeafId ||
-    node.id === activeGroupNodeId ||
-    node.id === activeRouteId;
+    node.id === manualActiveId ||
+    (manualActiveId == null &&
+      (node.id === activeLeafId ||
+        node.id === activeGroupNodeId ||
+        node.id === activeRouteId));
 
   const renderNode = (node: TreeNode, depth: number) => {
     const hasChildren = !!node.children && node.children.length > 0;

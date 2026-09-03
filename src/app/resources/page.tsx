@@ -27,13 +27,8 @@ export default function ResourcesPage() {
         const items = resources.filter((r) => r.category === cat);
         if (items.length === 0) return null;
         return (
-          <section
-            key={cat}
-            id={cat}
-            data-spy-group={cat}
-            className="scroll-anchor space-y-3"
-          >
-            <GroupLabel>
+          <section key={cat} id={cat} className="scroll-anchor space-y-3">
+            <GroupLabel data-spy-group={cat}>
               {cat}
               <span className="ml-2 font-normal">
                 · {resourceCategoryMeta[cat]}
@@ -44,6 +39,7 @@ export default function ResourcesPage() {
                 <Reveal key={r.name} delay={i * 60}>
                   <Card
                     id={resourceId(r)}
+                    data-spy-group={cat}
                     data-spy-item={resourceId(r)}
                     className="hover-lift scroll-anchor"
                   >

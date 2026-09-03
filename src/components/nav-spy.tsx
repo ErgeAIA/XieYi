@@ -3,6 +3,20 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 
+// 读取 --scroll-offset（如 4.5rem）换算为像素，作为锚点落点与 spy 判定带的单一真源；
+// 解析失败回退 72px。
+function getSpyOffsetPx() {
+  if (typeof document === "undefined") return 72;
+  const styles = getComputedStyle(document.documentElement);
+  const rem = parseFloat(styles.getPropertyValue("--scroll-offset"));
+  const fontSize = parseFloat(styles.fontSize);
+  const offsetPx =
+    Number.isFinite(rem) && Number.isFinite(fontSize)
+      ? rem * fontSize
+      : 72;
+  return Number.isFinite(offsetPx) ? offsetPx : 72;
+}
+
 type NavSpyValue = {
   activeGroup: string | null;
   activeItem: string | null;
@@ -54,7 +68,16 @@ export function NavSpyProvider({ children }: { children: React.ReactNode }) {
     );
     if (!groups.length && !items.length) return;
 
-    const currentGroup = { current: null as string | null };
+    // 读取 --scroll-offset，作为锚点落点（scroll-margin）与 spy 判定带的单一真源。
+    // 判定带上边界比锚点落点小 16px，确保分组标题滚到位后一定落在判定带内，
+    // 从而「分组标题」是带内最顶元素、而非它下面的第一个叶子。
+    const offsetPx = getSpyOffsetPx();
+    const topMargin = Math.max(0, offsetPx - 16);
+
+    const current = {
+      current: { group: null as string | null, item: null as string | null },
+    };
+    const intersecting = new Set<Element>();
     const first = { current: true };
     let debounce: number | undefined;
 
@@ -72,28 +95,40 @@ export function NavSpyProvider({ children }: { children: React.ReactNode }) {
     }
     if (pinGroup) setPinnedGroup(pinGroup);
 
+    // 最顶可见元素决定当前高亮：它若是分组（无 data-spy-item），则清空叶子；
+    // 它若是叶子，则同时取其所属分组，使父分组在滚动时仍可被 spy 感知。
     const commit = () => {
-      if (currentGroup.current) setActiveGroup(currentGroup.current);
+      setActiveGroup(current.current.group);
+      setActiveItem(current.current.item);
     };
 
     const io = new IntersectionObserver(
       (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (!visible.length) return;
-        visible.sort(
-          (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
-        );
-        const g = visible[0].target.getAttribute("data-spy-group");
-        const it = visible[0].target.getAttribute("data-spy-item");
-        if (g) currentGroup.current = g;
-        if (it) setActiveItem(it);
+        // 维护「当前所有相交元素」集合：IntersectionObserver 的 entries 只返回
+        // 本次发生变化的元素，rest 时若仅叶子变化，分组不会被重新评估，导致高亮卡在叶子。
+        // 因此每次都从完整相交集合里取最顶元素来判定。
+        for (const e of entries) {
+          if (e.isIntersecting) intersecting.add(e.target);
+          else intersecting.delete(e.target);
+        }
+        if (intersecting.size === 0) return;
+        const top = [...intersecting].sort(
+          (a, b) =>
+            a.getBoundingClientRect().top - b.getBoundingClientRect().top
+        )[0];
+        const g =
+          top.getAttribute("data-spy-group") ??
+          top.closest("[data-spy-group]")?.getAttribute("data-spy-group") ??
+          null;
+        const it = top.getAttribute("data-spy-item") ?? null;
+        current.current = { group: g, item: it };
         // 仅首帧（挂载/筛选重排后）立即同步，其余等滚动停止再提交
         if (first.current) {
           first.current = false;
           commit();
         }
       },
-      { rootMargin: "-72px 0px -65% 0px", threshold: 0 }
+      { rootMargin: `-${topMargin}px 0px -65% 0px`, threshold: 0 }
     );
     groups.forEach((el) => io.observe(el));
     items.forEach((el) => io.observe(el));

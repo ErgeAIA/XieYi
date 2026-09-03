@@ -44,18 +44,14 @@ export default function ConceptsPage() {
         const items = filtered.filter((c) => c.group === g);
         if (items.length === 0) return null;
         return (
-          <section
-            key={g}
-            id={g}
-            data-spy-group={g}
-            className="scroll-anchor space-y-3"
-          >
-            <GroupLabel>{conceptGroupMeta[g]}</GroupLabel>
+          <section key={g} id={g} className="scroll-anchor space-y-3">
+            <GroupLabel data-spy-group={g}>{conceptGroupMeta[g]}</GroupLabel>
             <div className="space-y-3">
               {items.map((c, i) => (
                 <Reveal key={c.id} delay={i * 50}>
                   <Card
                     id={c.id}
+                    data-spy-group={g}
                     data-spy-item={c.id}
                     className="hover-lift scroll-anchor"
                   >

@@ -47,18 +47,14 @@ export default function FrameworksPage() {
         const items = filtered.filter((f) => f.group === g);
         if (items.length === 0) return null;
         return (
-          <section
-            key={g}
-            id={g}
-            data-spy-group={g}
-            className="scroll-anchor space-y-3"
-          >
-            <GroupLabel>{frameworkGroupMeta[g]}</GroupLabel>
+          <section key={g} id={g} className="scroll-anchor space-y-3">
+            <GroupLabel data-spy-group={g}>{frameworkGroupMeta[g]}</GroupLabel>
             <div className="space-y-3">
               {items.map((f, i) => (
                 <Reveal key={f.id} delay={i * 40}>
                   <Card
                     id={f.id}
+                    data-spy-group={g}
                     data-spy-item={f.id}
                     className="hover-lift scroll-anchor"
                   >
