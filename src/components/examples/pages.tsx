@@ -471,37 +471,53 @@ function SettingsExample() {
 
 function KanbanExample() {
   const cols = [
-    { title: "待办", items: ["设计登录页", "编写文档"] },
-    { title: "进行中", items: ["搭建组件库"] },
-    { title: "已完成", items: ["需求评审", "项目初始化"] },
+    {
+      title: "待办",
+      items: [
+        { text: "设计登录页", who: "李" },
+        { text: "编写文档", who: "韩" },
+      ],
+    },
+    { title: "进行中", items: [{ text: "搭建组件库", who: "张" }] },
+    {
+      title: "已完成",
+      items: [
+        { text: "需求评审", who: "王" },
+        { text: "项目初始化", who: "刘" },
+      ],
+    },
   ];
   return (
-    <div className="grid gap-3 sm:grid-cols-3">
-      {cols.map((c) => (
-        <div key={c.title} className="rounded-md border bg-muted/30 p-3">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-medium">{c.title}</span>
-            <Badge variant="secondary">{c.items.length}</Badge>
-          </div>
-          <div className="space-y-2">
-            {c.items.map((it, i) => (
-              <div
-                key={i}
-                className="rounded-md border bg-card p-2 text-sm shadow-sm"
-              >
-                <div className="flex items-center gap-2">
-                  <Avatar name="L" />
-                  {it}
-                </div>
+    <section className="example-canvas">
+      <Reveal>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {cols.map((c) => (
+            <div key={c.title} className="rounded-md border bg-muted/30 p-3">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-sm font-medium">{c.title}</span>
+                <Badge variant="secondary">{c.items.length}</Badge>
               </div>
-            ))}
-            <Button variant="ghost" size="sm" className="w-full">
-              + 添加卡片
-            </Button>
-          </div>
+              <div className="space-y-2">
+                {c.items.map((it, i) => (
+                  <div
+                    key={i}
+                    className="rounded-md border bg-card p-2 text-sm shadow-sm"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Avatar name={it.who} />
+                      {it.text}
+                    </div>
+                  </div>
+                ))}
+                <Button variant="ghost" size="sm" className="w-full">
+                  + 添加卡片
+                </Button>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </Reveal>
+    </section>
   );
 }
 
