@@ -1,4 +1,4 @@
-// 自动迁移自 tools/vibe-coding-guide.html（脚本 scripts/extract-data.mjs 生成，AI 通用组已重排+优化+补推荐；开发工程组已同样重排+补推荐，按上线流排序）
+// 自动迁移自 tools/vibe-coding-guide.html（脚本 scripts/extract-data.mjs 生成；三个组均已重排+优化+补推荐：AI 组按认知流并新增工作模式卡，dev 组按上线流并新增构建/测试卡，web 组按学习流并新增三件套/路由/状态卡）
 import type { Concept, ConceptGroup } from "./types";
 
 export const concepts: Concept[] = [
@@ -371,52 +371,38 @@ export const concepts: Concept[] = [
     ]
   },
   {
-    "id": "frontend-backend",
-    "nameZh": "前端 / 后端",
-    "nameEn": "Frontend / Backend",
+    "id": "html-css-js",
+    "nameZh": "网页三件套",
+    "nameEn": "HTML / CSS / JS",
     "group": "web",
-    "definition": "前端负责界面与交互，后端负责数据与业务逻辑，通过接口协作。",
-    "analogy": "像餐厅：前厅点菜上菜（前端），后厨做菜（后端），菜单是双方约定的接口。",
+    "definition": "网页的三个基础层：HTML 定结构——页面上有什么内容；CSS 定样式——内容长什么样；JavaScript 定行为——操作后发生什么反应。所有前端框架和组件，最终都会生成这三样东西交给浏览器。",
+    "analogy": "像盖房子：HTML 是毛坯框架，隔出客厅卧室；CSS 是装修，刷墙铺地板定风格；JavaScript 是水电开关——按一下，灯真的会亮。",
     "aiUsage": {
-      "strategy": "说清需求属于前端、后端还是全栈，并说明两者如何通过 API 对接。",
-      "example": "请为登录页实现前端表单校验，并给我一个接收账号密码的后端接口设计。"
-    }
-  },
-  {
-    "id": "api",
-    "nameZh": "接口",
-    "nameEn": "API",
-    "group": "web",
-    "definition": "程序之间约定的数据交换接口，定义请求方式、参数与返回格式。",
-    "analogy": "像餐厅菜单：顾客按菜单点菜，后厨按菜单出菜，两边都认同一套规则。",
-    "aiUsage": {
-      "strategy": "设计接口时写清路径、方法、参数、返回结构与错误码，让 AI 直接实现。",
-      "example": "请设计一个用户登录 API，POST /api/login，返回 token 或 401 错误。"
-    }
-  },
-  {
-    "id": "database",
-    "nameZh": "数据库",
-    "nameEn": "Database",
-    "group": "web",
-    "definition": "持久化存储数据的系统，支持增删改查与数据关联。",
-    "analogy": "像图书馆书库：书按编号摆放，借书还书都有登记，才能管好上万册书。",
-    "aiUsage": {
-      "strategy": "描述数据模型时给出实体关系，让 AI 设计表结构或查询语句。",
-      "example": "请为待办事项设计三张表：用户、任务、标签，并说明它们之间的关系。"
-    }
+      "strategy": "描述页面时按三层说清：要哪些内容、长什么样、有什么交互，AI 就能一次到位地用三件套实现。",
+      "example": "做一个个人主页：左侧头像加一段自我介绍（内容），暖色卡片式排版（样式），点『复制邮箱』按钮就把地址复制到剪贴板（行为）。"
+    },
+    "recommendations": [
+      { "name": "MDN Web 文档", "url": "https://developer.mozilla.org/zh-CN/", "note": "Web 标准权威参考，三件套逐个查" },
+      { "name": "现代 JavaScript 教程", "url": "https://zh.javascript.info", "note": "免费、系统的中文 JS 教程" },
+      { "name": "本站前端组件页", "url": "/components", "note": "三件套封装好的成品，直接抄作业" }
+    ]
   },
   {
     "id": "component",
     "nameZh": "组件",
     "nameEn": "Component",
     "group": "web",
-    "definition": "可复用的界面单元，封装了样式、结构与行为。",
+    "definition": "可复用的界面单元，把结构、样式与行为封装在一起，通过属性（props）接收数据、对外暴露交互事件。",
     "analogy": "像乐高积木：标准件拼在一起能搭出各种造型，不必每次都从零造。",
     "aiUsage": {
       "strategy": "描述组件时给清 props、状态和交互，要求它可复用而非一次性。",
       "example": "请实现一个可复用的日期选择组件，支持禁用日期和范围选择两种模式。"
-    }
+    },
+    "recommendations": [
+      { "name": "shadcn/ui", "url": "https://ui.shadcn.com", "note": "复制源码进项目、可自由改的组件方案，本站在用" },
+      { "name": "Ant Design", "url": "https://ant.design", "note": "国内流行的企业级 React 组件库" },
+      { "name": "本站前端组件页", "url": "/components", "note": "收录 67 个组件的用法与示例" }
+    ]
   },
   {
     "id": "responsive",
@@ -424,11 +410,99 @@ export const concepts: Concept[] = [
     "nameEn": "Responsive",
     "group": "web",
     "definition": "页面随屏幕尺寸自动调整布局，手机、平板、桌面都能用。",
-    "analogy": "像橡皮筋：不管撑多大都能贴回原形，怎么拉伸都不会断。",
+    "analogy": "像水倒进不同的杯子：页面内容是水，手机、平板、桌面是不同的杯子，水总能贴着容器排出合适的形状。",
     "aiUsage": {
       "strategy": "描述布局在哪些断点下如何变化，让 AI 用媒体查询或流式布局实现。",
       "example": "请让这个导航栏在手机端变成汉堡菜单，在桌面端保持横向排列。"
-    }
+    },
+    "recommendations": [
+      { "name": "Tailwind CSS", "url": "https://tailwindcss.com", "note": "原子化 CSS，断点响应式随写随有，本站在用" },
+      { "name": "MDN 响应式设计", "url": "https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Responsive_Design", "note": "视口、断点、流式布局的系统讲解" }
+    ]
+  },
+  {
+    "id": "routing",
+    "nameZh": "路由",
+    "nameEn": "Routing",
+    "group": "web",
+    "definition": "决定『访问哪个地址显示哪个页面』的机制：地址变化时，路由按规则找到对应页面来渲染；现代单页应用靠它切换视图而不用整页刷新，流畅感就来自这里。",
+    "analogy": "像写字楼的前台导览：你说要找哪家公司（网址），导览图（路由）告诉你去几楼几号房，不用每次都从大门重新进来。",
+    "aiUsage": {
+      "strategy": "列出页面清单和各自地址（如 /login、/settings），让 AI 一次把路由骨架搭好；需要登录才能看的页面，一并说明跳转规则。",
+      "example": "搭好路由：/ 首页、/articles 列表、/articles/:id 详情、/settings 设置；未登录访问 /settings 时跳转到 /login。"
+    },
+    "recommendations": [
+      { "name": "Next.js App Router", "url": "https://nextjs.org/docs/app", "note": "文件即路由，本站在用" },
+      { "name": "React Router", "url": "https://reactrouter.com", "note": "React 生态最常用的路由库" }
+    ]
+  },
+  {
+    "id": "state",
+    "nameZh": "状态",
+    "nameEn": "State",
+    "group": "web",
+    "definition": "界面上会随操作变化的数据：输入框里的字、是否已登录、购物车里的商品都是状态。状态一变，页面跟着更新——管理好『谁存它、谁能改它』，是前端稳定不乱的关键。",
+    "analogy": "像餐厅后厨的白板订单：服务员写上去，后厨抬头可见，划掉一道菜全员同步。白板只有一块、写的人有规矩，才不会出错——状态同理，要定好唯一来源和修改权限。",
+    "aiUsage": {
+      "strategy": "说清哪些数据会变、谁负责改、哪些页面要共享，让 AI 选对存放位置：组件内、全局还是服务端。",
+      "example": "登录成功后顶部显示头像：请把用户信息做成全局状态，登录页和顶栏共用，退出登录时一并清空。"
+    },
+    "recommendations": [
+      { "name": "React 官方文档·管理状态", "url": "https://react.dev/learn/managing-state", "note": "状态该放哪的官方决策指南" },
+      { "name": "Zustand", "url": "https://github.com/pmndrs/zustand", "note": "轻量全局状态库，几行代码够用" }
+    ]
+  },
+  {
+    "id": "frontend-backend",
+    "nameZh": "前端 / 后端",
+    "nameEn": "Frontend / Backend",
+    "group": "web",
+    "definition": "前端是用户在浏览器里看到、点到的那部分，负责界面与交互；后端跑在服务器上，负责数据存取与业务逻辑；两边通过接口通信。",
+    "analogy": "像餐厅：前厅点菜上菜（前端），后厨做菜（后端），菜单是双方约定的接口。",
+    "aiUsage": {
+      "strategy": "说清需求属于前端、后端还是全栈，并说明两者如何通过 API 对接。",
+      "example": "请为登录页实现前端表单校验，并给我一个接收账号密码的后端接口设计。"
+    },
+    "recommendations": [
+      { "name": "Next.js", "url": "https://nextjs.org", "note": "页面与接口一体的全栈框架，本站即用它" },
+      { "name": "Express", "url": "https://expressjs.com", "note": "最常用的 Node 后端框架，写接口的最小起点" },
+      { "name": "本站提示词库", "url": "/prompts", "note": "复制「原型 / 实现」类提示词，一次生成前后端" }
+    ]
+  },
+  {
+    "id": "api",
+    "nameZh": "接口",
+    "nameEn": "API",
+    "group": "web",
+    "definition": "程序之间约定的数据交换契约：用哪种 HTTP 方法、传什么参数、返回什么格式的数据（如今多为 JSON），说清楚就能互相对话。",
+    "analogy": "像餐厅菜单：顾客按菜单点菜，后厨按菜单出菜，两边都认同一套规则。",
+    "aiUsage": {
+      "strategy": "设计接口时写清路径、方法、参数、返回结构与错误码，让 AI 直接实现。",
+      "example": "请设计一个用户登录 API，POST /api/login，返回 token 或 401 错误。"
+    },
+    "recommendations": [
+      { "name": "Apifox", "url": "https://apifox.com", "note": "接口调试 + 文档 + Mock 一体，中文友好" },
+      { "name": "MDN HTTP 教程", "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTTP", "note": "方法、状态码、请求头的权威参考" },
+      { "name": "本站提示词库", "url": "/prompts", "note": "复制「实现」类提示词：按契约直接生成接口" }
+    ]
+  },
+  {
+    "id": "database",
+    "nameZh": "数据库",
+    "nameEn": "Database",
+    "group": "web",
+    "definition": "持久化存储数据的系统：程序重启数据也不丢，支持增删改查与数据之间的关联；关系型数据库用 SQL 操作。",
+    "analogy": "像图书馆书库：书按编号摆放，借书还书都有登记，才能管好上万册书。",
+    "aiUsage": {
+      "strategy": "描述数据模型时给出实体关系，让 AI 设计表结构或查询语句。",
+      "example": "请为待办事项设计三张表：用户、任务、标签，并说明它们之间的关系。"
+    },
+    "recommendations": [
+      { "name": "SQLite", "url": "https://www.sqlite.org", "note": "零配置单文件数据库，小项目首选" },
+      { "name": "PostgreSQL", "url": "https://www.postgresql.org", "note": "功能最全的开源关系型数据库" },
+      { "name": "Supabase", "url": "https://supabase.com", "note": "托管数据库并自动生成接口，AI 建站常用" },
+      { "name": "本站提示词库", "url": "/prompts", "note": "复制「数据」类提示词：让 AI 设计表结构与查询" }
+    ]
   }
 ];
 
