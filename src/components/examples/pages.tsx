@@ -281,6 +281,8 @@ function DataTableExample() {
     { name: "项目 A", owner: "李雷", status: "进行中", updated: "2 小时前" },
     { name: "项目 B", owner: "韩梅梅", status: "已完成", updated: "昨天" },
     { name: "项目 C", owner: "张伟", status: "待审核", updated: "3 天前" },
+    { name: "项目 D", owner: "王芳", status: "进行中", updated: "5 天前" },
+    { name: "项目 E", owner: "刘洋", status: "已完成", updated: "上周" },
   ];
   const filtered = rows.filter((r) =>
     (r.name + r.owner).toLowerCase().includes(q.toLowerCase()),
@@ -288,60 +290,64 @@ function DataTableExample() {
   const statusVariant = (s: string) =>
     s === "已完成" ? "default" : s === "进行中" ? "secondary" : "outline";
   return (
-    <div className="space-y-3">
-      <Input
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="搜索项目…"
-        className="max-w-xs"
-      />
-      <div className="overflow-hidden rounded-md border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/50 text-left text-muted-foreground">
-            <tr>
-              <th className="p-2 font-medium">名称</th>
-              <th className="p-2 font-medium">负责人</th>
-              <th className="p-2 font-medium">状态</th>
-              <th className="p-2 font-medium">更新时间</th>
-              <th className="p-2 font-medium"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((r, i) => (
-              <tr key={i} className="border-t">
-                <td className="p-2">{r.name}</td>
-                <td className="p-2">{r.owner}</td>
-                <td className="p-2">
-                  <Badge variant={statusVariant(r.status)}>{r.status}</Badge>
-                </td>
-                <td className="p-2 text-muted-foreground">{r.updated}</td>
-                <td className="p-2 text-right">
-                  <Dialog>
-                    <DialogTrigger render={<Button variant="ghost" size="sm" />}>
-                      删除
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>确认删除</DialogTitle>
-                        <DialogDescription>
-                          确定删除 {r.name} 吗？此操作不可撤销。
-                        </DialogDescription>
-                      </DialogHeader>
-                      <DialogFooter>
-                        <DialogClose render={<Button variant="outline" />}>
-                          取消
-                        </DialogClose>
-                        <Button variant="destructive">删除</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <section className="example-canvas">
+      <Reveal>
+        <div className="space-y-3">
+          <Input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="搜索项目…"
+            className="max-w-xs"
+          />
+          <div className="overflow-hidden rounded-md border">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50 text-left text-muted-foreground">
+                <tr>
+                  <th className="p-2 font-medium">名称</th>
+                  <th className="p-2 font-medium">负责人</th>
+                  <th className="p-2 font-medium">状态</th>
+                  <th className="p-2 font-medium">更新时间</th>
+                  <th className="p-2 font-medium"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((r, i) => (
+                  <tr key={i} className="border-t">
+                    <td className="p-2">{r.name}</td>
+                    <td className="p-2">{r.owner}</td>
+                    <td className="p-2">
+                      <Badge variant={statusVariant(r.status)}>{r.status}</Badge>
+                    </td>
+                    <td className="p-2 text-muted-foreground">{r.updated}</td>
+                    <td className="p-2 text-right">
+                      <Dialog>
+                        <DialogTrigger render={<Button variant="ghost" size="sm" />}>
+                          删除
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>确认删除</DialogTitle>
+                            <DialogDescription>
+                              确定删除 {r.name} 吗？此操作不可撤销。
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <DialogClose render={<Button variant="outline" />}>
+                              取消
+                            </DialogClose>
+                            <Button variant="destructive">删除</Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Reveal>
+    </section>
   );
 }
 
