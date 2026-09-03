@@ -384,6 +384,8 @@ export const concepts: Concept[] = [
     "recommendations": [
       { "name": "MDN Web 文档", "url": "https://developer.mozilla.org/zh-CN/", "note": "Web 标准权威参考，三件套逐个查" },
       { "name": "现代 JavaScript 教程", "url": "https://zh.javascript.info", "note": "免费、系统的中文 JS 教程" },
+      { "name": "web.dev", "url": "https://web.dev", "note": "Google 出品：性能、无障碍等现代 Web 最佳实践" },
+      { "name": "Can I Use", "url": "https://caniuse.com", "note": "浏览器兼容性查询，某个特性能不能用一查便知" },
       { "name": "本站前端组件页", "url": "/components", "note": "三件套封装好的成品，直接抄作业" }
     ]
   },
@@ -401,6 +403,8 @@ export const concepts: Concept[] = [
     "recommendations": [
       { "name": "shadcn/ui", "url": "https://ui.shadcn.com", "note": "复制源码进项目、可自由改的组件方案，本站在用" },
       { "name": "Ant Design", "url": "https://ant.design", "note": "国内流行的企业级 React 组件库" },
+      { "name": "Material UI (MUI)", "url": "https://mui.com", "note": "老牌 Material Design 实现，组件覆盖度最高" },
+      { "name": "Radix UI", "url": "https://www.radix-ui.com", "note": "无样式交互原语，shadcn/ui 的底座" },
       { "name": "本站前端组件页", "url": "/components", "note": "收录 67 个组件的用法与示例" }
     ]
   },
@@ -417,6 +421,7 @@ export const concepts: Concept[] = [
     },
     "recommendations": [
       { "name": "Tailwind CSS", "url": "https://tailwindcss.com", "note": "原子化 CSS，断点响应式随写随有，本站在用" },
+      { "name": "Flexbox Froggy", "url": "https://flexboxfroggy.com", "note": "游戏过关学弹性布局，零门槛；姊妹篇 Grid Garden 学网格" },
       { "name": "MDN 响应式设计", "url": "https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Responsive_Design", "note": "视口、断点、流式布局的系统讲解" }
     ]
   },
@@ -433,7 +438,8 @@ export const concepts: Concept[] = [
     },
     "recommendations": [
       { "name": "Next.js App Router", "url": "https://nextjs.org/docs/app", "note": "文件即路由，本站在用" },
-      { "name": "React Router", "url": "https://reactrouter.com", "note": "React 生态最常用的路由库" }
+      { "name": "React Router", "url": "https://reactrouter.com", "note": "React 生态最常用的路由库" },
+      { "name": "TanStack Router", "url": "https://tanstack.com/router", "note": "类型安全的路由新生代，搜索参数是一等公民" }
     ]
   },
   {
@@ -449,7 +455,9 @@ export const concepts: Concept[] = [
     },
     "recommendations": [
       { "name": "React 官方文档·管理状态", "url": "https://react.dev/learn/managing-state", "note": "状态该放哪的官方决策指南" },
-      { "name": "Zustand", "url": "https://github.com/pmndrs/zustand", "note": "轻量全局状态库，几行代码够用" }
+      { "name": "Zustand", "url": "https://github.com/pmndrs/zustand", "note": "轻量全局状态库，几行代码够用" },
+      { "name": "TanStack Query", "url": "https://tanstack.com/query", "note": "服务端状态的事实标准：缓存、重试、失效一站式" },
+      { "name": "Redux Toolkit", "url": "https://redux-toolkit.js.org", "note": "老牌主流方案，企业项目常见，自带最佳实践" }
     ]
   },
   {
@@ -466,6 +474,9 @@ export const concepts: Concept[] = [
     "recommendations": [
       { "name": "Next.js", "url": "https://nextjs.org", "note": "页面与接口一体的全栈框架，本站即用它" },
       { "name": "Express", "url": "https://expressjs.com", "note": "最常用的 Node 后端框架，写接口的最小起点" },
+      { "name": "Hono", "url": "https://hono.dev", "note": "轻量极速的后起主流，Node 与边缘运行时通吃" },
+      { "name": "NestJS", "url": "https://nestjs.com", "note": "结构化后端框架，大型项目的主流选择" },
+      { "name": "roadmap.sh", "url": "https://roadmap.sh", "note": "开源的全栈学习路线图，按图查漏补缺" },
       { "name": "本站提示词库", "url": "/prompts", "note": "复制「原型 / 实现」类提示词，一次生成前后端" }
     ]
   },
@@ -482,6 +493,8 @@ export const concepts: Concept[] = [
     },
     "recommendations": [
       { "name": "Apifox", "url": "https://apifox.com", "note": "接口调试 + 文档 + Mock 一体，中文友好" },
+      { "name": "Hoppscotch", "url": "https://hoppscotch.io", "note": "开源的 API 调试客户端，浏览器里直接用" },
+      { "name": "JSONPlaceholder", "url": "https://jsonplaceholder.typicode.com", "note": "免费假接口，练手请求不用自己搭后端" },
       { "name": "MDN HTTP 教程", "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTTP", "note": "方法、状态码、请求头的权威参考" },
       { "name": "本站提示词库", "url": "/prompts", "note": "复制「实现」类提示词：按契约直接生成接口" }
     ]
@@ -500,7 +513,9 @@ export const concepts: Concept[] = [
     "recommendations": [
       { "name": "SQLite", "url": "https://www.sqlite.org", "note": "零配置单文件数据库，小项目首选" },
       { "name": "PostgreSQL", "url": "https://www.postgresql.org", "note": "功能最全的开源关系型数据库" },
+      { "name": "MySQL", "url": "https://www.mysql.com", "note": "国内使用最广的关系型数据库，开源经典" },
       { "name": "Supabase", "url": "https://supabase.com", "note": "托管数据库并自动生成接口，AI 建站常用" },
+      { "name": "Prisma", "url": "https://www.prisma.io", "note": "类型安全的 ORM，用模型定义表结构、自动生成查询" },
       { "name": "本站提示词库", "url": "/prompts", "note": "复制「数据」类提示词：让 AI 设计表结构与查询" }
     ]
   }
