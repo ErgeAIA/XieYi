@@ -36,6 +36,12 @@ export function NavSpyProvider({ children }: { children: React.ReactNode }) {
     setPinnedGroupState((prev) => (prev === g ? prev : g));
   }, []);
 
+  // 让滚动/防抖回调读取最新的 pinnedGroup，避免闭包 stale
+  const pinnedRef = React.useRef(pinnedGroup);
+  React.useEffect(() => {
+    pinnedRef.current = pinnedGroup;
+  }, [pinnedGroup]);
+
   /* eslint-disable react-hooks/set-state-in-effect -- IntersectionObserver 驱动的 scroll-spy 必须在 effect 内更新高亮状态，属该规则的合法例外（与 components-view 同类模式） */
   React.useEffect(() => {
     // 路由切换：observer 挂载后会立即校正 activeGroup/item；
@@ -50,6 +56,7 @@ export function NavSpyProvider({ children }: { children: React.ReactNode }) {
 
     const currentGroup = { current: null as string | null };
     const first = { current: true };
+    let debounce: number | undefined;
 
     // 带 hash 的跳转：先把目标分组钉住，滚动过程中不抖动
     const hash = window.location.hash ? window.location.hash.slice(1) : "";
@@ -91,18 +98,28 @@ export function NavSpyProvider({ children }: { children: React.ReactNode }) {
     groups.forEach((el) => io.observe(el));
     items.forEach((el) => io.observe(el));
 
-    const clear = () => {
-      // 交还滚动实际停在哪一组，并解钉
-      setActiveGroup(currentGroup.current);
+    // 持续滚动 spy：滚动中防抖提交，滚动结束立即提交，与 components-view 一致。
+    // hash 钉住期间忽略中间值，避免跳转途中菜单闪烁；停止后交还并解钉。
+    const onScroll = () => {
+      if (first.current) return;
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(() => {
+        if (!pinnedRef.current) commit();
+      }, 120);
+    };
+    const onScrollEnd = () => {
+      commit();
       setPinnedGroup(null);
     };
-    window.addEventListener("scrollend", clear, { once: true });
-    const hardTimer = window.setTimeout(clear, 1500);
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scrollend", onScrollEnd);
 
     return () => {
       io.disconnect();
-      window.removeEventListener("scrollend", clear);
-      window.clearTimeout(hardTimer);
+      window.clearTimeout(debounce);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scrollend", onScrollEnd);
     };
   }, [pathname, setActiveGroup, setActiveItem, setPinnedGroup]);
   /* eslint-enable react-hooks/set-state-in-effect */
