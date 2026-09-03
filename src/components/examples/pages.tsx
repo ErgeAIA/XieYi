@@ -43,6 +43,12 @@ import {
 } from "@/components/ui/dialog";
 import { Reveal } from "@/components/motion/reveal";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Info,
   AlertTriangle,
   CheckCircle2,
@@ -62,7 +68,7 @@ function Avatar({ name }: { name: string }) {
   );
 }
 
-/* ---------- 1. Dashboard 数据面板 ---------- */
+/* ---------- 1. 数据面板 ---------- */
 
 function DashboardExample() {
   const stats = [
@@ -154,7 +160,7 @@ function DashboardExample() {
   );
 }
 
-/* ---------- 2. IDE 编辑器布局 ---------- */
+/* ---------- 2. 编辑器布局 ---------- */
 
 function IdeExample() {
   const files = [
@@ -848,71 +854,226 @@ function EmptyStatesExample() {
   );
 }
 
-export const pageExamples = [
+interface PageExample {
+  id: string;
+  title: string;
+  desc: string;
+  keywords: string;
+  Comp: React.ComponentType;
+  usage?: string;
+  prompt?: string;
+}
+
+export const pageExamples: PageExample[] = [
   {
     id: "dashboard",
-    title: "Dashboard 数据面板",
+    title: "数据面板",
     desc: "指标卡 + 趋势图 + 动态流",
+    usage: "后台首页概览、运营数据周报、个人中心数据墙、SaaS 产品指标页",
     keywords:
       "dashboard 数据面板 指标 统计 图表 趋势 访问 用户 转化 营收 动态 卡片 概览",
+    prompt: `请生成一个「数据面板（Dashboard）」页面，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 顶部一行 4 个指标卡（grid 4 列）。每张卡：指标名、大号数字、同比涨跌 Badge（涨用品牌强调色、跌用次要灰）。占位数据如：今日访问 1,284 ▲12%、新增用户 86 ▲5%、转化率 3.2% ▼1%、营收 ¥42.8k ▲8%。
+- 下方左右分栏（约 2:1）：左侧趋势图区块（SVG 折线/柱状占位，展示近 7 日访问），右侧「最新动态」信息流（头像 + 文案 + 相对时间，如「3 分钟前 李雷 完成注册」）。
+- 卡片用 Card 组件（CardHeader/CardTitle/CardContent），圆角、细边框、浅底。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体，不引入装饰字体；留白充足，层级清晰；hover 轻微抬升反馈。
+
+响应式：
+- <1024px 指标卡 2 列，<640px 1 列；下方分栏窄屏堆叠为单列。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: DashboardExample,
   },
   {
     id: "ide",
-    title: "IDE 编辑器布局",
+    title: "编辑器布局",
     desc: "文件树 + 代码区 + 预览三栏",
+    usage: "代码编辑器、IDE 工作台、在线预览工具、低代码搭建器",
     keywords: "ide 编辑器 代码 文件树 资源管理器 预览 高亮 终端 布局",
+    prompt: `请生成一个「编辑器布局（IDE）」页面，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 三栏：左文件树（宽约 240px，含文件夹/文件层级、展开折叠）、中代码区（等宽字体占位代码、行号、语法高亮色块）、右实时预览（渲染占位内容）。
+- 顶部工具栏：左侧标题/面包屑，右侧运行/格式化/分屏按钮。
+- 文件树节点 hover 高亮，选中项用品牌色左侧竖条 + 浅底标记。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 代码区用等宽字体（font-mono），不引入装饰字体；三栏在窄屏可隐藏侧栏或堆叠。
+
+响应式：
+- <1024px 收起文件树（可用按钮唤出），<768px 预览改为下方标签页切换。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: IdeExample,
   },
   {
     id: "form",
     title: "表单填写页面",
     desc: "输入、文本域、下拉、勾选",
+    usage: "新建/编辑表单、用户注册资料、配置创建、反馈收集",
     keywords:
       "form 表单 输入 input 文本域 textarea 下拉 select 勾选 checkbox 提交 创建 校验",
+    prompt: `请生成一个「表单填写页面」，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 居中卡片（max-width 约 480px），纵向排列表单项：文本输入（姓名/邮箱）、多行文本域（简介）、下拉选择（角色）、勾选框（同意条款）、提交按钮。
+- 每项含 label + 控件 + 辅助说明/错误提示；必填项用星号标记。
+- 提交按钮占满宽度，主色填充。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；错误态用 text-destructive 与边框强调；焦点态清晰。
+
+响应式：
+- 移动端卡片占满宽度，控件垂直铺满。
+
+数据全部用占位 mock，不接后端，提交仅做前端校验演示。输出完整可运行组件。`,
     Comp: FormExample,
   },
   {
     id: "data",
     title: "数据列表管理",
     desc: "搜索 + 表格 + 删除确认",
+    usage: "后台数据表、用户管理、订单列表、内容审核后台",
     keywords:
       "data 数据 列表 表格 table 搜索 筛选 删除 对话框 确认 分页 行 状态",
+    prompt: `请生成一个「数据列表管理」页面，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 顶部工具栏：左侧搜索框 + 筛选下拉，右侧「新建」按钮。
+- 主体为表格：列含复选框、名称、状态 Badge、更新时间、操作（编辑/删除）。
+- 删除操作弹出确认对话框（Dialog），确认后移除该行（前端演示）。
+- 底部分页栏（上一页/页码/下一页）。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；状态用 Badge 区分；行 hover 浅底。
+
+响应式：
+- <768px 表格改为卡片列表，每行信息纵向堆叠。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: DataTableExample,
   },
   {
     id: "auth",
     title: "登录 / 注册页",
     desc: "Tab 切换的认证卡片",
+    usage: "产品登录入口、注册引导、账号密码认证页",
     keywords: "auth 登录 注册 login 认证 账号 密码 邮箱 tab 切换 卡片",
+    prompt: `请生成一个「登录 / 注册页」，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 居中认证卡片（max-width 约 400px），顶部 Tab 切换「登录 / 注册」。
+- 登录态：邮箱输入 + 密码输入 + 记住我勾选 + 主色「登录」按钮 + 第三方登录分隔线。
+- 注册态：用户名/邮箱/密码 + 确认密码 + 服务条款勾选 + 「注册」按钮。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；密码框带显示/隐藏切换；错误提示用 text-destructive。
+
+响应式：
+- 移动端卡片占满宽度，去除背景装饰留白。
+
+数据全部用占位 mock，不接后端，切换 Tab 仅前端状态。输出完整可运行组件。`,
     Comp: AuthExample,
   },
   {
     id: "settings",
     title: "设置页",
     desc: "分组 Tab 与开关项",
+    usage: "产品偏好设置、账户设置中心、后台配置页",
     keywords: "settings 设置 偏好 通用 通知 安全 开关 switch 语言 昵称 分组",
+    prompt: `请生成一个「设置页」，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 左侧分组导航（竖向 Tab：通用 / 通知 / 安全 / 关于），右侧对应内容面板。
+- 内容面板为分组表单：每组一个标题 + 若干设置项（昵称输入、语言下拉、通知开关 Switch、主题单选）。
+- 底部「保存」按钮（仅在修改后高亮）。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；Switch 用品牌色表示开启；分组之间用分隔线或留白区隔。
+
+响应式：
+- <768px 分组导航改为顶部横向滚动 Tab。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: SettingsExample,
   },
   {
     id: "kanban",
     title: "看板",
     desc: "待办 / 进行中 / 已完成",
+    usage: "任务看板、项目管理板、销售漏斗、工作流看板",
     keywords: "kanban 看板 任务 卡片 拖拽 列 待办 进行中 已完成 流程",
+    prompt: `请生成一个「看板（Kanban）」页面，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 横向多列（如 待办 / 进行中 / 已完成），列宽固定约 280px，可横向滚动。
+- 每列含列标题 + 卡片数 + 卡片列表；卡片含标题、标签 Badge、负责人头像、截止日期。
+- 列底部「+ 添加卡片」入口（前端演示）。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；卡片用浅底圆角，列头用 muted 文字；标签用不同色 Badge。
+
+响应式：
+- <768px 列改为纵向堆叠，单列占满宽度。
+
+数据全部用占位 mock，不接后端（拖拽可先用静态展示，不强求实现）。输出完整可运行组件。`,
     Comp: KanbanExample,
   },
   {
     id: "todo",
     title: "任务待办",
     desc: "增删改的清单",
+    usage: "个人待办清单、购物清单、每日任务、轻量事项管理",
     keywords: "todo 任务 待办 清单 勾选 添加 删除 完成 列表 增删改",
+    prompt: `请生成一个「任务待办」页面，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 居中容器（max-width 约 480px），顶部输入框 + 「添加」按钮。
+- 下方清单：每项含勾选框（完成态划线变灰）、任务文本、删除按钮（hover 显示）。
+- 顶部可加「全部 / 进行中 / 已完成」筛选 Tab 与剩余计数。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；完成项用 line-through + text-muted-foreground；勾选用品牌色。
+
+响应式：
+- 移动端容器占满宽度。
+
+数据全部用占位 mock，不接后端，增删改仅前端状态。输出完整可运行组件。`,
     Comp: TodoExample,
   },
   {
     id: "timeline",
     title: "时间轴",
     desc: "垂直时间线",
+    usage: "项目进展时间线、版本更新日志、订单流转、个人履历",
     keywords: "timeline 时间轴 时间线 事件 历史 节点 垂直 里程碑 进度",
+    prompt: `请生成一个「时间轴（Timeline）」页面，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥1024px）：
+- 垂直时间线：一条竖线，节点用圆点标记（最新节点用品牌色实心，历史用空心或 muted）。
+- 每个节点含时间（如 2026-09-01）、标题、描述、可选标签 Badge。
+- 内容块在竖线一侧（或左右交替），留白充足。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体；节点圆点用 border / bg-primary 区分状态；时间用 muted 小字。
+
+响应式：
+- 移动端时间线靠左，内容块全宽。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: TimelineExample,
   },
   {
@@ -952,12 +1113,49 @@ export const pageExamples = [
   },
 ];
 
+function PromptBlock({ prompt }: { prompt: string }) {
+  const [copied, setCopied] = React.useState(false);
+  const onCopy = React.useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(prompt);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* 复制失败静默忽略 */
+    }
+  }, [prompt]);
+  return (
+    <Accordion type="single" collapsible>
+      <AccordionItem value="prompt" className="border-b-0">
+        <AccordionTrigger className="text-xs text-muted-foreground hover:text-foreground">
+          给 AI 的提示词（点击展开）
+        </AccordionTrigger>
+        <AccordionContent className="space-y-2">
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-xs text-muted-foreground">
+              可直接复制给 AI，生成此页面布局
+            </span>
+            <Button size="sm" variant="outline" onClick={onCopy}>
+              {copied ? "已复制" : "复制提示词"}
+            </Button>
+          </div>
+          <pre className="max-h-80 overflow-auto whitespace-pre-wrap rounded-lg border bg-muted/30 p-4 font-mono text-xs leading-relaxed text-foreground/90">
+            {prompt}
+          </pre>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
+
 export function ExamplesGallery() {
   const [q, setQ] = React.useState("");
   const s = q.trim().toLowerCase();
   const list = s
     ? pageExamples.filter((e) =>
-        `${e.title} ${e.desc} ${e.keywords}`.toLowerCase().includes(s),
+        `${e.title} ${e.desc} ${e.keywords} ${e.usage ?? ""} ${e.prompt ?? ""}`
+          .toLowerCase()
+          .includes(s),
       )
     : pageExamples;
 
@@ -977,22 +1175,10 @@ export function ExamplesGallery() {
         )}
       </div>
 
-      {list.length === 0 ? (
+      {list.length === 0 && (
         <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
           未找到与「{q}」匹配的示例。
         </p>
-      ) : (
-        <nav className="flex flex-wrap gap-2">
-          {list.map((e) => (
-            <a
-              key={e.id}
-              href={`#${e.id}`}
-              className="hover-lift rounded-md border bg-card px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {e.title}
-            </a>
-          ))}
-        </nav>
       )}
 
       <div className="space-y-10">
@@ -1008,10 +1194,23 @@ export function ExamplesGallery() {
               <div>
                 <h2 className="text-lg font-medium">{e.title}</h2>
                 <p className="text-sm text-muted-foreground">{e.desc}</p>
+                {e.usage && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {e.usage.split(/[、,，]/).map((u) => (
+                      <span
+                        key={u}
+                        className="rounded-full border bg-muted/40 px-2 py-0.5 text-xs text-muted-foreground"
+                      >
+                        {u.trim()}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="hover-lift overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
                 <Comp />
               </div>
+              {e.prompt && <PromptBlock prompt={e.prompt} />}
             </section>
           );
         })}
