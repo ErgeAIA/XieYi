@@ -191,6 +191,19 @@
   --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* 锚点落点令牌：解耦 scroll-mt / scroll-spy 对手写像素的依赖。
+   作为「锚点落点（.scroll-anchor 的 scroll-margin-top）」与
+   「scroll-spy 的 rootMargin 顶部」的单一真源；须与 site-header 的
+   min-h-14（56px = 3.5rem）保持一致，取 3.5rem + 1rem 余量。 */
+:root {
+  --scroll-offset: 4.5rem;
+}
+
+/* 统一锚点落点：替代各页散落的 scroll-mt-16/20/24 */
+.scroll-anchor {
+  scroll-margin-top: var(--scroll-offset);
+}
+
 /* 总动画开关：data-motion="off" 时关闭全部 CSS 动画/过渡/平滑滚动。
    默认（无属性）即开启；仅当用户手动关闭，或系统偏好 prefers-reduced-motion 时关闭。 */
 html[data-motion="off"] *,
