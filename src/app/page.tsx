@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
+import { PageContainer, SectionTitle } from "@/components/page-shell";
 import { HomeBento, HomeHeroDemo } from "@/components/home-demos";
 import { HeroBloom } from "@/components/hero-bloom";
 import { Typewriter } from "@/components/typewriter";
@@ -27,7 +28,7 @@ const entries = [
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-6xl space-y-20 py-10 md:space-y-24 md:py-14">
+    <PageContainer width="wide" className="space-y-14 md:space-y-20">
       {/* Hero：非对称 split，左文案右实时预览；背景为 2D Canvas 墨润开动画 */}
       <section className="relative grid items-center gap-10 overflow-hidden rounded-3xl border border-border/60 bg-card/20 p-8 md:p-14 lg:grid-cols-12 lg:gap-14">
         <HeroBloom className="pointer-events-none absolute inset-0 h-full w-full" />
@@ -75,7 +76,7 @@ export default function Home() {
       {/* 入口目录：行列表（与 hero 的 split、下方的 bento 属不同版式家族） */}
       <Reveal>
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold tracking-tight">从这里开始</h2>
+          <SectionTitle className="text-2xl">从这里开始</SectionTitle>
           <div className="divide-y border-t">
             {entries.map((e) => (
               <Link
@@ -101,12 +102,10 @@ export default function Home() {
       {/* 组件速览：bento，4 个单元对应 4 项内容，无空单元格 */}
       <Reveal>
         <section className="space-y-4">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            组件可以直接操作
-          </h2>
+          <SectionTitle className="text-2xl">组件可以直接操作</SectionTitle>
           <HomeBento />
         </section>
       </Reveal>
-    </div>
+    </PageContainer>
   );
 }
