@@ -43,3 +43,38 @@
 - **验证**：MCP 成功 `navigate` 到 `localhost:3000` 并实测首页动画开关与位置随机。
 - **注意**：MCP 更新可能改变其内置 Playwright 版本（进而期望不同的 chromium build 号），届时需重新对齐；更稳妥的长期方案是让 MCP 用其自带 Playwright 安装对应浏览器。
 - **状态**：resolved
+
+---
+
+## BUG-004: 导航高亮错位——点一级菜单亮了相邻二级、点二级偶发错位
+
+- **日期**：2026-09-04
+- **现象**：点一级菜单（如「基础概念」下的某分组）→ 右侧区块跳转准确，但侧栏高亮的是该一级**下相邻的二级叶子**，而不是被点的一级本身；点二级有时也高亮错节点。
+- **根因**：sidebar-tree 的 nav-spy 用 `IntersectionObserver`。两处错误：① 回调里**迭代赋值 bug**——`top` 变量在 `for` 循环中被反复覆盖，只保留最后一个命中的可见元素，而非真正"最靠上"那个；② 更根本的原理性错误：想用回调参数 `entries` 推断"当前顶部元素"，但 **`IntersectionObserver` 的 `entries` 只含本次变化的项，不反映全量可见状态**；滚动过程中据此推断 top 会得到错误结果（往往是滚动经过、刚离开视口的旧元素）。
+- **修复**（commit `ca6d531`，已 push，浏览器实测通过）：
+  1. 回调内改为**全量查询** `document.querySelectorAll('[data-spy-group]')` + `getBoundingClientRect`，按"在判定带（band）内、mostTop 最靠上"选出真正顶部元素再算 `group`/`item`。
+  2. `commit` 改为在 `scrollend` 提交，避免滚动抖动期间反复改写高亮。
+  3. 点击权威高亮 `manualActiveId`：叶子 `isActive` 仅当 `manualActiveId == null` 时才由 spy 决定；点击即时设 `manualActiveId = 被点节点` 并 `scrollIntoView`。
+  4. 顶层「基础概念」等无独立区块的节点：用 `spy-item` 兜底 + 路由 `concepts` 节点，确保点击即可高亮自身。
+- **教训**：
+  1. **scroll-spy 用 IntersectionObserver 时，绝不能依赖 `entries` 推断『当前顶部元素』**——`entries` 只含变化项；必须全量查询 + 几何计算（getBoundingClientRect）。
+  2. 此类交互 bug 必须起 dev server + 浏览器**实测**，不能凭代码推演"应该对了"——前几轮改了 5~6 次都没解决，正是因为没实测、在错方向上越改越偏。
+- **状态**：resolved
+
+---
+
+## BUG-005: 一级菜单需点两次才高亮（首次点亮其下最近的二级叶子）
+
+- **日期**：2026-09-04
+- **现象**：点一级菜单，首次点击高亮该一级**下最近的二级叶子**（跳转准确，有时还会因动画闪一下）；再点一次一级菜单它才亮自身。一级菜单离得越远（平滑滚动越久）越明显。
+- **根因**：点击权威高亮的"交还"逻辑用了 `programmatic` ref + **1200ms 定时器**——点击后标记 `programmatic=true`，定时器 1.2s 后置回 `false`；再靠 `scrollend` 决定是否 `setManualActiveId(null)` 交还 spy。问题在于**动画时长不可控**：一级菜单离得远时平滑滚动 >1.2s，定时器先把它置 `false`，随后 `scrollend` 便触发 `setManualActiveId(null)` → spy 接管 → 点亮滚动落点附近最近的二级叶子。近处滚动短、没超时则不清除，所以"再点一次才亮"。"跳转有时不准（动画导致）"也同源于此——中间态下 spy 闪过叶子。
+- **修复**（commit `8df95c6`，已 push，浏览器实测通过）：
+  1. 交还条件从「`scrollend` + 定时器」改为**仅在用户真实滚动输入时**才 `setManualActiveId(null)`：`wheel` / `touchmove` / 方向键（`ArrowUp/Down`、`PageUp/Down`、`Home`、`End`、空格）。
+  2. 程序化平滑滚动不触发这些事件，故点击后高亮**贯穿整个滚动动画稳定保持**，直到用户真正手动滚动才交还 scroll-spy。
+  3. 删除 `programmatic` / `programmaticTimer` 两个 ref 与定时器逻辑。
+- **验证**：点远处一级菜单 `#dev`（从页顶滚 5004px，远超旧 1.2s 阈值）首次即只亮「开发工程」分组；点叶子 `#commit` 只亮「提交Commit」；点 `dev` 后派发 wheel 事件再滚动 → 高亮交还 spy 变「提交Commit」。
+- **教训**：
+  1. **"用定时器兜底判断用户是否在看动画"是脆弱模式**——动画/网络/设备导致时长不可控，任何固定阈值一旦被越过就误判。判定"是否用户主动滚动"的可靠信号是**真实输入事件**（wheel/touch/键），而非"程序化滚动结束后多久"。
+  2. **BUG-004 与 BUG-005 同一类根因都因"没实测"**：BUG-004 在错方向迭代改了多轮；BUG-005 的定时器阈值假设从一开始就站不住。交互 bug 的第一性原理是"先复现、用浏览器实测看真实行为"，再动手。
+  3. spy（滚动监听）与"点击权威高亮"共存的页面，二者的优先级与交还时机是最易出错点——交还必须绑定"用户真实意图信号"，不能用时间或动画结束事件近似。
+- **状态**：resolved
