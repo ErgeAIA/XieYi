@@ -4,6 +4,12 @@ import * as React from "react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
+import {
+  PageContainer,
+  PageHeader,
+  GroupLabel,
+  EmptyState,
+} from "@/components/page-shell";
 import { concepts, conceptGroups, conceptGroupMeta } from "@/content/concepts";
 
 export default function ConceptsPage() {
@@ -18,16 +24,18 @@ export default function ConceptsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold tracking-tight">基础概念</h1>
-        <Input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="搜索概念…"
-          className="max-w-xs"
-        />
-      </div>
+    <PageContainer>
+      <PageHeader
+        title="基础概念"
+        actions={
+          <Input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="搜索概念…"
+            className="max-w-xs"
+          />
+        }
+      />
 
       {conceptGroups.map((g) => {
         const items = filtered.filter((c) => c.group === g);
@@ -37,18 +45,16 @@ export default function ConceptsPage() {
             key={g}
             id={g}
             data-spy-group={g}
-            className="scroll-mt-16 space-y-3"
+            className="scroll-anchor space-y-3"
           >
-            <h2 className="text-sm font-medium text-muted-foreground">
-              {conceptGroupMeta[g]}
-            </h2>
+            <GroupLabel>{conceptGroupMeta[g]}</GroupLabel>
             <div className="space-y-3">
               {items.map((c, i) => (
                 <Reveal key={c.id} delay={i * 50}>
                   <Card
                     id={c.id}
                     data-spy-item={c.id}
-                    className="hover-lift scroll-mt-24"
+                    className="hover-lift scroll-anchor"
                   >
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base">
@@ -83,9 +89,7 @@ export default function ConceptsPage() {
         );
       })}
 
-      {filtered.length === 0 && (
-        <p className="text-sm text-muted-foreground">没有匹配的概念。</p>
-      )}
-    </div>
+      {filtered.length === 0 && <EmptyState>没有匹配的概念。</EmptyState>}
+    </PageContainer>
   );
 }
