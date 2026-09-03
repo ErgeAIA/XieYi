@@ -9,6 +9,7 @@ import {
   type ComponentCategory,
 } from "@/content/components";
 import { concepts, conceptGroups, conceptGroupMeta } from "@/content/concepts";
+import { promptLibrary } from "@/content/prompt-library";
 import {
   resources,
   resourceCategories,
@@ -66,6 +67,13 @@ export function SidebarNav() {
               spyItem: c.id,
             })),
         })),
+      },
+      {
+        id: "prompts",
+        label: "提示词库",
+        href: "/prompts",
+        route: "/prompts",
+        count: promptLibrary.length,
       },
       {
         id: "components",
@@ -157,12 +165,21 @@ export function SidebarNav() {
   const activeGroupId = isComponents ? activeCat : activeGroup;
 
   return (
-    <nav className="flex flex-col gap-0.5 text-sm">
-      <TreeMenu
-        nodes={nodes}
-        activeItemId={activeItemId}
-        activeGroupId={activeGroupId}
-      />
-    </nav>
+    <>
+      <nav className="flex flex-col gap-0.5 text-sm">
+        <TreeMenu
+          nodes={nodes}
+          activeItemId={activeItemId}
+          activeGroupId={activeGroupId}
+        />
+      </nav>
+      <SidebarExtras />
+    </>
   );
+}
+
+/** 未来扩展点：用户将在左侧导航下方加 CAT 链接（阶段 C 之后实现）。
+ *  当前空渲染；届时在此返回独立区块，保持与 TreeMenu 的视觉间距一致。 */
+function SidebarExtras() {
+  return null;
 }
