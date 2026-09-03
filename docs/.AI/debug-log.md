@@ -20,3 +20,26 @@
   3. 绕过 pnpm 校验最干净的方式是跳过 pnpm 直接调目标二进制（`node ./node_modules/<pkg>/dist/bin/<pkg>`）。
   4. 供应链 `minimumReleaseAge` 是环境默认策略，不是项目配置；不要为绕过它而长期放宽全局/项目 pnpm 配置。
 - **状态**：resolved（绕过方式已固化进 `AGENTS.md` 反直觉约定 + 本日志）
+
+---
+
+## BUG-002: 墨滴 WebGL 动画卡顿 + 动效开关失效
+
+- **日期**：2026-09-03
+- **现象**：首页加入墨滴动画后页面严重卡顿；header 动效开关按钮关掉后动画仍运行。
+- **根因**：① 开关只改 `data-motion` DOM 属性 + CSS 门控（那只管 CSS 动画），`HeroBloom` 仅在挂载时读一次 `data-motion`，不监听变化，WebGL 的 rAF 循环不收；② 片元着色器过贵（每像素 ×5 滴墨各 4 次 5 八度 fbm，约 100 次噪声/像素），且全屏 DPR≤2、60fps 无限循环。
+- **修复**：① 新增 `MutationObserver` 监听 `data-motion`，关即 `stop()` 只画静态帧、开即 `play()`；② 限帧 ~30fps（FRAME_MS=33）；③ 内部渲染分辨率上限 1000→700；④ 着色器降耗（fbm 八度 5→3，高频细节/颗粒层由 fbm 降为单八度 noise）。后续按用户要求再压：墨滴 5→3、每轮重新随机位置/种子（不再固定点位）。
+- **验证**：`tsc`/`eslint`/`next build` 通过；Playwright 实测 rAF off=0 / on>0（开关生效）、位置随机、canvas 700×316、无 shader 报错。
+- **状态**：resolved（commit `eab55b2`）
+
+---
+
+## BUG-003: Playwright MCP 浏览器二进制缺失（chromium-1200）
+
+- **日期**：2026-09-03
+- **现象**：Playwright MCP 启动报 `Executable doesn't exist at ...\ms-playwright\chromium-1200\chrome-win64\chrome.exe`。
+- **根因**：MCP 内置 Playwright 锁定要 build 1200，而用户全局 `playwright@1.62.1` CLI 装的是更新 build（chromium-1223/1228/1234 等），路径不匹配。
+- **修复（非破坏性）**：复制已装 `chromium-1234` → `chromium-1200` 路径。启动器只校验可执行文件存在、不重校验 build 号，浏览器即起。
+- **验证**：MCP 成功 `navigate` 到 `localhost:3000` 并实测首页动画开关与位置随机。
+- **注意**：MCP 更新可能改变其内置 Playwright 版本（进而期望不同的 chromium build 号），届时需重新对齐；更稳妥的长期方案是让 MCP 用其自带 Playwright 安装对应浏览器。
+- **状态**：resolved

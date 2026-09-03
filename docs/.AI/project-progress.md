@@ -7,6 +7,10 @@
 ## 当前状态
 
 - **当前分支**：main（初始仓库，尚未开特性分支）
+- **最后更新**：2026-09-03 **墨滴动画性能修复（hero-bloom.tsx）**：限帧 ~30fps（FRAME_MS=33）、内部渲染分辨率上限 1000→700、着色器降耗（fbm 八度 5→3，高频细节/颗粒层由 fbm 降为单八度 noise）、墨滴 5→3 且每轮重新随机位置/种子（不再固定点位）；`MutationObserver` 监听 `data-motion`，关闭即停 rAF 循环只画静态帧、开启即恢复（修复「开关关了没用」）。`tsc`/`eslint`/`next build` 通过，Playwright 实测：开关生效（off rAF=0 / on>0）、位置随机、canvas 700×316、无 shader 报错。
+- **最后更新**：2026-09-03 **侧栏导航「跳转不精准」用户实测缓解，算验收**（不再单独修）。
+- **最后更新**：2026-09-03 **Playwright MCP 浏览器缺失修复**：MCP 内置 Playwright 锁定 chromium-1200，全局 CLI 装的是更新 build；复制已装 `chromium-1234` → `chromium-1200` 路径（非破坏性）使浏览器启动成功，可用于首页动画实测。
+- **最后更新**：2026-09-03 **提交未提交历史改动**：commit `eab55b2` 推送 `main`，含示例注册表（`registry.tsx`）/9 个页面级布局（`examples/pages.tsx`）/`command-search.tsx`/`sidebar-tree.tsx`/`hero-bloom.tsx` 及 `.gitignore`（忽略空文件 `.dev.err`）。
 - **最后更新**：2026-09-02 **阶段 B M1 完成**：落地示例注册表模式（`src/components/examples/registry.tsx` + `components-view.tsx` 的 `ExampleBlock`），覆盖 7 个代表性组件（Card/Tabs/Button/Input/Badge/Alert/Dialog），构建通过、lint 0 错误，已推送 `2ecb5d7`；用户已确认阶段 B 决策（先验证模式再铺开 / HTML 字段保留作 fallback / main 增量提交即推送）。
 - **最后更新**：2026-09-02 **阶段 B M2 推进**：新增 4 个表单原语（checkbox/switch/select/radio-group）；注册表覆盖 21/28 含示例组件（M1 的 7 + M2 新增 14）；构建通过、lint 0；已推送 `40a2f8e`。剩余 7 个复杂组件（Date Picker/Dropdown Menu/Drawer/Chart/File Tree/Upload/Toast）待下一批。
 - **最后更新**：2026-09-02 **阶段 B M2b 完成**：补齐剩余 7 个复杂组件（Date Picker/Dropdown Menu/Drawer/Chart/File Tree/Upload/Toast）的可交互示例，注册表现已覆盖 **28/28** 含 `example` 的组件；示例内容自由设计，视觉风格参考 `ErgePrism/tools/shadcn-ui-showcase.html`、实现参考官方文档；全部用纯 React + 现有 ui 原语（Drawer 复用 Sheet）+ lucide 实现，不引入新依赖；构建通过、类型检查 0 错误（待提交推送）。
@@ -20,7 +24,13 @@
 ### 阶段 A（已完成，2026-09-01）
 - 脚手架、shadcn 初始化、数据迁移、布局/侧栏/搜索全部落地，build 通过。
 
-### 阶段 B（进行中）
+### 阶段 B（已完成，2026-09-02）
+
+阶段 B 全部完成：B-① 组件示例重写（注册表覆盖 28/28 含 example 组件 + 39 空白分类感知 Skeleton 占位）、B-② `/examples` 9 个页面级真实布局、B-③ 概念/组件内容 + 参考资源 + 后端内容均落地。
+
+### 阶段 C（待启动）：最终统一 pass
+- **目标**：全站 UI 美化 + 真实布局精修 + 动画统一。用户 2026-09-02 明确要求「等全站内容齐了再一起做」，现内容已齐（阶段 B 完成），该 pass 尚未启动。
+- **范围待定**：`HeroBloom`（墨滴）已就绪；`HeroEmber`（three.js 余烬）当前为未挂载死代码，统一 pass 时定夺去留（见 DEC-003）；LXGW 字体子集可能因近期新增中文需重跑 `node scripts/gen-lxgw.mjs`。
 总目标：把"HTML 片段示例"升级为**真实可交互 shadcn 组件**，补全示例，做 `/examples` 页面级布局。
 
 **已确认决策（2026-09-02）**：

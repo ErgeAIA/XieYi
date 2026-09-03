@@ -29,3 +29,12 @@
   4. 删除 `AGENTS.md` 中原"保全决策须写入 `AGENTS.decisions.md`"的约束，改为写入 `docs/.AI/decision-log.md`；`HANDOFF.md` 内容并入上述文档后弃用（待删除确认）。
 - **验证**：三份 `.AI` 文档与 `README.md` 已生成；`AGENTS.md` 经裁剪后聚焦于可强制规则。
 - **涉及**：`AGENTS.md`、`README.md`、`docs/.AI/{project-progress,decision-log,debug-log}.md`；`HANDOFF.md`、`AGENTS.decisions.md`（已于 2026-09-02 删除）。
+
+---
+
+## DEC-003: 首页动画策略 —— HeroBloom（墨滴）为主，HeroEmber（余烬）暂留
+
+- **日期**：2026-09-03
+- **背景**：阶段 A 后首页做过多次动画迭代（火星微光掠过、three.js 昙花绽放、墨滴 WebGL 渗化）。当前 `src/app/page.tsx` 仅挂载 `HeroBloom`（墨滴）；`src/components/hero-ember.tsx`（three.js 火山余烬粒子）存在但**未挂任何页面**，属死代码。
+- **决策**：用户要求余烬动画暂时保留、不删，待「最终统一 pass」（阶段 C）时一并定夺去留（可能接入首页作备选，也可能删除）。
+- **涉及**：`src/components/hero-bloom.tsx`、`src/components/hero-ember.tsx`、`src/app/page.tsx`。
