@@ -73,6 +73,8 @@ import {
   Clock,
   User,
   Package,
+  Palette,
+  ShieldCheck,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -424,76 +426,185 @@ function AuthExample() {
 /* ---------- 6. 设置页 ---------- */
 
 function SettingsExample() {
+  const sections = [
+    { id: "profile", label: "个人资料", icon: User },
+    { id: "appearance", label: "外观", icon: Palette },
+    { id: "notify", label: "通知", icon: Bell },
+    { id: "security", label: "安全", icon: ShieldCheck },
+  ];
+  const [active, setActive] = React.useState("profile");
+  const go = (id: string) => {
+    setActive(id);
+    document
+      .getElementById(`settings-${id}`)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   return (
     <section className="example-canvas">
       <Reveal>
-        <Card className="max-w-xl">
-          <CardHeader>
-            <CardTitle>设置</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="general">
-              <TabsList>
-                <TabsTrigger value="general">通用</TabsTrigger>
-                <TabsTrigger value="notify">通知</TabsTrigger>
-                <TabsTrigger value="security">安全</TabsTrigger>
-              </TabsList>
-              <TabsContent value="general" className="space-y-4 pt-4">
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium">昵称</label>
-                  <Input defaultValue="写意用户" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium">语言</label>
-                  <Select defaultValue="zh">
-                    <SelectTrigger>
-                      <SelectValue placeholder="语言" />
-                    </SelectTrigger>
-                    <SelectPortal>
-                      <SelectPositioner>
-                        <SelectPopup>
-                          <SelectList>
-                            <SelectItem value="zh">简体中文</SelectItem>
-                            <SelectItem value="en">English</SelectItem>
-                          </SelectList>
-                        </SelectPopup>
-                      </SelectPositioner>
-                    </SelectPortal>
-                  </Select>
-                </div>
-              </TabsContent>
-              <TabsContent value="notify" className="space-y-3 pt-4">
-                {[
-                  ["邮件通知", "接收重要更新邮件"],
-                  ["推送通知", "在浏览器接收推送"],
-                  ["站内信", "接收站内消息"],
-                ].map(([t, d], i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between rounded-md border p-3"
-                  >
+        <div className="flex h-[520px] overflow-hidden rounded-md border text-sm">
+          {/* 左侧分组导航 */}
+          <aside className="hidden w-44 shrink-0 flex-col border-r bg-muted/30 sm:flex">
+            <div className="flex h-12 shrink-0 items-center border-b px-3">
+              <span className="font-semibold">设置</span>
+            </div>
+            <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 py-2">
+              {sections.map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => go(s.id)}
+                  className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left ${
+                    active === s.id
+                      ? "bg-accent font-medium text-accent-foreground"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  <s.icon className="size-4 shrink-0" />
+                  <span>{s.label}</span>
+                </button>
+              ))}
+            </nav>
+          </aside>
+
+          {/* 右侧滚动内容 */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="mx-auto max-w-2xl px-4 py-5 sm:px-6">
+              <h3 className="text-lg font-semibold">设置</h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                管理写意站点的个人偏好与安全选项。
+              </p>
+
+              <section id="settings-profile" className="mt-6 scroll-mt-4">
+                <h4 className="text-base font-semibold">个人资料</h4>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  这些信息将展示在你的个人主页。
+                </p>
+                <div className="mt-3 divide-y rounded-md border">
+                  <div className="flex items-center justify-between gap-3 px-3 py-2.5">
                     <div>
-                      <div className="text-sm font-medium">{t}</div>
-                      <div className="text-xs text-muted-foreground">{d}</div>
+                      <div className="text-xs text-muted-foreground">昵称</div>
+                      <div className="font-medium">二哥</div>
                     </div>
-                    <Switch defaultChecked={i !== 1} />
+                    <button className="text-xs font-medium text-primary hover:underline">
+                      更新
+                    </button>
                   </div>
-                ))}
-              </TabsContent>
-              <TabsContent value="security" className="space-y-4 pt-4">
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium">当前密码</label>
-                  <Input type="password" />
+                  <div className="flex items-center justify-between gap-3 px-3 py-2.5">
+                    <div>
+                      <div className="text-xs text-muted-foreground">署名</div>
+                      <div className="font-medium">B站·宝藏二哥AIA</div>
+                    </div>
+                    <button className="text-xs font-medium text-primary hover:underline">
+                      更新
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-between gap-3 px-3 py-2.5">
+                    <div>
+                      <div className="text-xs text-muted-foreground">主页</div>
+                      <a
+                        href="https://space.bilibili.com/67221461"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-primary hover:underline"
+                      >
+                        space.bilibili.com/67221461
+                      </a>
+                    </div>
+                    <button className="text-xs font-medium text-primary hover:underline">
+                      更新
+                    </button>
+                  </div>
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium">新密码</label>
-                  <Input type="password" />
+              </section>
+
+              <section id="settings-appearance" className="mt-6 scroll-mt-4">
+                <h4 className="text-base font-semibold">外观</h4>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  主题与语言偏好，即时生效。
+                </p>
+                <div className="mt-3 divide-y rounded-md border">
+                  <div className="flex items-center justify-between gap-3 px-3 py-2.5">
+                    <div>
+                      <div className="text-xs text-muted-foreground">主题</div>
+                      <div className="font-medium">跟随系统</div>
+                    </div>
+                    <button className="text-xs font-medium text-primary hover:underline">
+                      更新
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-between gap-3 px-3 py-2.5">
+                    <div>
+                      <div className="text-xs text-muted-foreground">语言</div>
+                      <div className="font-medium">简体中文</div>
+                    </div>
+                    <button className="text-xs font-medium text-primary hover:underline">
+                      更新
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-between gap-3 px-3 py-2.5">
+                    <div>
+                      <div className="font-medium">自动切换暗色</div>
+                      <div className="text-xs text-muted-foreground">
+                        跟随系统外观在明暗主题间自动切换
+                      </div>
+                    </div>
+                    <Switch defaultChecked />
+                  </div>
                 </div>
-                <Button>更新密码</Button>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+              </section>
+
+              <section id="settings-notify" className="mt-6 scroll-mt-4">
+                <h4 className="text-base font-semibold">通知</h4>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  选择你希望接收的通知类型。
+                </p>
+                <div className="mt-3 divide-y rounded-md border">
+                  {[
+                    ["邮件通知", "组件评审与版本发布提醒", true],
+                    ["推送通知", "在浏览器接收实时推送", false],
+                    ["@提及", "有人在讨论中提及你时提醒", true],
+                  ].map(([t, d, on]) => (
+                    <div
+                      key={t as string}
+                      className="flex items-center justify-between gap-3 px-3 py-2.5"
+                    >
+                      <div>
+                        <div className="font-medium">{t}</div>
+                        <div className="text-xs text-muted-foreground">{d}</div>
+                      </div>
+                      <Switch defaultChecked={on as boolean} />
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section id="settings-security" className="mt-6 scroll-mt-4">
+                <h4 className="text-base font-semibold">安全</h4>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  管理登录设备与备用验证方式。
+                </p>
+                <div className="mt-3 divide-y rounded-md border">
+                  <div className="flex items-center justify-between gap-3 px-3 py-2.5">
+                    <div>
+                      <div className="text-xs text-muted-foreground">
+                        已登录设备
+                      </div>
+                      <div className="font-medium">3 台</div>
+                    </div>
+                    <button className="text-xs font-medium text-primary hover:underline">
+                      更新
+                    </button>
+                  </div>
+                  <div className="px-3 py-2.5">
+                    <button className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline">
+                      <Plus className="size-3.5" /> 添加备用邮箱
+                    </button>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
       </Reveal>
     </section>
   );
@@ -1653,22 +1764,26 @@ export const pageExamples: PageExample[] = [
     id: "settings",
     title: "设置页",
     nameEn: "Settings",
-    desc: "分组 Tab 与开关项",
-    usage: "产品偏好设置、账户设置中心、后台配置页",
-    keywords: "settings 设置 偏好 通用 通知 安全 开关 switch 语言 昵称 分组",
-    prompt: `请生成一个「设置页」，技术栈 React + Tailwind CSS。
+    desc: "左分组导航 + 分区块滚动内容",
+    usage: "账户设置中心、产品偏好配置、后台配置页、应用个性化面板",
+    keywords:
+      "settings 设置 偏好 分组导航 个人资料 外观 通知 安全 开关 switch 主题 语言 滚动",
+    prompt: `请生成一个「设置页（Settings Screen）」页面，技术栈 React + Tailwind CSS。
 
-布局（桌面 ≥1024px）：
-- 左侧分组导航（竖向 Tab：通用 / 通知 / 安全 / 关于），右侧对应内容面板。
-- 内容面板为分组表单：每组一个标题 + 若干设置项（昵称输入、语言下拉、通知开关 Switch、主题单选）。
-- 底部「保存」按钮（仅在修改后高亮）。
+布局（桌面 ≥640px，外框固定高度约 520px）：
+- 左侧分组导航（宽约 176px）：顶部「设置」标题；竖向导航（个人资料 / 外观 / 通知 / 安全，图标 + 文字，当前项 accent 浅底高亮，点击平滑滚动到对应区块并保持高亮）。
+- 右侧滚动内容区（max-width 约 672px 居中）：页头（「设置」大标题 + 一句 muted 描述）；4 个分组，每组：h4 标题 + muted 说明 + 圆角边框列表（行间分隔线 divide-y）：
+  - 个人资料：行式信息（昵称「二哥」/ 署名「B站·宝藏二哥AIA」/ 主页链接 space.bilibili.com/67221461 新窗口打开），每行右侧品牌色「更新」文字按钮。
+  - 外观：主题（跟随系统）、语言（简体中文）行 + 更新按钮；「自动切换暗色」行 + Switch。
+  - 通知：邮件通知（开）/ 推送通知（关）/ @提及（开），每行标题 + muted 描述 + Switch。
+  - 安全：已登录设备（3 台）行 + 更新；「+ 添加备用邮箱」品牌色文字链接。
 
 样式约束：
-- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
-- 无衬线系统字体；Switch 用品牌色表示开启；分组之间用分隔线或留白区隔。
+- 仅用 design token 类（bg-background、bg-muted/30、text-muted-foreground、border、bg-accent、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体，不引入装饰字体；Switch 用品牌色表示开启。
 
 响应式：
-- <768px 分组导航改为顶部横向滚动 Tab。
+- <640px 隐藏左侧导航，内容占满（可用下拉或横向 Tab 替代导航）。
 
 数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: SettingsExample,
