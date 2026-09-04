@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
+import Script from "next/script";
 import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -38,11 +39,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${spaceGrotesk.variable} ${plexMono.variable} antialiased`}
     >
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem('xieyi-motion');var r=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var on=s===null?!r:s!=='off';document.documentElement.setAttribute('data-motion',on?'on':'off');}catch(e){}})();`,
-          }}
-        />
+        <Script id="xieyi-motion-init" strategy="beforeInteractive">
+          {`(function(){try{var s=localStorage.getItem('xieyi-motion');var r=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var on=s===null?!r:s!=='off';document.documentElement.setAttribute('data-motion',on?'on':'off');}catch(e){}})();`}
+        </Script>
         <link
           rel="stylesheet"
           href="/fonts/lxgw-wenkai/lxgw-wenkai.css"

@@ -78,6 +78,7 @@ import {
   UserPlus,
   Users,
   Mail,
+  Check,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -3726,7 +3727,7 @@ function PromptBlock({ prompt }: { prompt: string }) {
     }
   }, [prompt]);
   return (
-    <Accordion type="single" collapsible>
+    <Accordion>
       <AccordionItem value="prompt" className="border-b-0">
         <AccordionTrigger className="text-xs font-medium text-primary hover:text-primary/80 [&_svg]:text-primary">
           给 AI 的提示词（点击展开）
