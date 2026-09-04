@@ -81,7 +81,7 @@ function DashboardExample() {
   const bars = [40, 65, 50, 80, 72, 95];
   const max = Math.max(...bars);
   const activity = [
-    { who: "李雷", what: "发布了新组件 Button", time: "2 分钟前" },
+    { who: "二哥", what: "发布了新组件 Button", time: "2 分钟前" },
     { who: "韩梅梅", what: "更新了设置页", time: "15 分钟前" },
     { who: "系统", what: "完成每日备份", time: "1 小时前" },
     { who: "张伟", what: "合并了 PR #42", time: "3 小时前" },
@@ -657,7 +657,7 @@ function StackedExample() {
   ];
   const total = usages.reduce((s, u) => s + u.count, 0);
   const [notes, setNotes] = React.useState([
-    { who: "李雷", what: "优化 hover 态过渡曲线", time: "2 小时前" },
+    { who: "二哥", what: "优化 hover 态过渡曲线", time: "2 小时前" },
     { who: "韩梅梅", what: "修复暗色下 focus 环不可见", time: "昨天" },
     { who: "张伟", what: "新增 loading 图标位", time: "3 天前" },
   ]);
@@ -684,7 +684,7 @@ function StackedExample() {
                 </span>
               ))}
             </nav>
-            <Avatar name="李雷" />
+            <Avatar name="二哥" />
           </div>
 
           {/* 居中窄栏：竖向堆叠的详情内容 */}
@@ -1019,7 +1019,7 @@ export const pageExamples: PageExample[] = [
 
 布局（桌面 ≥1024px）：
 - 顶部一行 4 个指标卡（grid 4 列）。每张卡：指标名、大号数字、同比涨跌 Badge（涨用品牌强调色、跌用次要灰）。占位数据如：今日访问 1,284 ▲12%、新增用户 86 ▲5%、转化率 3.2% ▼1%、营收 ¥42.8k ▲8%。
-- 下方左右分栏（约 2:1）：左侧趋势图区块（SVG 折线/柱状占位，展示近 7 日访问），右侧「最新动态」信息流（头像 + 文案 + 相对时间，如「3 分钟前 李雷 完成注册」）。
+- 下方左右分栏（约 2:1）：左侧趋势图区块（SVG 折线/柱状占位，展示近 7 日访问），右侧「最新动态」信息流（头像 + 文案 + 相对时间，如「2 分钟前 二哥 发布了新组件 Button」）。
 - 卡片用 Card 组件（CardHeader/CardTitle/CardContent），圆角、细边框、浅底。
 
 样式约束：
