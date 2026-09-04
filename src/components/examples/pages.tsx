@@ -76,6 +76,8 @@ import {
   Palette,
   ShieldCheck,
   UserPlus,
+  Users,
+  Mail,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -2295,6 +2297,354 @@ function StackedListHeaderExample() {
   );
 }
 
+/* ---------- 18. 统计（data display: stats，5 个变体独立示例） ---------- */
+
+// 18.1 带涨跌：标签 + 涨跌 + 大数字四联卡
+function StatsTrendingExample() {
+  const stats = [
+    { label: "组件下载量", value: "405,091", delta: "+12.5%", up: true },
+    { label: "月活跃访客", value: "12,878", delta: "-4.5%", up: false },
+    { label: "示例完成率", value: "98.5%", delta: "+1.2%", up: true },
+    { label: "平均构建时长", value: "3.65 分", delta: "-8.3%", up: true },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((s) => (
+            <Card key={s.label}>
+              <CardContent>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-xs text-muted-foreground">{s.label}</div>
+                  <div
+                    className={`text-xs font-medium ${
+                      s.up ? "text-emerald-600" : "text-destructive"
+                    }`}
+                  >
+                    {s.delta}
+                  </div>
+                </div>
+                <div className="mt-1 text-2xl font-semibold tabular-nums">
+                  {s.value}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 18.2 深色简版：深底面板多列大数字
+function StatsDarkExample() {
+  const stats: [string, string][] = [
+    ["构建次数", "405"],
+    ["平均构建时长", "3.65 分"],
+    ["服务数量", "3"],
+    ["成功率", "98.5%"],
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-lg bg-foreground p-5 text-background">
+          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+            {stats.map(([k, v]) => (
+              <div key={k}>
+                <div className="text-xs text-background/60">{k}</div>
+                <div className="mt-1 text-2xl font-semibold tabular-nums">
+                  {v}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 18.3 卡片组：区头 + 浅底容器内三张白卡
+function StatsCardsExample() {
+  const stats: [string, string][] = [
+    ["新增订阅者", "71,897"],
+    ["平均打开率", "58.16%"],
+    ["平均点击率", "24.57%"],
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div>
+          <div className="flex items-center justify-between">
+            <h4 className="text-base font-semibold">订阅概览</h4>
+            <span className="text-xs text-muted-foreground">近 30 天</span>
+          </div>
+          <div className="mt-3 grid gap-4 rounded-lg bg-muted/30 p-4 sm:grid-cols-3">
+            {stats.map(([k, v]) => (
+              <Card key={k}>
+                <CardContent>
+                  <div className="text-xs text-muted-foreground">{k}</div>
+                  <div className="mt-1 text-2xl font-semibold tabular-nums">
+                    {v}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 18.4 品牌图标：品牌色图标 + 涨跌 + 更多链接
+function StatsBrandExample() {
+  const stats = [
+    { label: "新增订阅者", value: "71,897", delta: "+122", up: true, icon: Users },
+    { label: "平均打开率", value: "58.16%", delta: "-1.4%", up: false, icon: Mail },
+    { label: "平均点击率", value: "24.57%", delta: "+9.09%", up: true, icon: MousePointerClick },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div>
+          <div className="flex items-center justify-between">
+            <h4 className="text-base font-semibold">订阅概览</h4>
+            <span className="text-xs text-muted-foreground">近 30 天</span>
+          </div>
+          <div className="mt-3 grid gap-4 rounded-lg bg-muted/30 p-4 sm:grid-cols-3">
+            {stats.map((s) => (
+              <Card key={s.label}>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="flex size-8 items-center justify-center rounded-md bg-primary/10">
+                      <s.icon className="size-4 text-primary" />
+                    </span>
+                    <span
+                      className={`text-xs font-medium ${
+                        s.up ? "text-emerald-600" : "text-destructive"
+                      }`}
+                    >
+                      {s.delta}
+                    </span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">{s.label}</div>
+                  <div className="text-2xl font-semibold tabular-nums">
+                    {s.value}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="mt-3">
+            <a
+              href="#"
+              className="text-xs font-medium text-primary hover:underline"
+            >
+              查看完整报表 →
+            </a>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 18.5 共享边框：深底整条 + 内部分隔线
+function StatsBordersExample() {
+  const stats = [
+    { label: "新增订阅者", value: "71,897", delta: "+122", up: true },
+    { label: "平均打开率", value: "58.16%", delta: "-1.4%", up: false },
+    { label: "平均点击率", value: "24.57%", delta: "+9.09%", up: true },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-lg bg-foreground p-5 text-background">
+          <div className="text-xs text-background/60">近 30 天</div>
+          <div className="mt-3 grid divide-y divide-background/15 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            {stats.map((s) => (
+              <div key={s.label} className="py-3 sm:px-4 sm:py-0 sm:first:pl-0 sm:last:pr-0">
+                <div className="text-xs text-background/60">{s.label}</div>
+                <div className="mt-1 flex items-baseline gap-2">
+                  <span className="text-2xl font-semibold tabular-nums">
+                    {s.value}
+                  </span>
+                  <span
+                    className={`text-xs font-medium ${
+                      s.up ? "text-emerald-400" : "text-red-400"
+                    }`}
+                  >
+                    {s.delta}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+/* ---------- 19. 动态流（lists: feeds，3 个变体独立示例） ---------- */
+
+// 19.1 图标时间线：竖线 + 彩色节点 + 右侧日期
+function FeedTimelineExample() {
+  const steps = [
+    { text: "提交评审：Button hover 态优化", time: "09-01", color: "bg-muted-foreground/40", done: true },
+    { text: "进入发布排期", time: "09-12", color: "bg-sky-500", done: false },
+    { text: "完成设计走查", time: "09-18", color: "bg-emerald-500", done: true },
+    { text: "合入 main 分支", time: "09-20", color: "bg-sky-500", done: false },
+    { text: "发布 v1.5.0", time: "09-24", color: "bg-emerald-500", done: true },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="flow-root">
+          <ul className="-mb-6">
+            {steps.map((s, i) => (
+              <li key={s.time + s.text}>
+                <div className="relative flex items-start gap-3 pb-6">
+                  {i !== steps.length - 1 && (
+                    <span
+                      className="absolute left-4 top-8 -ml-px h-full w-0.5 bg-border"
+                      aria-hidden
+                    />
+                  )}
+                  <span
+                    className={`relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full ${s.color}`}
+                  >
+                    {s.done ? (
+                      <Check className="size-4 text-white" />
+                    ) : (
+                      <ArrowRight className="size-4 text-white" />
+                    )}
+                  </span>
+                  <div className="flex min-w-0 flex-1 items-baseline justify-between gap-3 pt-1">
+                    <span className="text-sm">{s.text}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">
+                      {s.time}
+                    </span>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 19.2 评论协作：深色卡评论流 + 输入框
+function FeedCommentsExample() {
+  const comments = [
+    {
+      who: "李雷",
+      action: "添加了评审意见",
+      time: "3 小时前",
+      quote: "hover 曲线改成 ease-out 之后明显顺滑，建议同步到 Dialog。",
+    },
+    { who: "韩梅梅", action: "标记该评审为已通过", time: "2 小时前" },
+    {
+      who: "张伟",
+      action: "添加了评审意见",
+      time: "1 小时前",
+      quote: "暗色下 focus 环补了内阴影，麻烦再走查一遍。",
+    },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-lg bg-foreground p-5 text-background">
+          <ul className="space-y-4">
+            {comments.map((c) => (
+              <li key={c.who + c.time} className="flex gap-3">
+                <Avatar name={c.who} />
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs">
+                    <span className="font-medium">{c.who}</span>{" "}
+                    <span className="text-background/60">{c.action}</span>
+                    <span className="ml-2 text-background/40">{c.time}</span>
+                  </div>
+                  {c.quote && (
+                    <div className="mt-1.5 rounded-md bg-background/10 p-2.5 text-xs leading-relaxed">
+                      {c.quote}
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-4 flex gap-2 border-t border-background/15 pt-4">
+            <Avatar name="二哥" />
+            <Input placeholder="添加评论…" className="h-8 text-xs" />
+            <Button size="sm">评论</Button>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 19.3 多类型事件：段落 / 动作 / 提及混合事件流
+function FeedMixedExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <ul className="space-y-5 text-sm">
+          <li className="flex gap-3">
+            <Avatar name="李雷" />
+            <div className="min-w-0 flex-1">
+              <div className="text-xs">
+                <span className="font-medium">李雷</span>{" "}
+                <span className="text-muted-foreground">更新了组件文档</span>
+                <span className="ml-2 text-muted-foreground/60">2 小时前</span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                补充了 Button 在表单与对话框两种场景下的用法差异，并新增暗色下的状态截图。
+              </p>
+            </div>
+          </li>
+          <li className="flex items-center gap-3">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted">
+              <ArrowRight className="size-3.5 text-muted-foreground" />
+            </span>
+            <span className="text-xs">
+              <span className="font-medium">韩梅梅</span>{" "}
+              <span className="text-muted-foreground">
+                推送了新分支 fix/focus-ring
+              </span>
+              <span className="ml-2 text-muted-foreground/60">4 小时前</span>
+            </span>
+          </li>
+          <li className="pl-10 text-xs text-muted-foreground">
+            提及了 2 位成员：李雷、张伟
+          </li>
+          <li className="flex gap-3">
+            <Avatar name="张伟" />
+            <div className="min-w-0 flex-1">
+              <div className="text-xs">
+                <span className="font-medium">张伟</span>{" "}
+                <span className="text-muted-foreground">发起了评审</span>
+                <span className="ml-2 text-muted-foreground/60">昨天</span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                Accordion 键盘导航的第一版实现，支持方向键与 Home / End，请重点检查
+                aria 属性是否完整。
+              </p>
+              <div className="mt-1.5 text-xs text-muted-foreground">
+                提及了 2 位成员：李雷、韩梅梅
+              </div>
+            </div>
+          </li>
+        </ul>
+      </Reveal>
+    </section>
+  );
+}
+
 interface PageExample {
   id: string;
   title: string;
@@ -3171,6 +3521,196 @@ export const pageExamples: PageExample[] = [
 
 数据为静态文案。输出完整可运行组件。`,
     Comp: StackedListHeaderExample,
+  },
+  {
+    id: "stats",
+    title: "统计 · 带涨跌",
+    nameEn: "With Trending",
+    desc: "标签 + 涨跌 + 大数字的四联卡",
+    usage: "运营数据、指标概览、报表头部",
+    keywords:
+      "stats 统计 指标 涨跌 trend 数字 卡片 概览 数据 报表",
+    prompt: `请生成一个「带涨跌统计卡」组件，技术栈 React + Tailwind CSS。
+
+使用场景：运营数据的指标概览——四张卡并排，每张先给指标名与涨跌，再给大号数值。
+
+样式（桌面 ≥1024px）：
+- 四联卡网格（桌面 4 列、平板 2 列）：每张卡内上行 = muted 小字标签（如「组件下载量」）+ 右侧涨跌值（正向绿色 text-emerald-600，负向红色 text-destructive，如 +12.5% / -4.5%）；下行 = 大号数字（text-2xl font-semibold tabular-nums，如 405,091）。
+
+样式约束：涨跌色仅用 emerald-600 / destructive 语义色，其余一律 design token；数字用 tabular-nums 对齐。
+
+响应式：桌面 4 列、平板 2 列、移动 1 列。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StatsTrendingExample,
+  },
+  {
+    id: "stats-dark",
+    title: "统计 · 深色简版",
+    nameEn: "Simple Dark",
+    desc: "深底面板内多列大数字",
+    usage: "深色区块、构建信息、系统面板",
+    keywords:
+      "stats 统计 深色 dark 大数字 面板 部署 构建 系统",
+    prompt: `请生成一个「深色简版统计」组件，技术栈 React + Tailwind CSS。
+
+使用场景：深色面板内的关键数字陈列，如构建信息、系统运行概况。
+
+样式（桌面 ≥1024px）：
+- 深色实底面板：bg-foreground 搭配 text-background（反色对）。
+- 内部 4 列网格（移动 2 列）：每项 = muted 小字标签（text-background/60，如「构建次数」）+ 大号数字（text-2xl font-semibold tabular-nums，如 405 / 3.65 分 / 98.5%）。
+
+样式约束：只用 bg-foreground / text-background 及其透明度变体；无涨跌色。
+
+响应式：桌面 4 列、移动 2 列。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StatsDarkExample,
+  },
+  {
+    id: "stats-cards",
+    title: "统计 · 卡片组",
+    nameEn: "In Cards",
+    desc: "区头 + 浅底容器内三张白卡",
+    usage: "订阅概览、周期数据、报表区块",
+    keywords:
+      "stats 统计 卡片 区头 订阅 周期 概览 报表 三张",
+    prompt: `请生成一个「卡片组统计」组件，技术栈 React + Tailwind CSS。
+
+使用场景：带时间范围的一组指标，需要清晰的区块边界——区头说明主题与周期，指标逐卡展示。
+
+样式（桌面 ≥1024px）：
+- 区头：左侧区块标题（如「订阅概览」，text-base font-semibold）+ 右侧时间范围（muted 小字「近 30 天」）。
+- 浅底容器（rounded-lg bg-muted/30 p-4）内放三张白卡（Card）：每张 = muted 小字标签（如「新增订阅者」）+ 大号数字（text-2xl font-semibold tabular-nums，如 71,897）。
+
+样式约束：仅用 design token 类；无衬线系统字体。
+
+响应式：三卡桌面 3 列、移动纵向堆叠。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StatsCardsExample,
+  },
+  {
+    id: "stats-brand",
+    title: "统计 · 品牌图标",
+    nameEn: "Brand Icon",
+    desc: "品牌色图标 + 涨跌 + 更多链接",
+    usage: "订阅数据、关键指标、带入口的概览",
+    keywords:
+      "stats 统计 图标 brand 品牌 涨跌 订阅 链接 入口 报表",
+    prompt: `请生成一个「品牌图标统计卡」组件，技术栈 React + Tailwind CSS。
+
+使用场景：与卡片组统计同场景，但每张卡带品牌色图标以增强识别，并附完整报表入口。
+
+样式（桌面 ≥1024px）：
+- 区头同「卡片组统计」（标题 + 近 30 天）。
+- 浅底容器（bg-muted/30）内三张卡：每张 = 品牌色图标方块（bg-primary/10 圆角 + text-primary 图标，如 Users / Mail / MousePointerClick）与右侧涨跌值同行，下方 muted 标签 + 大号数字。
+- 底部一行品牌色链接「查看完整报表 →」。
+
+样式约束：品牌色仅用 bg-primary/10 + text-primary；涨跌色用 emerald-600 / destructive；无衬线系统字体。
+
+响应式：三卡桌面 3 列、移动纵向堆叠。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StatsBrandExample,
+  },
+  {
+    id: "stats-borders",
+    title: "统计 · 共享边框",
+    nameEn: "Shared Borders",
+    desc: "深底整条 + 内部分隔线",
+    usage: "页头指标条、深色概览、紧凑数据条",
+    keywords:
+      "stats 统计 共享边框 分隔 深色 指标条 紧凑 页头",
+    prompt: `请生成一个「共享边框统计条」组件，技术栈 React + Tailwind CSS。
+
+使用场景：多个指标并排但不用独立卡片——同处一条深色面板内，用内部分隔线切分，比卡片组更紧凑。
+
+样式（桌面 ≥1024px）：
+- 深色实底整条（bg-foreground + text-background 反色对）：顶部 muted 小字「近 30 天」。
+- 下方三段网格：移动端纵向（divide-y 分隔），桌面横向三列（sm:divide-x 分隔、去掉纵向分隔）；每段 = muted 标签（text-background/60）+ 底行「大号数字 + 涨跌值」基线对齐（涨跌正向 text-emerald-400、负向 text-red-400）。
+
+样式约束：主底色只用反色对；涨跌用 emerald-400 / red-400 语义色；数字 tabular-nums。
+
+响应式：桌面三列、移动纵向。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StatsBordersExample,
+  },
+  {
+    id: "feed",
+    title: "动态流 · 图标时间线",
+    nameEn: "With Icons",
+    desc: "竖线 + 彩色节点 + 右侧日期",
+    usage: "流程进度、发布历史、审批轨迹",
+    keywords:
+      "feed 动态流 时间线 timeline 图标 节点 流程 进度 历史 审批",
+    prompt: `请生成一个「图标时间线动态流」组件，技术栈 React + Tailwind CSS。
+
+使用场景：按时间顺序展示流程轨迹，如发布历史、审批进度——每个节点有状态色，读者能看出走到了哪一步。
+
+样式（桌面 ≥1024px）：
+- 垂直时间线：左侧一条竖线贯穿（bg-border），每步一个圆形彩色节点压在竖线上（z-10）。
+- 节点色：已完成步用绿色实底（bg-emerald-500）+ 白色 Check 图标；传递步用蓝色实底（bg-sky-500）+ 白色 ArrowRight 图标；起点用 muted 灰。
+- 节点右侧同一行：事件文字（text-sm）+ 行尾日期（muted 小字，如 09-01）。
+- 步与步之间留白均匀，竖线不越过最后节点。
+
+样式约束：节点彩色仅用 emerald-500 / sky-500 / muted 语义色；图标用 lucide-react。
+
+响应式：移动端日期换行到文字下方。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: FeedTimelineExample,
+  },
+  {
+    id: "feed-comments",
+    title: "动态流 · 评论协作",
+    nameEn: "With Comments",
+    desc: "深色卡评论流 + 输入框",
+    usage: "评审讨论、协作反馈、工单留言",
+    keywords:
+      "feed 动态流 评论 comments 协作 评审 留言 讨论 输入",
+    prompt: `请生成一个「评论协作动态流」组件，技术栈 React + Tailwind CSS。
+
+使用场景：围绕一个对象的评审讨论——有普通动作（标记通过），也有带引用内容的评论，底部还能继续发言。
+
+样式（桌面 ≥1024px）：
+- 深色实底卡片（bg-foreground + text-background 反色对）。
+- 评论列表（space-y-4）：每条 = 头像 + 右侧「名字（粗体）+ 动作描述（text-background/60）+ 相对时间（text-background/40）」；若带评论内容，则在下方放一块浅色内嵌引用（bg-background/10 圆角 + leading-relaxed 小字）。
+- 底部：细分隔线（border-background/15）+ 发言行（头像 + 输入框「添加评论…」+ 主色「评论」按钮）。
+
+样式约束：主底色只用反色对及其透明度变体；按钮用主色 token。
+
+响应式：移动端时间换行、引用块占满宽度。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: FeedCommentsExample,
+  },
+  {
+    id: "feed-mixed",
+    title: "动态流 · 多类型事件",
+    nameEn: "Multiple Types",
+    desc: "段落 / 动作 / 提及混合事件",
+    usage: "活动流、仓库动态、版本动态",
+    keywords:
+      "feed 动态流 多类型 mixed 事件 段落 推送 提及 活动 仓库",
+    prompt: `请生成一个「多类型事件动态流」组件，技术栈 React + Tailwind CSS。
+
+使用场景：活动流里事件类型不一——有的带长段落说明、有的只是动作记录、有的附带提及标记，需要混排而不显得杂乱。
+
+样式（桌面 ≥1024px）：
+- 纵向事件列表（space-y-5）：
+  - 段落型：头像 + 「名字（粗体）+ 动作 + 时间（muted）」+ 下方一段 muted 说明文字（leading-relaxed）。
+  - 动作型：小图标方块（bg-muted 圆角内放 ArrowRight 图标）+ 行内文字「名字 + 推送了新分支 fix/focus-ring」+ 时间。
+  - 提及行：缩进的 muted 小字「提及了 2 位成员：李雷、张伟」，归属上一条动作事件。
+  - 段落型事件底部也可附一行提及。
+
+样式约束：仅用 design token 类（text-muted-foreground 及透明度），不引入语义色；图标用 lucide-react。
+
+响应式：移动端段落占满宽度、时间换行。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: FeedMixedExample,
   },
 ];
 
