@@ -69,6 +69,10 @@ import {
   PanelLeft,
   AtSign,
   Star,
+  Tag,
+  Clock,
+  User,
+  Package,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -1287,26 +1291,122 @@ function MultiColumnExample() {
 /* ---------- 13. 标题（page / card / section headings） ---------- */
 
 function HeadingsExample() {
+  const stats = [
+    { label: "组件", value: "28" },
+    { label: "示例", value: "15" },
+    { label: "概念", value: "21" },
+  ];
   return (
-    <section className="example-canvas space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold">团队设置</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-          管理团队成员与权限。
-        </p>
-      </div>
-      <div className="rounded-md border p-4">
-        <h4 className="text-base font-semibold">基本信息</h4>
-        <p className="mt-1 text-sm text-muted-foreground">
-          用于对外展示的资料。
-        </p>
-      </div>
-      <div>
-        <h5 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          高级选项
-        </h5>
-        <div className="mt-2 text-sm">下面是一些不常用的设置。</div>
-      </div>
+    <section className="example-canvas space-y-8">
+      {/* 页面标题：眉题 + 元信息 + 操作 */}
+      <Reveal>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              组件详情
+            </div>
+            <div className="mt-1 flex items-center gap-2">
+              <h3 className="text-xl font-semibold">Button 按钮</h3>
+              <Badge>已发布</Badge>
+            </div>
+            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1">
+                <Tag className="size-3.5" /> v1.4.0
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <User className="size-3.5" /> B站·宝藏二哥AIA
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <Clock className="size-3.5" /> 2 小时前更新
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <Package className="size-3.5" /> @base-ui/react
+              </span>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline">
+              复制名称
+            </Button>
+            <Button size="sm">复制提示词</Button>
+          </div>
+        </div>
+      </Reveal>
+
+      {/* 页面标题：面包屑 + 描述 */}
+      <Reveal>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span>首页</span>
+              <span>/</span>
+              <span>组件</span>
+              <span>/</span>
+              <span className="font-medium text-foreground">版本发布</span>
+            </div>
+            <h3 className="mt-1 text-xl font-semibold">v1.5 版本发布</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              汇总本次版本的组件变更与示例更新，发布前请完成走查。
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline">
+              查看进度
+            </Button>
+            <Button size="sm">发布</Button>
+          </div>
+        </div>
+      </Reveal>
+
+      {/* 页面标题：头像 + 统计 */}
+      <Reveal>
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Avatar name="二哥" />
+              <div>
+                <h3 className="text-lg font-semibold">二哥</h3>
+                <div className="text-xs text-muted-foreground">
+                  B站·宝藏二哥AIA · 站点维护者
+                </div>
+              </div>
+            </div>
+            <Button size="sm" variant="outline">
+              编辑资料
+            </Button>
+          </div>
+          <div className="grid grid-cols-3 gap-3 sm:max-w-sm">
+            {stats.map((s) => (
+              <div key={s.label} className="rounded-md border p-3 text-center">
+                <div className="text-xl font-semibold tabular-nums">
+                  {s.value}
+                </div>
+                <div className="mt-0.5 text-xs text-muted-foreground">
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+
+      {/* 次级层级：卡片标题与章节标题 */}
+      <Reveal>
+        <div className="rounded-md border p-4">
+          <h4 className="text-base font-semibold">基本信息</h4>
+          <p className="mt-1 text-sm text-muted-foreground">
+            卡片级标题：用于表单与设置区块，字重与字号次于页面标题。
+          </p>
+        </div>
+        <div className="mt-4">
+          <h5 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+            高级选项
+          </h5>
+          <div className="mt-2 text-sm">
+            章节标题：muted 小字加大写间距，用于次级分组的收束。
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -1724,22 +1824,24 @@ export const pageExamples: PageExample[] = [
     id: "headings",
     title: "标题",
     nameEn: "Headings",
-    desc: "页面 / 卡片 / 章节三级标题",
-    usage: "页面排版规范、组件文档、设置分组标题、表单区块标题、内容层级示范",
-    keywords: "heading 标题 页面标题 卡片标题 章节标题 排版 typography 层级 h1 h2 h3",
-    prompt: `请生成一个「标题层级（Headings）」排版示例，技术栈 React + Tailwind CSS。
+    desc: "页头范式：元信息 / 面包屑 / 头像统计 / 次级层级",
+    usage: "页面排版规范、详情页页头、个人主页头、设置分组标题、内容层级示范",
+    keywords:
+      "heading 标题 页面标题 page heading 眉题 eyebrow 元信息 面包屑 breadcrumb 统计 卡片标题 章节标题 排版 typography 层级",
+    prompt: `请生成一个「页面标题（Page Headings）」排版示例，技术栈 React + Tailwind CSS。
 
-内容（桌面 ≥1024px）：
-- 页面级标题（h2/h3 量级，text-lg font-semibold）+ 一句 muted 描述，用于整页主标题区。
-- 卡片级标题（h4 量级，text-base font-semibold）+ 描述，放在带边框圆角的卡片内，代表表单 / 区块标题。
-- 小节标题（h5 量级，text-sm font-medium，大写 + letter-spacing + muted 色），下方接说明文字，用于「高级选项」等次级分组。
+展示 4 种页头形态（桌面 ≥1024px，形态之间用充足留白分隔）：
+- 页面标题 · 带元信息与操作：eyebrow 小字（muted、大写间距）+ 大标题（text-xl font-semibold）+ 状态 Badge；标题下方一行元信息（小图标 + muted 文本：版本、作者「B站·宝藏二哥AIA」、更新时间、依赖）；右侧操作按钮组（次要 + 主色）。
+- 页面标题 · 带面包屑：面包屑（首页 / 组件 / 当前页，当前项加亮）+ 大标题 + 一句 muted 描述；右侧操作按钮组。
+- 个人页头：圆形头像 + 姓名（「二哥」）+ 全称署名与角色（muted 小字）+ 右侧按钮；下方 3 列统计块（大数字 tabular-nums + muted 标签）。
+- 次级层级：卡片级标题（h4，带边框卡片内）与章节标题（h5，muted 小字大写间距），体现页面标题之下的层级收束。
 
 样式约束：
-- 仅用 design token 类（text-foreground、text-muted-foreground、border 等），禁止硬编码颜色值。
-- 无衬线系统字体；标题层级仅靠字号 / 字重 / 颜色区分，不引入装饰字体；层级之间留白充足。
+- 仅用 design token 类（text-foreground、text-muted-foreground、border、bg-primary/10、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体，不引入装饰字体；标题层级靠字号 / 字重 / 颜色区分；元信息与面包屑用 lucide 小图标。
 
 响应式：
-- 移动端标题字号可略降，层级关系保持一致。
+- 移动端标题与操作按钮换行堆叠，统计块保持 3 列或改 1 列。
 
 数据为静态文案。输出完整可运行组件。`,
     Comp: HeadingsExample,
