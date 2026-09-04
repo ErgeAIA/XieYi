@@ -66,6 +66,7 @@ import {
   MessagesSquare,
   BookOpen,
   Settings,
+  PanelLeft,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -859,6 +860,7 @@ function SidebarExample() {
     { title: "系统", items: [{ label: "设置", icon: Settings }] },
   ];
   const [current, setCurrent] = React.useState("概览");
+  const [collapsed, setCollapsed] = React.useState(false);
   const stats = [
     { label: "组件总数", value: "28" },
     { label: "本周新增", value: "4" },
@@ -877,37 +879,62 @@ function SidebarExample() {
       <Reveal>
         <div className="flex h-[460px] overflow-hidden rounded-md border text-sm">
           {/* 侧边栏 */}
-          <aside className="hidden w-56 shrink-0 flex-col border-r bg-muted/30 md:flex">
-            <div className="flex items-center justify-between px-4 py-4">
-              <span className="font-semibold">写意</span>
-              <Badge variant="secondary">v1.4</Badge>
+          <aside
+            className={`hidden shrink-0 flex-col border-r bg-muted/30 transition-[width] duration-200 md:flex ${
+              collapsed ? "w-14" : "w-56"
+            }`}
+          >
+            <div
+              className={`flex h-12 shrink-0 items-center border-b px-4 ${
+                collapsed ? "justify-center px-0" : "justify-between"
+              }`}
+            >
+              {collapsed ? (
+                <span className="flex size-7 items-center justify-center rounded-md bg-primary/10 text-xs font-semibold text-primary">
+                  写
+                </span>
+              ) : (
+                <>
+                  <span className="font-semibold">写意</span>
+                  <Badge variant="secondary">v1.4</Badge>
+                </>
+              )}
             </div>
             <nav className="flex-1 space-y-4 overflow-y-auto px-2 pb-2">
               {groups.map((g) => (
                 <div key={g.title}>
-                  <div className="px-2 pb-1 text-xs font-medium text-muted-foreground">
-                    {g.title}
-                  </div>
+                  {!collapsed && (
+                    <div className="px-2 pb-1 text-xs font-medium text-muted-foreground">
+                      {g.title}
+                    </div>
+                  )}
                   <div className="space-y-0.5">
                     {g.items.map((it) => (
                       <button
                         key={it.label}
                         onClick={() => setCurrent(it.label)}
-                        className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left ${
+                        title={it.label}
+                        className={`flex w-full items-center rounded-md py-1.5 text-left ${
+                          collapsed ? "justify-center" : "gap-2 px-2"
+                        } ${
                           current === it.label
                             ? "bg-accent font-medium text-accent-foreground"
                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
                         }`}
                       >
                         <it.icon className="size-4 shrink-0" />
-                        <span className="flex-1">{it.label}</span>
-                        {it.badge && (
-                          <Badge
-                            variant="secondary"
-                            className="px-1.5 py-0 text-[10px]"
-                          >
-                            {it.badge}
-                          </Badge>
+                        {!collapsed && (
+                          <>
+                            <span className="flex-1">{it.label}</span>
+                            {it.badge && (
+                              <Badge
+                                variant="secondary"
+                                className="px-1.5 py-0 text-[10px]"
+                              >
+                                {it.badge}
+                              </Badge>
+                            )}
+                          </>
                         )}
                       </button>
                     ))}
@@ -915,21 +942,37 @@ function SidebarExample() {
                 </div>
               ))}
             </nav>
-            <div className="flex items-center gap-2 border-t p-3">
+            <div
+              className={`flex items-center border-t p-3 ${
+                collapsed ? "justify-center" : "gap-2"
+              }`}
+            >
               <Avatar name="二哥" />
-              <div className="min-w-0 flex-1 leading-tight">
-                <div className="truncate font-medium">二哥</div>
-                <div className="truncate text-xs text-muted-foreground">
-                  管理员
-                </div>
-              </div>
-              <Settings className="size-4 shrink-0 text-muted-foreground" />
+              {!collapsed && (
+                <>
+                  <div className="min-w-0 flex-1 leading-tight">
+                    <div className="truncate font-medium">二哥</div>
+                    <div className="truncate text-xs text-muted-foreground">
+                      管理员
+                    </div>
+                  </div>
+                  <Settings className="size-4 shrink-0 text-muted-foreground" />
+                </>
+              )}
             </div>
           </aside>
 
           {/* 主区 */}
           <div className="flex min-w-0 flex-1 flex-col">
             <header className="flex h-12 shrink-0 items-center gap-3 border-b px-4">
+              <button
+                onClick={() => setCollapsed((c) => !c)}
+                className="hidden text-muted-foreground hover:text-foreground md:block"
+                aria-label={collapsed ? "展开侧边栏" : "收起侧边栏"}
+                aria-expanded={!collapsed}
+              >
+                <PanelLeft className="size-4" />
+              </button>
               <div className="flex items-center gap-1.5 text-xs">
                 <span className="text-muted-foreground">首页</span>
                 <span className="text-muted-foreground">/</span>
@@ -1447,8 +1490,8 @@ export const pageExamples: PageExample[] = [
     prompt: `请生成一个「侧边栏布局（Sidebar Layout）」应用框架，技术栈 React + Tailwind CSS。
 
 布局（桌面 ≥768px）：
-- 左侧固定侧栏（宽约 224px）：顶部品牌区（品牌名 + 版本 Badge）；中部竖向分组导航（分组标题用 muted 小字，项含图标 + 名称 + 可选数量 Badge，当前项用 accent 浅底高亮，支持点击切换）；底部用户卡（头像 + 姓名 + 角色 + 设置入口）。
-- 右侧主区竖向堆叠：顶栏（左侧面包屑「首页 / 当前页」，右侧搜索框 + 通知铃铛带小红点 + 头像）；下方滚动内容区：页头（标题随当前导航变化 + 一句描述 + 主色「新建」按钮）、3 列指标卡、含表格的卡片（组件 / 分类 / 状态 Badge / 更新时间）。
+- 左侧固定侧栏（宽约 224px，可收起为仅图标的窄栏，宽约 56px）：顶部品牌区（品牌名 + 版本 Badge，收起时仅显示品牌首字）；中部竖向分组导航（分组标题用 muted 小字，项含图标 + 名称 + 可选数量 Badge，当前项用 accent 浅底高亮，支持点击切换；收起时仅显示图标，悬浮 title 提示名称）；底部用户卡（头像 + 姓名 + 角色 + 设置入口，收起时仅显示头像）。
+- 右侧主区竖向堆叠：顶栏（最左为侧栏收起 / 展开切换按钮，点击在完整侧栏与图标窄栏之间平滑切换；随后是面包屑「首页 / 当前页」，右侧搜索框 + 通知铃铛带小红点 + 头像）；下方滚动内容区：页头（标题随当前导航变化 + 一句描述 + 主色「新建」按钮）、3 列指标卡、含表格的卡片（组件 / 分类 / 状态 Badge / 更新时间）。
 
 样式约束：
 - 仅用 design token 类（bg-background、bg-muted/30、text-muted-foreground、border、bg-accent、text-primary 等），禁止硬编码颜色值。
