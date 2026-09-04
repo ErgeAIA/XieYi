@@ -67,6 +67,8 @@ import {
   BookOpen,
   Settings,
   PanelLeft,
+  AtSign,
+  Star,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -1061,45 +1063,223 @@ function SidebarExample() {
 /* ---------- 12. 多栏布局（multi-column） ---------- */
 
 function MultiColumnExample() {
+  const navGroups: {
+    title: string;
+    items: {
+      label: string;
+      icon: React.ComponentType<{ className?: string }>;
+      badge?: number;
+    }[];
+  }[] = [
+    {
+      title: "消息",
+      items: [
+        { label: "收件箱", icon: Inbox, badge: 4 },
+        { label: "评论", icon: MessagesSquare, badge: 12 },
+        { label: "@提及", icon: AtSign, badge: 2 },
+        { label: "系统通知", icon: Bell },
+      ],
+    },
+    {
+      title: "项目",
+      items: [
+        { label: "写意组件库", icon: Component },
+        { label: "提示词库", icon: BookOpen },
+      ],
+    },
+  ];
+  const messages = [
+    {
+      from: "李雷",
+      subject: "Button 组件 hover 态评审",
+      snippet: "过渡曲线改成 ease-out 之后明显顺滑了",
+      time: "10:24",
+      unread: true,
+      body: [
+        "二哥，hover 态的过渡曲线改成 ease-out 之后，浅色和暗色下都明显顺滑了，建议把同样的参数同步到 Dialog 和 Dropdown。",
+        "另外暗色下的 focus 环我已经补了一层内阴影，详见截图。",
+      ],
+    },
+    {
+      from: "韩梅梅",
+      subject: "示例页排版走查结果",
+      snippet: "9 个页面级示例都过了一遍，列出 3 个对齐问题",
+      time: "09:41",
+      unread: true,
+      body: [
+        "9 个页面级示例都过了一遍，整体没问题，列出 3 个对齐问题：指标卡数字基线、表格内边距、侧栏分组间距，附件里标了位置。",
+      ],
+    },
+    {
+      from: "张伟",
+      subject: "v1.5 发布计划确认",
+      snippet: "下周三发布，需要先冻结 main 分支",
+      time: "昨天",
+      unread: false,
+      body: [
+        "v1.5 定在下周三发布，发布前 24 小时冻结 main 分支，changelog 我先起草一版给你过目。",
+      ],
+    },
+    {
+      from: "系统",
+      subject: "每周构建报告",
+      snippet: "本周 12 次构建全部通过，平均耗时 2 分 18 秒",
+      time: "周一",
+      unread: false,
+      body: [
+        "本周共 12 次构建，全部通过，平均耗时 2 分 18 秒，较上周缩短 9%。",
+      ],
+    },
+  ];
+  const [active, setActive] = React.useState(0);
+  const current = messages[active];
   return (
     <section className="example-canvas">
-      <div className="overflow-hidden rounded-md border">
-        <div className="grid md:grid-cols-[160px_1fr_200px]">
-          <aside className="hidden border-r bg-muted/30 p-3 text-sm md:block">
-            <div className="mb-2 text-xs font-medium text-muted-foreground">
-              分类
-            </div>
-            {["全部", "设计", "开发", "运营"].map((c, i) => (
-              <div
-                key={c}
-                className={`rounded px-2 py-1 ${
-                  i === 0
-                    ? "bg-accent text-accent-foreground"
-                    : "hover:bg-muted"
-                }`}
+      <Reveal>
+        <div className="flex h-[440px] overflow-hidden rounded-md border text-sm">
+          {/* 左栏：分组导航 */}
+          <aside className="hidden w-48 shrink-0 flex-col border-r bg-muted/30 md:flex">
+            <div className="flex h-12 shrink-0 items-center border-b px-3">
+              <span className="font-semibold">写意</span>
+              <Badge
+                variant="secondary"
+                className="ml-auto px-1.5 py-0 text-[10px]"
               >
-                {c}
-              </div>
-            ))}
-          </aside>
-          <main className="space-y-3 p-3">
-            <div className="text-sm font-medium">文章列表</div>
-            {["如何设计组件库", "提示词的写法", "上线 checklist"].map((t) => (
-              <div key={t} className="rounded-md border p-3 text-sm">
-                {t}
-              </div>
-            ))}
-          </main>
-          <aside className="hidden border-l bg-muted/30 p-3 text-sm md:block">
-            <div className="mb-2 text-xs font-medium text-muted-foreground">
-              关于
+                消息中心
+              </Badge>
             </div>
-            <p className="text-muted-foreground">
-              多栏布局常用于内容站：左导航、中内容、右信息。
-            </p>
+            <nav className="flex-1 space-y-3 overflow-y-auto px-2 py-2">
+              {navGroups.map((g) => (
+                <div key={g.title}>
+                  <div className="px-2 pb-1 text-xs font-medium text-muted-foreground">
+                    {g.title}
+                  </div>
+                  <div className="space-y-0.5">
+                    {g.items.map((it) => (
+                      <button
+                        key={it.label}
+                        title={it.label}
+                        className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left ${
+                          it.label === "收件箱"
+                            ? "bg-accent font-medium text-accent-foreground"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        }`}
+                      >
+                        <it.icon className="size-4 shrink-0" />
+                        <span className="flex-1 truncate">{it.label}</span>
+                        {it.badge && (
+                          <Badge
+                            variant="secondary"
+                            className="px-1.5 py-0 text-[10px]"
+                          >
+                            {it.badge}
+                          </Badge>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </nav>
           </aside>
+
+          {/* 中栏：消息列表 */}
+          <div className="flex w-64 shrink-0 flex-col border-r">
+            <div className="flex h-12 shrink-0 items-center justify-between border-b px-3">
+              <span className="font-medium">收件箱</span>
+              <span className="text-xs text-muted-foreground">
+                {messages.length} 条
+              </span>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              {messages.map((m, i) => (
+                <button
+                  key={m.subject}
+                  onClick={() => setActive(i)}
+                  className={`flex w-full gap-2 border-b px-3 py-2.5 text-left ${
+                    i === active ? "bg-accent/60" : "hover:bg-muted"
+                  }`}
+                >
+                  <Avatar name={m.from} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span
+                        className={`truncate text-xs ${
+                          m.unread ? "font-semibold" : "font-medium"
+                        }`}
+                      >
+                        {m.from}
+                      </span>
+                      <span className="shrink-0 text-[10px] text-muted-foreground">
+                        {m.time}
+                      </span>
+                    </div>
+                    <div
+                      className={`truncate text-xs ${
+                        m.unread
+                          ? "font-medium text-foreground"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      {m.subject}
+                    </div>
+                    <div className="truncate text-xs text-muted-foreground">
+                      {m.snippet}
+                    </div>
+                  </div>
+                  {m.unread && (
+                    <span className="mt-1 size-1.5 shrink-0 rounded-full bg-primary" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 右栏：详情 */}
+          <div className="hidden min-w-0 flex-1 flex-col lg:flex">
+            <div className="flex h-12 shrink-0 items-center justify-between gap-2 border-b px-4">
+              <span className="truncate font-medium">{current.subject}</span>
+              <div className="flex shrink-0 items-center gap-1 text-muted-foreground">
+                <button className="hover:text-foreground" aria-label="星标">
+                  <Star className="size-4" />
+                </button>
+                <button className="hover:text-foreground" aria-label="归档">
+                  <Inbox className="size-4" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 space-y-3 overflow-y-auto p-4">
+              <div className="flex items-center gap-2">
+                <Avatar name={current.from} />
+                <div className="leading-tight">
+                  <div className="text-xs font-medium">{current.from}</div>
+                  <div className="text-[10px] text-muted-foreground">
+                    发消息于 {current.time}
+                  </div>
+                </div>
+              </div>
+              {current.body.map((p, i) => (
+                <p
+                  key={i}
+                  className="text-sm leading-relaxed text-foreground/90"
+                >
+                  {p}
+                </p>
+              ))}
+              <div className="rounded-md border-l-4 border-primary bg-muted/30 p-3 text-xs text-muted-foreground">
+                回复时请引用原话题：{current.subject}
+              </div>
+            </div>
+            <div className="flex gap-2 border-t p-3">
+              <Input
+                placeholder={`回复 ${current.from}…`}
+                className="h-8 text-xs"
+              />
+              <Button size="sm">发送</Button>
+            </div>
+          </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -1506,26 +1686,25 @@ export const pageExamples: PageExample[] = [
   {
     id: "multi-column",
     title: "多栏布局",
-    desc: "左导航 + 内容 + 右信息",
-    usage: "博客与文档站、内容门户、知识库、电商分类页、后台整体框架",
-    keywords: "multi-column 多栏 多列 布局 侧边栏 网格 左导航 右信息 内容 栏目",
-    prompt: `请生成一个「多栏布局（Multi-column Layout）」页面，技术栈 React + Tailwind CSS。
+    desc: "左导航 + 中列表 + 右详情的三栏联动",
+    usage: "邮件收件箱、消息中心、工单系统、项目管理工具、文件管理器",
+    keywords:
+      "multi-column 多栏 三栏 布局 收件箱 inbox 列表 详情 联动 消息中心 工单",
+    prompt: `请生成一个「多栏布局（Multi-column Layout）」三栏应用框架，技术栈 React + Tailwind CSS。
 
-布局（桌面 ≥1024px）：
-- 三栏网格（约 160px / 1fr / 200px）：
-  - 左栏：竖向分类导航（全部 / 设计 / 开发 / 运营…），当前项高亮（品牌色浅底），其余 hover 浅底。
-  - 中栏：内容列表（如文章标题卡片，纵向排布），顶部一个列表标题（「文章列表」）。
-  - 右栏：信息栏（如「关于」说明文字、标签云或统计）。
-- 整体细边框分隔各栏，圆角外框。
+布局（桌面 ≥1024px，外框固定高度约 440px）：
+- 左栏（宽约 192px）：品牌区（名称 + 应用名 Badge）；竖向分组导航（「消息」分组：收件箱 / 评论 / @提及 / 系统通知，含数量 Badge，「收件箱」默认高亮；「项目」分组：项目入口）。
+- 中栏（宽约 256px）：顶部栏（栏目名 + 条数）；消息列表（每项：头像 + 发件人 + 时间 + 主题 + 摘要，均单行截断；未读消息加粗并带品牌色小圆点；点击切换选中，选中项浅底高亮）。
+- 右栏（占满剩余宽度）：顶部栏（当前消息主题 + 星标 / 归档图标按钮）；详情区（发件人头像行 + 正文段落 + 品牌色强调边框提示块）；底部回复输入框 + 发送按钮。
 
 样式约束：
-- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
-- 无衬线系统字体；侧栏浅底（bg-muted/30）；中栏卡片细边框、hover 抬升反馈。
+- 仅用 design token 类（bg-background、bg-muted/30、text-muted-foreground、border、bg-accent、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体，不引入装饰字体；三栏之间用细边框分隔，列表与详情超出时在栏内滚动。
 
 响应式：
-- <1024px 隐藏左右侧栏，内容占满；<768px 分类导航改为顶部横向滚动 Tab。
+- <1024px 隐藏右栏详情（中栏占满）；<768px 隐藏左栏导航。
 
-数据全部用占位 mock，不接后端。输出完整可运行组件。`,
+数据全部用占位 mock，不接后端；点击列表项切换右栏详情（前端 state）。输出完整可运行组件。`,
     Comp: MultiColumnExample,
   },
   {
