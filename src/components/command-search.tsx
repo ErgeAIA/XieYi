@@ -43,14 +43,14 @@ export function CommandSearch() {
         className="flex h-8 w-full items-center gap-2 rounded-md border border-input bg-background px-3 text-sm text-muted-foreground transition-colors hover:bg-muted"
       >
         <SearchIcon className="size-4" />
-        <span>搜索组件 / 概念 / 示例…</span>
+        <span>搜索组件 / 概念 / 页面画廊…</span>
         <kbd className="ml-auto rounded border bg-muted px-1.5 text-[10px] font-medium">
           ⌘K
         </kbd>
       </button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="输入组件名、概念名、示例内容…" />
+        <CommandInput placeholder="输入组件名、概念名、页面画廊内容…" />
         <CommandList>
           <CommandEmpty>未找到结果。</CommandEmpty>
           <CommandGroup heading="基础概念">
@@ -81,7 +81,7 @@ export function CommandSearch() {
               </CommandItem>
             ))}
           </CommandGroup>
-          <CommandGroup heading="示例">
+          <CommandGroup heading="页面画廊">
             {pageExamples.map((e) => (
               <CommandItem
                 key={e.id}

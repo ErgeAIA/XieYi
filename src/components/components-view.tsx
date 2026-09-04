@@ -16,6 +16,8 @@ import { exampleRegistry } from "@/components/examples/registry";
 import { useScrollSpy } from "@/components/scroll-spy";
 import { SectionTitle, EmptyState } from "@/components/page-shell";
 import { Reveal } from "@/components/motion/reveal";
+import Link from "next/link";
+import { exampleHrefForComponent } from "@/components/examples/pages";
 
 // 读取 --scroll-offset（如 4.5rem）换算为像素，作为 scroll-spy 的 rootMargin 顶部，
 // 与 .scroll-anchor 的 scroll-margin-top 共用单一真源；解析失败回退 72px。
@@ -246,6 +248,13 @@ export function ComponentsView({
                         cat={c.cat}
                         html={c.example}
                       />
+                      <Link
+                        href={exampleHrefForComponent(c.nameEn)}
+                        className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80"
+                      >
+                        更多示例
+                        <span aria-hidden>→</span>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>

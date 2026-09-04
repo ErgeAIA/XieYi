@@ -15,7 +15,7 @@ export const concepts: Concept[] = [
     },
     "recommendations": [
       { "name": "Claude Code 提示词库（官方）", "url": "https://code.claude.com/docs/zh-CN/prompt-library", "note": "本库 52 条提示词的权威来源" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "已按 15 类收录，支持搜索与一键复制" },
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "已按 15 类收录，支持搜索与一键复制" },
       { "name": "提示工程指南 Prompting Guide", "url": "https://www.promptingguide.ai/zh", "note": "系统化的提示词方法论与模板" }
     ]
   },
@@ -109,7 +109,7 @@ export const concepts: Concept[] = [
       { "name": "Quest 模式 · Qoder", "url": "https://docs.qoder.com/zh/user-guide/quest/overview", "note": "自主编程委派：Goal 开关只给目标，Spec 开关对齐规格" },
       { "name": "Craft 模式 · CodeBuddy", "url": "https://www.codebuddy.cn/docs/ide/Features/Plan-Mode", "note": "Ask / Plan / Craft 三模式覆盖问、规划、执行全流程" },
       { "name": "权限档位 · Qoder CLI", "url": "https://docs.qoder.com/zh/cli/permissions", "note": "CLI 权限与审批档位设置说明" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「计划 / 引导」类提示词，配合 Plan / Spec 模式先用" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「计划 / 引导」类提示词，配合 Plan / Spec 模式先用" }
     ]
   },
   {
@@ -217,7 +217,7 @@ export const concepts: Concept[] = [
       { "name": "GitLab", "url": "https://gitlab.com", "note": "内置 CI / CD，适合一体化研发" },
       { "name": "Bitbucket", "url": "https://bitbucket.org", "note": "与 Jira 深度集成" },
       { "name": "Sourcegraph", "url": "https://sourcegraph.com", "note": "跨仓库语义搜索，快速定位代码" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「理解 / 计划」类提示词，先让 AI 读懂仓库结构" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「理解 / 计划」类提示词，先让 AI 读懂仓库结构" }
     ]
   },
   {
@@ -241,7 +241,7 @@ export const concepts: Concept[] = [
       { "name": "GitHub Desktop", "url": "https://desktop.github.com", "note": "零门槛图形客户端，点几下完成提交 / 同步" },
       { "name": "Fork", "url": "https://git-fork.com", "note": "轻快好用的桌面客户端（Windows / Mac）" },
       { "name": "Lazygit", "url": "https://github.com/jesseduffield/lazygit", "note": "终端里的图形界面，远程开发 / AI 协作场景顺手" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「Git」类提示词：让 AI 安全做分支 / 回退 / 合并" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「Git」类提示词：让 AI 安全做分支 / 回退 / 合并" }
     ]
   },
   {
@@ -258,7 +258,7 @@ export const concepts: Concept[] = [
     "recommendations": [
       { "name": "Conventional Commits", "url": "https://www.conventionalcommits.org", "note": "提交信息规范" },
       { "name": "Commitizen", "url": "https://github.com/commitizen/cz-cli", "note": "交互式生成规范提交" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「Git」类提示词：让 AI 按功能拆提交、写清 why" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「Git」类提示词：让 AI 按功能拆提交、写清 why" }
     ]
   },
   {
@@ -313,7 +313,7 @@ export const concepts: Concept[] = [
     "recommendations": [
       { "name": "Vitest", "url": "https://vitest.dev", "note": "当前主流的 JavaScript 测试框架，与 Vite 无缝配合" },
       { "name": "Playwright", "url": "https://playwright.dev", "note": "端到端测试：模拟真实用户操作浏览器" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「测试」类提示词：先写测试、再修到通过" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「测试」类提示词：先写测试、再修到通过" }
     ]
   },
   {
@@ -331,7 +331,7 @@ export const concepts: Concept[] = [
       { "name": "Chrome DevTools", "url": "https://developer.chrome.com/docs/devtools", "note": "浏览器调试基础" },
       { "name": "Sentry", "url": "https://sentry.io", "note": "线上错误监控与溯源" },
       { "name": "Chrome DevTools MCP", "note": "让 AI 直接控制并排查 Chrome（见 AI 通用·工具 / MCP）" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「调试」类提示词：让 AI 按假设-验证法定位问题" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「调试」类提示词：让 AI 按假设-验证法定位问题" }
     ]
   },
   {
@@ -348,7 +348,7 @@ export const concepts: Concept[] = [
     "recommendations": [
       { "name": "《重构：改善既有代码的设计》Martin Fowler", "note": "业界圣经" },
       { "name": "SonarQube", "url": "https://www.sonarsource.com", "note": "自动检测代码坏味道" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「重构」类提示词：让 AI 行为不变地拆分 / 改名" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「重构」类提示词：让 AI 行为不变地拆分 / 改名" }
     ]
   },
   {
@@ -367,7 +367,7 @@ export const concepts: Concept[] = [
       { "name": "Netlify", "url": "https://www.netlify.com", "note": "静态与 Jamstack 部署" },
       { "name": "Cloudflare Pages", "url": "https://pages.cloudflare.com", "note": "边缘网络部署" },
       { "name": "GitHub Actions", "url": "https://github.com/features/actions", "note": "CI / CD 自动化流水线" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「发布」类提示词：让 AI 准备上线清单与回滚方案" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「发布」类提示词：让 AI 准备上线清单与回滚方案" }
     ]
   },
   {
@@ -477,7 +477,7 @@ export const concepts: Concept[] = [
       { "name": "Hono", "url": "https://hono.dev", "note": "轻量极速的后起主流，Node 与边缘运行时通吃" },
       { "name": "NestJS", "url": "https://nestjs.com", "note": "结构化后端框架，大型项目的主流选择" },
       { "name": "roadmap.sh", "url": "https://roadmap.sh", "note": "开源的全栈学习路线图，按图查漏补缺" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「原型 / 实现」类提示词，一次生成前后端" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「原型 / 实现」类提示词，一次生成前后端" }
     ]
   },
   {
@@ -496,7 +496,7 @@ export const concepts: Concept[] = [
       { "name": "Hoppscotch", "url": "https://hoppscotch.io", "note": "开源的 API 调试客户端，浏览器里直接用" },
       { "name": "JSONPlaceholder", "url": "https://jsonplaceholder.typicode.com", "note": "免费假接口，练手请求不用自己搭后端" },
       { "name": "MDN HTTP 教程", "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTTP", "note": "方法、状态码、请求头的权威参考" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「实现」类提示词：按契约直接生成接口" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「实现」类提示词：按契约直接生成接口" }
     ]
   },
   {
@@ -516,7 +516,7 @@ export const concepts: Concept[] = [
       { "name": "MySQL", "url": "https://www.mysql.com", "note": "国内使用最广的关系型数据库，开源经典" },
       { "name": "Supabase", "url": "https://supabase.com", "note": "托管数据库并自动生成接口，AI 建站常用" },
       { "name": "Prisma", "url": "https://www.prisma.io", "note": "类型安全的 ORM，用模型定义表结构、自动生成查询" },
-      { "name": "本站提示词库", "url": "/prompts", "note": "复制「数据」类提示词：让 AI 设计表结构与查询" }
+      { "name": "本站提示词实践指南", "url": "/prompts", "note": "复制「数据」类提示词：让 AI 设计表结构与查询" }
     ]
   }
 ];

@@ -27,7 +27,7 @@ const entries = [
   {
     href: "/examples",
     title: "示例",
-    desc: "Dashboard、IDE、看板、登录等 9 个完整页面级布局。",
+    desc: "数据面板、编辑器布局、看板、登录等 9 个完整页面级布局。",
   },
 ];
 

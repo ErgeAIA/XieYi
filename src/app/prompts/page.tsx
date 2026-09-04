@@ -33,8 +33,8 @@ export default function PromptsPage() {
   return (
     <PageContainer>
       <PageHeader
-        title="提示词库"
-        description="收录 Claude Code 官方提示词库 52 条，按场景分类，可直接复制进 Claude Code 使用。"
+        title="提示词实践指南"
+        description="收录 Claude Code 官方 52 条提示词实践，按场景分类，可直接复制进 Claude Code 使用。"
         actions={
           <Input
             value={q}

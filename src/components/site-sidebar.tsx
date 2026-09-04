@@ -9,17 +9,24 @@ import {
   type ComponentCategory,
 } from "@/content/components";
 import { concepts, conceptGroups, conceptGroupMeta } from "@/content/concepts";
+import type { ConceptGroup } from "@/content/types";
 import { promptLibrary } from "@/content/prompt-library";
 import {
   resources,
   resourceCategories,
   resourceId,
+  type ResourceCategory,
 } from "@/content/resources";
 import { backendTopics } from "@/content/backend";
-import { pageExamples } from "@/components/examples/pages";
+import {
+  pageExamples,
+  exampleCatMeta,
+  exampleCatOrder,
+  exampleCatMap,
+} from "@/components/examples/pages";
 import { useScrollSpy } from "@/components/scroll-spy";
 import { useNavSpy } from "@/components/nav-spy";
-import { frameworks, frameworkGroups, frameworkGroupMeta } from "@/content/frameworks";
+import { frameworks, frameworkGroups, frameworkGroupMeta, type FrameworkGroup } from "@/content/frameworks";
 import { TreeMenu, type TreeNode } from "@/components/sidebar-tree";
 
 const CATEGORY_EN: Record<ComponentCategory, string> = {
@@ -34,6 +41,45 @@ const CATEGORY_EN: Record<ComponentCategory, string> = {
   extra: "Extended",
 };
 
+const CONCEPT_GROUP_EN: Record<ConceptGroup, string> = {
+  ai: "AI General",
+  dev: "Engineering",
+  web: "Web Basics",
+};
+
+const EXAMPLE_CAT_EN: Record<string, string> = {
+  shell: "Application Shell",
+  feedback: "Feedback & Alerts",
+  lists: "Lists & Data",
+  metrics: "Metrics",
+  activity: "Activity",
+};
+
+const FRAMEWORK_GROUP_EN: Record<FrameworkGroup, string> = {
+  frontend: "Frontend",
+  backend: "Backend",
+  fullstack: "Full-stack",
+};
+
+const RESOURCE_CAT_EN: Record<ResourceCategory, string> = {
+  组件库: "Component Libraries",
+  设计系统: "Design Systems",
+  图标库: "Icon Libraries",
+  "AI 工具": "AI Tools",
+  动画组件: "Animation",
+  学习资料: "Learning",
+  社区: "Community",
+};
+
+const BACKEND_EN: Record<string, string> = {
+  api: "API",
+  database: "Database",
+  auth: "Auth",
+  deploy: "Deployment",
+  cache: "Cache",
+  storage: "File Storage",
+};
+
 export function SidebarNav() {
   const pathname = usePathname();
   const isComponents = pathname === "/components";
@@ -43,16 +89,18 @@ export function SidebarNav() {
   // 统一文件树：一级标题即可展开/收起，后端相关/参考资源/示例一并纳入。
   const nodes = React.useMemo<TreeNode[]>(
     () => [
-      { id: "home", label: "首页", href: "/", route: "/" },
+      { id: "home", label: "首页", en: "Home", href: "/", route: "/" },
       {
         id: "concepts",
         label: "基础概念",
+        en: "Concepts",
         href: "/concepts",
         route: "/concepts",
         count: concepts.length,
         children: conceptGroups.map((g) => ({
           id: g,
           label: conceptGroupMeta[g],
+          en: CONCEPT_GROUP_EN[g],
           route: "/concepts",
           href: `/concepts#${g}`,
           spyGroup: g,
@@ -71,35 +119,53 @@ export function SidebarNav() {
       },
       {
         id: "prompts",
-        label: "提示词库",
+        label: "提示词实践指南",
+        en: "Prompt Guide",
         href: "/prompts",
         route: "/prompts",
         count: promptLibrary.length,
       },
       {
         id: "examples",
-        label: "示例",
+        label: "页面画廊",
+        en: "Page Gallery",
         href: "/examples",
         route: "/examples",
         count: pageExamples.length,
-        children: pageExamples.map((e) => ({
-          id: e.id,
-          label: e.title,
-          en: e.nameEn,
-          route: "/examples",
-          href: `/examples#${e.id}`,
-          spyGroup: e.id,
-        })),
+        children: exampleCatOrder.map((cat) => {
+          const items = pageExamples.filter(
+            (e) => exampleCatMap[e.id] === cat,
+          );
+          return {
+            id: cat,
+            label: exampleCatMeta[cat],
+            en: EXAMPLE_CAT_EN[cat],
+            route: "/examples",
+            href: `/examples#${cat}`,
+            spyGroup: cat,
+            count: items.length,
+            children: items.map((e) => ({
+              id: e.id,
+              label: e.title,
+              en: e.nameEn,
+              route: "/examples",
+              href: `/examples#${e.id}`,
+              spyItem: e.id,
+            })),
+          };
+        }),
       },
       {
         id: "frameworks",
         label: "框架",
+        en: "Frameworks",
         href: "/frameworks",
         route: "/frameworks",
         count: frameworks.length,
         children: frameworkGroups.map((g) => ({
           id: g,
           label: frameworkGroupMeta[g],
+          en: FRAMEWORK_GROUP_EN[g],
           route: "/frameworks",
           href: `/frameworks#${g}`,
           spyGroup: g,
@@ -119,6 +185,7 @@ export function SidebarNav() {
       {
         id: "components",
         label: "前端组件",
+        en: "Components",
         href: "/components",
         route: "/components",
         count: componentCategories.reduce(
@@ -146,12 +213,14 @@ export function SidebarNav() {
       {
         id: "backend",
         label: "后端相关",
+        en: "Backend",
         href: "/backend",
         route: "/backend",
         count: backendTopics.length,
         children: backendTopics.map((t) => ({
           id: t.id,
           label: t.name,
+          en: BACKEND_EN[t.id],
           route: "/backend",
           href: `/backend#${t.id}`,
           spyGroup: t.id,
@@ -160,12 +229,14 @@ export function SidebarNav() {
       {
         id: "resources",
         label: "参考资源",
+        en: "Resources",
         href: "/resources",
         route: "/resources",
         count: resources.length,
         children: resourceCategories.map((cat) => ({
           id: cat,
           label: cat,
+          en: RESOURCE_CAT_EN[cat],
           route: "/resources",
           href: `/resources#${cat}`,
           spyGroup: cat,

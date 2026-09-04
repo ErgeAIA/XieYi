@@ -42,6 +42,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Reveal } from "@/components/motion/reveal";
+import { RadioGroup, Radio } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
 import {
   Accordion,
   AccordionContent,
@@ -79,6 +81,10 @@ import {
   Users,
   Mail,
   Check,
+  Eye,
+  EyeOff,
+  Globe,
+  GitBranch,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -248,62 +254,253 @@ function IdeExample() {
 
 /* ---------- 3. 表单填写页面 ---------- */
 
+function FormField({
+  label,
+  htmlFor,
+  required,
+  error,
+  hint,
+  children,
+}: {
+  label: string;
+  htmlFor?: string;
+  required?: boolean;
+  error?: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <label htmlFor={htmlFor} className="flex items-center gap-1 text-sm font-medium">
+        {label}
+        {required && <span className="text-destructive">*</span>}
+      </label>
+      {children}
+      {error ? (
+        <p className="text-xs text-destructive">{error}</p>
+      ) : hint ? (
+        <p className="text-xs text-muted-foreground">{hint}</p>
+      ) : null}
+    </div>
+  );
+}
+
 function FormExample() {
   const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("a@b");
   const [bio, setBio] = React.useState("");
-  const [agree, setAgree] = React.useState(false);
+  const [mailNotify, setMailNotify] = React.useState(true);
+  const [smsNotify, setSmsNotify] = React.useState(false);
+  const [skills, setSkills] = React.useState<string[]>(["frontend"]);
+  const toggleSkill = (v: string) =>
+    setSkills((s) => (s.includes(v) ? s.filter((x) => x !== v) : [...s, v]));
+
   return (
     <section className="example-canvas">
       <Reveal>
-        <Card className="max-w-md">
+        <Card className="mx-auto max-w-2xl">
           <CardHeader>
-            <CardTitle>新建项目</CardTitle>
-            <CardDescription>填写项目基本信息</CardDescription>
+            <CardTitle>账户资料</CardTitle>
+            <CardDescription>
+              完善你的个人与账户信息。带 <span className="text-destructive">*</span> 为必填项。
+            </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">项目名称</label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="例如：写意"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">描述</label>
-              <Textarea
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                placeholder="简单介绍这个项目"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">可见性</label>
-              <Select defaultValue="private">
-                <SelectTrigger>
-                  <SelectValue placeholder="选择可见性" />
-                </SelectTrigger>
-                <SelectPortal>
-                  <SelectPositioner>
-                    <SelectPopup>
-                      <SelectList>
-                        <SelectItem value="private">私有</SelectItem>
-                        <SelectItem value="team">团队</SelectItem>
-                        <SelectItem value="public">公开</SelectItem>
-                      </SelectList>
-                    </SelectPopup>
-                  </SelectPositioner>
-                </SelectPortal>
-              </Select>
-            </div>
-            <label className="flex items-center gap-2 text-sm">
-              <Checkbox checked={agree} onCheckedChange={(v) => setAgree(!!v)} />
-              我同意服务条款
-            </label>
+          <CardContent className="space-y-8">
+            {/* 基本信息 */}
+            <section className="space-y-4">
+              <div className="text-sm font-semibold text-foreground">基本信息</div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField label="姓名" htmlFor="f-name" required>
+                  <Input
+                    id="f-name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="例如：宝藏二哥"
+                  />
+                </FormField>
+                <FormField
+                  label="邮箱"
+                  htmlFor="f-email"
+                  required
+                  error="邮箱格式不正确，请检查"
+                >
+                  <Input
+                    id="f-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    aria-invalid
+                  />
+                </FormField>
+                <FormField label="手机号" htmlFor="f-phone" hint="用于登录与找回密码">
+                  <Input id="f-phone" type="tel" placeholder="138 0000 0000" />
+                </FormField>
+                <FormField label="所在城市">
+                  <Input placeholder="例如：北京" />
+                </FormField>
+              </div>
+              <FormField label="个人简介" htmlFor="f-bio" hint="一句话介绍你自己">
+                <Textarea
+                  id="f-bio"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  placeholder="热爱写作与开源的设计师"
+                  rows={3}
+                />
+              </FormField>
+            </section>
+
+            <Separator />
+
+            {/* 账户设置 */}
+            <section className="space-y-4">
+              <div className="text-sm font-semibold text-foreground">账户设置</div>
+              <FormField label="角色" htmlFor="f-role">
+                <Select defaultValue="designer">
+                  <SelectTrigger id="f-role">
+                    <SelectValue placeholder="选择角色" />
+                  </SelectTrigger>
+                  <SelectPortal>
+                    <SelectPositioner>
+                      <SelectPopup>
+                        <SelectList>
+                          <SelectItem value="owner">所有者</SelectItem>
+                          <SelectItem value="admin">管理员</SelectItem>
+                          <SelectItem value="designer">设计师</SelectItem>
+                          <SelectItem value="dev">开发者</SelectItem>
+                        </SelectList>
+                      </SelectPopup>
+                    </SelectPositioner>
+                  </SelectPortal>
+                </Select>
+              </FormField>
+
+              <FormField label="订阅计划">
+                <RadioGroup
+                  defaultValue="pro"
+                  className="grid gap-2 sm:grid-cols-3"
+                >
+                  <label className="flex items-center gap-2 rounded-lg border border-input p-3 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <Radio value="free" />
+                    免费版
+                  </label>
+                  <label className="flex items-center gap-2 rounded-lg border border-input p-3 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <Radio value="pro" />
+                    专业版
+                  </label>
+                  <label className="flex items-center gap-2 rounded-lg border border-input p-3 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                    <Radio value="team" />
+                    团队版
+                  </label>
+                </RadioGroup>
+              </FormField>
+
+              <FormField label="通知方式" hint="选择你希望接收提醒的渠道">
+                <div className="space-y-2">
+                  <label className="flex items-center justify-between gap-3 rounded-lg border border-input p-3 text-sm">
+                    <span>邮件通知</span>
+                    <Switch
+                      checked={mailNotify}
+                      onCheckedChange={setMailNotify}
+                      aria-label="邮件通知"
+                    />
+                  </label>
+                  <label className="flex items-center justify-between gap-3 rounded-lg border border-input p-3 text-sm">
+                    <span>短信通知</span>
+                    <Switch
+                      checked={smsNotify}
+                      onCheckedChange={setSmsNotify}
+                      aria-label="短信通知"
+                    />
+                  </label>
+                </div>
+              </FormField>
+
+              <FormField label="技能标签" hint="可多选，用于推荐相关示例">
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    ["frontend", "前端"],
+                    ["backend", "后端"],
+                    ["design", "设计"],
+                    ["ops", "运维"],
+                  ].map(([v, t]) => (
+                    <label key={v} className="flex items-center gap-2 text-sm">
+                      <Checkbox
+                        checked={skills.includes(v)}
+                        onCheckedChange={() => toggleSkill(v)}
+                      />
+                      {t}
+                    </label>
+                  ))}
+                </div>
+              </FormField>
+
+              <FormField label="头像">
+                <div className="flex items-center gap-3">
+                  <span className="flex size-12 items-center justify-center rounded-full bg-muted text-sm font-medium text-muted-foreground">
+                    二
+                  </span>
+                  <Button variant="outline" size="sm">
+                    上传头像
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                    移除
+                  </Button>
+                </div>
+              </FormField>
+            </section>
+
+            <Separator />
+
+            {/* 偏好设置 */}
+            <section className="space-y-4">
+              <div className="text-sm font-semibold text-foreground">偏好设置</div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField label="主题" htmlFor="f-theme">
+                  <Select defaultValue="system">
+                    <SelectTrigger id="f-theme">
+                      <SelectValue placeholder="选择主题" />
+                    </SelectTrigger>
+                    <SelectPortal>
+                      <SelectPositioner>
+                        <SelectPopup>
+                          <SelectList>
+                            <SelectItem value="light">浅色</SelectItem>
+                            <SelectItem value="dark">深色</SelectItem>
+                            <SelectItem value="system">跟随系统</SelectItem>
+                          </SelectList>
+                        </SelectPopup>
+                      </SelectPositioner>
+                    </SelectPortal>
+                  </Select>
+                </FormField>
+                <FormField label="语言" htmlFor="f-lang">
+                  <Select defaultValue="zh">
+                    <SelectTrigger id="f-lang">
+                      <SelectValue placeholder="选择语言" />
+                    </SelectTrigger>
+                    <SelectPortal>
+                      <SelectPositioner>
+                        <SelectPopup>
+                          <SelectList>
+                            <SelectItem value="zh">简体中文</SelectItem>
+                            <SelectItem value="en">English</SelectItem>
+                          </SelectList>
+                        </SelectPopup>
+                      </SelectPositioner>
+                    </SelectPortal>
+                  </Select>
+                </FormField>
+              </div>
+              <FormField label="生日" htmlFor="f-birth">
+                <Input id="f-birth" type="date" />
+              </FormField>
+            </section>
           </CardContent>
-          <CardFooter className="justify-end gap-2">
+          <CardFooter className="flex-col gap-2 sm:flex-row sm:justify-end">
             <Button variant="outline">取消</Button>
-            <Button disabled={!name || !agree}>创建</Button>
+            <Button variant="ghost">保存草稿</Button>
+            <Button>保存更改</Button>
           </CardFooter>
         </Card>
       </Reveal>
@@ -392,34 +589,277 @@ function DataTableExample() {
 /* ---------- 5. 登录 / 注册页 ---------- */
 
 function AuthExample() {
+  const [tab, setTab] = React.useState<"login" | "register">("login");
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [remember, setRemember] = React.useState(false);
+  const [agree, setAgree] = React.useState(false);
+
+  const [loginEmail, setLoginEmail] = React.useState("");
+  const [loginPassword, setLoginPassword] = React.useState("");
+  const [regUsername, setRegUsername] = React.useState("");
+  const [regEmail, setRegEmail] = React.useState("");
+  const [regPassword, setRegPassword] = React.useState("");
+  const [regConfirm, setRegConfirm] = React.useState("");
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (!loginEmail.includes("@")) {
+      setError("请输入有效的邮箱地址。");
+      return;
+    }
+    if (loginPassword.length < 6) {
+      setError("密码不能少于 6 位。");
+      return;
+    }
+    setLoading(true);
+    window.setTimeout(() => setLoading(false), 1200);
+  };
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    if (!regUsername.trim() || !regEmail.includes("@")) {
+      setError("请填写有效的用户名和邮箱。");
+      return;
+    }
+    if (regPassword.length < 6) {
+      setError("密码不能少于 6 位。");
+      return;
+    }
+    if (regPassword !== regConfirm) {
+      setError("两次输入的密码不一致。");
+      return;
+    }
+    if (!agree) {
+      setError("请先同意服务条款与隐私政策。");
+      return;
+    }
+    setLoading(true);
+    window.setTimeout(() => setLoading(false), 1200);
+  };
+
   return (
     <section className="example-canvas">
       <Reveal>
         <div className="flex justify-center">
-          <Card className="w-full max-w-sm">
+          <Card className="w-full max-w-md">
             <CardHeader className="text-center">
-              <CardTitle>欢迎回来</CardTitle>
-              <CardDescription>登录或注册写意账号</CardDescription>
+              <div className="mx-auto mb-3 flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <User className="size-5" />
+              </div>
+              <CardTitle>{tab === "login" ? "欢迎回来" : "创建账号"}</CardTitle>
+              <CardDescription>
+                {tab === "login"
+                  ? "登录以继续管理你的写意账号"
+                  : "填写下方信息，开始使用写意"}
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="login">
+              <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="login">登录</TabsTrigger>
                   <TabsTrigger value="register">注册</TabsTrigger>
                 </TabsList>
-                <TabsContent value="login" className="space-y-3 pt-4">
-                  <Input placeholder="邮箱" />
-                  <Input type="password" placeholder="密码" />
-                  <Button className="w-full">登录</Button>
+
+                {error && (
+                  <div className="mt-4 flex gap-2 rounded-md border border-destructive/30 bg-destructive/5 p-2.5 text-sm text-destructive">
+                    <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+                    <span>{error}</span>
+                  </div>
+                )}
+
+                <TabsContent value="login" className="pt-4">
+                  <form onSubmit={handleLogin} className="space-y-4">
+                    <div className="space-y-1.5">
+                      <label htmlFor="login-email" className="text-sm font-medium">
+                        邮箱
+                      </label>
+                      <Input
+                        id="login-email"
+                        type="email"
+                        placeholder="name@example.com"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label htmlFor="login-password" className="text-sm font-medium">
+                          密码
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setTab("register")}
+                          className="text-xs text-primary hover:underline"
+                        >
+                          忘记密码？
+                        </button>
+                      </div>
+                      <div className="relative">
+                        <Input
+                          id="login-password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={loginPassword}
+                          onChange={(e) => setLoginPassword(e.target.value)}
+                          required
+                          minLength={6}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((s) => !s)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                          aria-label={showPassword ? "隐藏密码" : "显示密码"}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="size-4" />
+                          ) : (
+                            <Eye className="size-4" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Checkbox
+                        checked={remember}
+                        onCheckedChange={(c) => setRemember(c === true)}
+                      />
+                      记住我
+                    </label>
+                    <Button className="w-full" disabled={loading}>
+                      {loading ? "登录中…" : "登录"}
+                    </Button>
+                  </form>
                 </TabsContent>
-                <TabsContent value="register" className="space-y-3 pt-4">
-                  <Input placeholder="用户名" />
-                  <Input placeholder="邮箱" />
-                  <Input type="password" placeholder="密码" />
-                  <Button className="w-full">注册</Button>
+
+                <TabsContent value="register" className="pt-4">
+                  <form onSubmit={handleRegister} className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-1.5">
+                        <label htmlFor="reg-username" className="text-sm font-medium">
+                          用户名
+                        </label>
+                        <Input
+                          id="reg-username"
+                          placeholder="二哥"
+                          value={regUsername}
+                          onChange={(e) => setRegUsername(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label htmlFor="reg-email" className="text-sm font-medium">
+                          邮箱
+                        </label>
+                        <Input
+                          id="reg-email"
+                          type="email"
+                          placeholder="name@example.com"
+                          value={regEmail}
+                          onChange={(e) => setRegEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label htmlFor="reg-password" className="text-sm font-medium">
+                        密码
+                      </label>
+                      <div className="relative">
+                        <Input
+                          id="reg-password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="至少 6 位字符"
+                          value={regPassword}
+                          onChange={(e) => setRegPassword(e.target.value)}
+                          required
+                          minLength={6}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((s) => !s)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                          aria-label={showPassword ? "隐藏密码" : "显示密码"}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="size-4" />
+                          ) : (
+                            <Eye className="size-4" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label htmlFor="reg-confirm" className="text-sm font-medium">
+                        确认密码
+                      </label>
+                      <Input
+                        id="reg-confirm"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="再次输入密码"
+                        value={regConfirm}
+                        onChange={(e) => setRegConfirm(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <label className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <Checkbox
+                        checked={agree}
+                        onCheckedChange={(c) => setAgree(c === true)}
+                        className="mt-0.5"
+                      />
+                      <span>
+                        我已阅读并同意
+                        <a href="#" className="text-primary hover:underline">
+                          服务条款
+                        </a>
+                        和
+                        <a href="#" className="text-primary hover:underline">
+                          隐私政策
+                        </a>
+                      </span>
+                    </label>
+                    <Button className="w-full" disabled={loading}>
+                      {loading ? "创建中…" : "创建账号"}
+                    </Button>
+                  </form>
                 </TabsContent>
               </Tabs>
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <span className="relative flex justify-center text-xs text-muted-foreground">
+                  <span className="bg-card px-2">或使用以下方式继续</span>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <Button variant="outline" className="w-full">
+                  <GitBranch className="mr-2 size-4" />
+                  GitHub
+                </Button>
+                <Button variant="outline" className="w-full">
+                  <Globe className="mr-2 size-4" />
+                  Google
+                </Button>
+              </div>
             </CardContent>
+            <CardFooter className="justify-center text-sm text-muted-foreground">
+              {tab === "login" ? "还没有账号？" : "已有账号？"}
+              <button
+                type="button"
+                onClick={() => setTab(tab === "login" ? "register" : "login")}
+                className="ml-1 font-medium text-primary hover:underline"
+              >
+                {tab === "login" ? "立即注册" : "立即登录"}
+              </button>
+            </CardFooter>
           </Card>
         </div>
       </Reveal>
@@ -764,10 +1204,72 @@ function TimelineExample() {
   );
 }
 
+/* ---------- 9.5 横向时间轴（application shell: timeline-horizontal） ---------- */
+
+function TimelineHorizontalExample() {
+  const steps = [
+    { date: "09-01", title: "项目启动", desc: "需求评审与技术方案", status: "complete" as const },
+    { date: "09-02", title: "脚手架搭建", desc: "Next.js + Tailwind + shadcn", status: "complete" as const },
+    { date: "09-03", title: "示例编写", desc: "组件示例与页面级布局", status: "current" as const },
+    { date: "09-04", title: "内部评审", desc: "设计走查与无障碍核对", status: "pending" as const },
+    { date: "09-05", title: "发布上线", desc: "部署到生产环境", status: "pending" as const },
+  ];
+  const completed = steps.filter((s) => s.status === "complete").length;
+  const trackWidth =
+    steps.length > 1 ? `${(completed / (steps.length - 1)) * 100}%` : "0%";
+
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="w-full max-w-2xl overflow-x-auto">
+          <div className="relative min-w-[520px] px-4">
+            {/* 背景轨道 */}
+            <div className="absolute left-4 right-4 top-3 h-0.5 bg-muted" />
+            {/* 已完成轨道 */}
+            <div
+              className="absolute left-4 top-3 h-0.5 bg-primary transition-all duration-500"
+              style={{ width: trackWidth }}
+            />
+            <ol className="relative flex justify-between" aria-label="项目时间轴">
+              {steps.map((s, i) => {
+                const complete = s.status === "complete";
+                const current = s.status === "current";
+                return (
+                  <li key={i} className="flex flex-col items-center">
+                    <div
+                      className={`flex size-6 items-center justify-center rounded-full border-2 text-[10px] font-medium ${
+                        complete
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : current
+                            ? "border-primary bg-background text-primary"
+                            : "border-muted bg-background text-muted-foreground"
+                      }`}
+                      aria-current={current ? "step" : undefined}
+                    >
+                      {complete ? <Check className="size-3.5" /> : i + 1}
+                    </div>
+                    <div className="mt-2 text-center">
+                      <div className="text-xs text-muted-foreground">{s.date}</div>
+                      <div className="text-sm font-medium">{s.title}</div>
+                      <div className="max-w-[96px] text-xs leading-snug text-muted-foreground">
+                        {s.desc}
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
 /* ---------- 10. 堆叠布局（application shell: stacked） ---------- */
 
 function StackedExample() {
-  const navItems = ["首页", "组件", "示例", "提示词库"];
+  const navItems = ["首页", "组件", "示例", "提示词实践指南"];
   const meta: { label: string; value: string; href?: string }[] = [
     { label: "版本", value: "v1.4.0" },
     {
@@ -974,7 +1476,7 @@ function SidebarExample() {
       items: [
         { label: "组件", icon: Component, badge: 28 },
         { label: "示例", icon: Sparkles },
-        { label: "提示词库", icon: MessagesSquare, badge: 52 },
+        { label: "提示词实践指南", icon: MessagesSquare, badge: 52 },
         { label: "资源", icon: BookOpen },
       ],
     },
@@ -1203,7 +1705,7 @@ function MultiColumnExample() {
       title: "项目",
       items: [
         { label: "写意组件库", icon: Component },
-        { label: "提示词库", icon: BookOpen },
+        { label: "提示词实践指南", icon: BookOpen },
       ],
     },
   ];
@@ -1526,6 +2028,94 @@ function HeadingsExample() {
   );
 }
 
+/* ---------- 13.5 进度条（feedback: progress） ---------- */
+
+function ProgressExample() {
+  const bars = [
+    { label: "上传文件", value: 25 },
+    { label: "处理数据", value: 50 },
+    { label: "生成报告", value: 75 },
+  ];
+  const steps = [
+    { id: "cart", label: "购物车", status: "complete" as const },
+    { id: "shipping", label: "配送", status: "complete" as const },
+    { id: "payment", label: "支付", status: "current" as const },
+    { id: "confirm", label: "确认", status: "pending" as const },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="space-y-8">
+          {/* 百分比进度条 */}
+          <div className="space-y-4">
+            {bars.map((b) => (
+              <div key={b.label} className="space-y-1.5">
+                <div className="flex items-center justify-between text-sm">
+                  <span>{b.label}</span>
+                  <span className="text-muted-foreground">{b.value}%</span>
+                </div>
+                <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full bg-primary transition-all duration-500"
+                    style={{ width: `${b.value}%` }}
+                    aria-hidden
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 步骤进度（圆圈 + 标题 + 连线） */}
+          <div>
+            <div className="mb-3 text-sm font-medium">订单进度</div>
+            <ol className="flex w-full items-center" aria-label="订单进度">
+              {steps.map((step, idx) => {
+                const complete = step.status === "complete";
+                const current = step.status === "current";
+                const last = idx === steps.length - 1;
+                return (
+                  <li key={step.id} className="flex flex-1 items-center">
+                    <div className="flex flex-col items-center gap-1.5">
+                      <div
+                        className={`flex size-7 items-center justify-center rounded-full border-2 text-xs font-medium ${
+                          complete
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : current
+                              ? "border-primary bg-background text-primary"
+                              : "border-muted bg-background text-muted-foreground"
+                        }`}
+                        aria-current={current ? "step" : undefined}
+                      >
+                        {complete ? <Check className="size-4" /> : idx + 1}
+                      </div>
+                      <span
+                        className={`text-xs ${
+                          complete || current ? "text-foreground" : "text-muted-foreground"
+                        }`}
+                      >
+                        {step.label}
+                      </span>
+                    </div>
+                    {!last && (
+                      <div className="mx-2 h-0.5 flex-1 rounded-full bg-muted">
+                        <div
+                          className={`h-full rounded-full bg-primary transition-all ${
+                            complete ? "w-full" : "w-0"
+                          }`}
+                        />
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
 /* ---------- 14. 警报（feedback: alerts，6 个变体独立示例） ---------- */
 
 // 14.1 描述型：图标 + 标题 + 描述
@@ -1596,17 +2186,54 @@ function AlertActionsExample() {
 
 // 14.4 实底通栏：深底横幅 + 右侧链接
 function AlertBannerExample() {
+  const [visible, setVisible] = React.useState(true);
+  if (!visible) {
+    return (
+      <section className="example-canvas">
+        <Reveal>
+          <div className="flex items-center justify-center rounded-md border border-dashed p-6 text-sm text-muted-foreground">
+            横幅已关闭
+            <button
+              type="button"
+              onClick={() => setVisible(true)}
+              className="ml-2 font-medium text-primary hover:underline"
+            >
+              重新显示
+            </button>
+          </div>
+        </Reveal>
+      </section>
+    );
+  }
   return (
     <section className="example-canvas">
       <Reveal>
-        <div className="flex items-center justify-between gap-3 rounded-md bg-foreground px-3.5 py-2.5 text-sm text-background">
-          <p>写意 v1.5.0 现已可用：新增 12 个组件示例与 6 个页面布局。</p>
-          <a
-            href="#"
-            className="inline-flex shrink-0 items-center gap-1 font-medium hover:underline"
-          >
-            查看更新日志 <ArrowRight className="size-3.5" />
-          </a>
+        <div className="flex items-start justify-between gap-4 rounded-md bg-foreground px-4 py-3 text-sm text-background sm:items-center">
+          <div className="flex items-start gap-3 sm:items-center">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-background/10">
+              <Sparkles className="size-4" />
+            </span>
+            <div>
+              <p className="font-medium">写意 v1.5.0 现已可用</p>
+              <p className="text-background/70">新增 12 个组件示例与 6 个页面布局。</p>
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-3">
+            <a
+              href="#"
+              className="inline-flex items-center gap-1 font-medium hover:underline"
+            >
+              查看更新日志 <ArrowRight className="size-3.5" />
+            </a>
+            <button
+              type="button"
+              onClick={() => setVisible(false)}
+              className="rounded-md p-1 text-background/70 hover:bg-background/10 hover:text-background"
+              aria-label="关闭"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
         </div>
       </Reveal>
     </section>
@@ -1703,13 +2330,25 @@ function EmptyCardExample() {
   return (
     <section className="example-canvas">
       <Reveal>
-        <div className="mx-auto flex max-w-md flex-col items-center gap-1.5 rounded-lg border p-8 text-center">
-          <Sparkles className="size-6 text-muted-foreground" />
-          <div className="mt-1 text-sm font-medium">创建你的第一个示例</div>
-          <div className="text-xs leading-relaxed text-muted-foreground">
+        <div className="mx-auto flex max-w-md flex-col items-center rounded-lg border p-8 text-center">
+          <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Package className="size-6" />
+          </div>
+          <h3 className="text-base font-semibold">创建你的第一个示例</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
             示例是学习组件用法最直接的入口。从常用页面布局开始，或复制提示词让
             AI 先生成一版初稿。
+          </p>
+          <div className="mt-5 flex w-full flex-col gap-2 sm:flex-row sm:justify-center">
+            <Button>新建示例</Button>
+            <Button variant="outline">查看文档</Button>
           </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            或者
+            <a href="#" className="ml-1 text-primary hover:underline">
+              复制提示词让 AI 生成初稿
+            </a>
+          </p>
         </div>
       </Reveal>
     </section>
@@ -1722,7 +2361,7 @@ function EmptyQuickExample() {
     { title: "新建组件", desc: "选择类别并补全描述", color: "bg-violet-500", icon: Component },
     { title: "导入主题", desc: "粘贴 palette 一键换肤", color: "bg-blue-500", icon: Palette },
     { title: "浏览示例", desc: "15 个页面级真实布局", color: "bg-emerald-500", icon: Sparkles },
-    { title: "提示词库", desc: "52 条工程场景提示词", color: "bg-amber-500", icon: MessagesSquare },
+    { title: "提示词实践指南", desc: "52 条工程场景提示词", color: "bg-amber-500", icon: MessagesSquare },
     { title: "参考资源", desc: "26 项精选外部资源", color: "bg-pink-500", icon: BookOpen },
     { title: "邀请成员", desc: "一起维护组件库", color: "bg-sky-500", icon: UserPlus },
   ];
@@ -1945,25 +2584,52 @@ function DescListExample() {
   );
 }
 
-// 16.2 卡片内：同款 dl 包进边框卡片
+// 16.2 卡片内：同款 dl 包进边框卡片，并补充状态徽章与行操作
 function DescListCardExample() {
+  const items = [
+    { key: "组件名", value: "Button", badge: "stable" as const },
+    { key: "版本", value: "v1.4.0" },
+    { key: "维护者", value: "二哥", action: "查看" },
+    { key: "分类", value: "form", badge: "public" as const },
+    { key: "引入路径", value: "@/components/ui/button", action: "复制" },
+  ];
   return (
     <section className="example-canvas">
       <Reveal>
-        <div className="rounded-md border p-4">
-          <h4 className="text-base font-semibold">组件信息</h4>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            「Button 按钮」的基础属性一览。
-          </p>
-          <dl className="mt-4 grid grid-cols-[88px_1fr] gap-x-4 gap-y-2 text-sm">
-            {DESC_ITEMS.map(([k, v]) => (
-              <React.Fragment key={k}>
-                <dt className="text-muted-foreground">{k}</dt>
-                <dd className="font-medium">{v}</dd>
-              </React.Fragment>
-            ))}
-          </dl>
-        </div>
+        <Card className="max-w-md">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">组件信息</CardTitle>
+            <CardDescription>「Button 按钮」的基础属性一览。</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <dl className="grid grid-cols-[96px_1fr] gap-x-4 gap-y-3 text-sm">
+              {items.map((item) => (
+                <React.Fragment key={item.key}>
+                  <dt className="text-muted-foreground">{item.key}</dt>
+                  <dd className="flex items-center justify-between gap-2">
+                    <span className="font-medium">{item.value}</span>
+                    <div className="flex items-center gap-2">
+                      {item.badge === "stable" && (
+                        <Badge variant="secondary">稳定</Badge>
+                      )}
+                      {item.badge === "public" && (
+                        <Badge variant="outline">公开</Badge>
+                      )}
+                      {item.action && (
+                        <button
+                          type="button"
+                          className="text-xs text-primary hover:underline"
+                        >
+                          {item.action}
+                        </button>
+                      )}
+                    </div>
+                  </dd>
+                </React.Fragment>
+              ))}
+            </dl>
+          </CardContent>
+        </Card>
       </Reveal>
     </section>
   );
@@ -2709,25 +3375,28 @@ export const pageExamples: PageExample[] = [
   },
   {
     id: "form",
-    title: "表单填写页面",
+    title: "综合表单页",
     nameEn: "Form",
-    desc: "输入、文本域、下拉、勾选",
-    usage: "新建/编辑表单、用户注册资料、配置创建、反馈收集",
+    desc: "文本/邮箱/电话/多行/下拉/单选/多选/开关/上传/日期，含必填与错误态",
+    usage: "账户设置、用户资料、注册表单、配置页",
     keywords:
-      "form 表单 输入 input 文本域 textarea 下拉 select 勾选 checkbox 提交 创建 校验",
-    prompt: `请生成一个「表单填写页面」，技术栈 React + Tailwind CSS。
+      "form 表单 输入 input 文本域 textarea 下拉 select 单选 radio 多选 checkbox 开关 switch 上传 日期 校验 必填 错误",
+    prompt: `请生成一个「综合表单页」，技术栈 React + Tailwind CSS，元素尽可能全。
 
-布局（桌面 ≥1024px）：
-- 居中卡片（max-width 约 480px），纵向排列表单项：文本输入（姓名/邮箱）、多行文本域（简介）、下拉选择（角色）、勾选框（同意条款）、提交按钮。
-- 每项含 label + 控件 + 辅助说明/错误提示；必填项用星号标记。
-- 提交按钮占满宽度，主色填充。
+结构（桌面 ≥1024px，居中卡片 max-width 约 640px）：
+- 卡片头：标题 + 说明（带 * 为必填）。
+- 分三段（用分隔线隔开）：基本信息 / 账户设置 / 偏好设置。
+- 基本信息：姓名（必填文本）、邮箱（必填，含错误态红框+提示）、手机号、城市、个人简介（多行）。
+- 账户设置：角色（下拉）、订阅计划（单选卡片组）、通知方式（开关行）、技能标签（多选）、头像（圆形占位+上传/移除按钮）。
+- 偏好设置：主题（下拉）、语言（下拉）、生日（日期输入）。
+- 底部操作：取消 / 保存草稿 / 保存更改（主按钮）。
 
 样式约束：
-- 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
-- 无衬线系统字体；错误态用 text-destructive 与边框强调；焦点态清晰。
+- 仅用 design token 类（bg-card、text-muted-foreground、border、text-primary、text-destructive 等），禁止硬编码颜色。
+- 无衬线系统字体；必填用 text-destructive 星号；错误态用 aria-invalid；选中单选卡片用 border-primary。
 
 响应式：
-- 移动端卡片占满宽度，控件垂直铺满。
+- 移动端卡片占满宽度，双列字段改为单列。
 
 数据全部用占位 mock，不接后端，提交仅做前端校验演示。输出完整可运行组件。`,
     Comp: FormExample,
@@ -2883,6 +3552,32 @@ export const pageExamples: PageExample[] = [
     Comp: TimelineExample,
   },
   {
+    id: "timeline-horizontal",
+    title: "横向时间轴",
+    nameEn: "Horizontal Timeline",
+    desc: "横向步骤时间线",
+    usage: "订单流程、多步骤进度、申请审批、项目里程碑",
+    keywords:
+      "timeline 时间轴 横向 步骤 进度 流程 里程碑",
+    prompt: `请生成一个「横向时间轴」组件，技术栈 React + Tailwind CSS。
+
+内容：
+- 5 个步骤横向排列（项目启动 / 脚手架搭建 / 示例编写 / 内部评审 / 发布上线），状态分 complete / current / pending。
+- 节点：完成态实心填充 + 对勾图标，当前态描边高亮，未开始态 muted。
+- 节点之间有水平连线，已完成部分用品牌色，未开始部分 bg-muted。
+- 节点下方显示日期、标题、一句话描述，居中对齐。
+
+样式约束：
+- 仅用 design token（bg-primary、text-muted-foreground、border-muted、bg-muted）。
+- 无衬线系统字体；节点 size-6，连线 h-0.5。
+- 过渡动画 duration-500。
+
+响应式：容器允许横向滚动，避免窄屏挤压。
+
+数据静态。输出完整可运行组件。`,
+    Comp: TimelineHorizontalExample,
+  },
+  {
     id: "stacked",
     title: "堆叠布局",
     nameEn: "Stacked",
@@ -2982,6 +3677,29 @@ export const pageExamples: PageExample[] = [
 
 数据为静态文案。输出完整可运行组件。`,
     Comp: HeadingsExample,
+  },
+  {
+    id: "progress",
+    title: "进度条",
+    nameEn: "Progress",
+    desc: "百分比进度条 + 步骤进度",
+    usage: "文件上传、表单分步、订单流程、任务完成度",
+    keywords:
+      "progress 进度条 步骤 step 百分比 percent 上传 流程 完成度",
+    prompt: `请生成一个「进度条」组件集合，技术栈 React + Tailwind CSS。
+
+内容：
+- 上方：3 条横向百分比进度条（上传文件 25%、处理数据 50%、生成报告 75%），每条左侧标签、右侧百分比，进度条用 rounded-full 细条 + 品牌色填充 + 剩余部分 bg-muted。
+- 下方：订单步骤进度（购物车 / 配送 / 支付 / 确认），圆圈节点（完成实心、当前描边高亮、未开始 muted），节点下标题，节点间用连线表示进度。
+
+样式约束：
+- 仅用 design token（bg-primary、text-muted-foreground、border-muted、bg-muted），禁止硬编码颜色。
+- 无衬线系统字体；过渡动画 duration-500。
+
+响应式：步骤标题在极窄屏可隐藏或缩小。
+
+数据静态。输出完整可运行组件。`,
+    Comp: ProgressExample,
   },
   {
     id: "alerts",
@@ -3715,6 +4433,108 @@ export const pageExamples: PageExample[] = [
   },
 ];
 
+// ── 分类分组（顺序由代码控制，集中在此维护） ─────────────────────
+export const exampleCatMeta = {
+  shell: "应用骨架",
+  feedback: "反馈与提示",
+  lists: "列表与数据",
+  metrics: "统计指标",
+  activity: "动态流",
+} as const;
+
+export const exampleCatOrder = [
+  "shell",
+  "feedback",
+  "lists",
+  "metrics",
+  "activity",
+] as const;
+
+// 每个示例所属分类（示例 id → 分类 key）。新增示例在此登记即进入对应分组。
+export const exampleCatMap: Record<
+  string,
+  (typeof exampleCatOrder)[number]
+> = {
+  dashboard: "shell",
+  ide: "shell",
+  form: "shell",
+  data: "shell",
+  auth: "shell",
+  settings: "shell",
+  kanban: "shell",
+  todo: "shell",
+  timeline: "shell",
+  "timeline-horizontal": "shell",
+  stacked: "shell",
+  sidebar: "shell",
+  "multi-column": "shell",
+  headings: "shell",
+  progress: "feedback",
+  alerts: "feedback",
+  "alerts-list": "feedback",
+  "alerts-actions": "feedback",
+  "alerts-banner": "feedback",
+  "alerts-border": "feedback",
+  "alerts-dismiss": "feedback",
+  empty: "feedback",
+  "empty-card": "feedback",
+  "empty-quick": "feedback",
+  "empty-invite": "feedback",
+  "empty-actions": "feedback",
+  "empty-grid": "feedback",
+  "desc-list": "lists",
+  "desc-list-card": "lists",
+  "desc-list-dark": "lists",
+  "desc-list-columns": "lists",
+  "desc-list-row": "lists",
+  "desc-list-status": "lists",
+  "stacked-list": "lists",
+  "stacked-list-status": "lists",
+  "stacked-list-dark": "lists",
+  "stacked-list-header": "lists",
+  stats: "metrics",
+  "stats-dark": "metrics",
+  "stats-cards": "metrics",
+  "stats-brand": "metrics",
+  "stats-borders": "metrics",
+  feed: "activity",
+  "feed-comments": "activity",
+  "feed-mixed": "activity",
+};
+
+// 组件文档「更多示例」跳转：把前端组件映射到页面画廊里最贴合的展示页。
+// 找不到强关联时回退到画廊首页，保证每个组件都有入口。
+const componentExampleMap: Record<string, string> = {
+  button: "auth",
+  input: "form",
+  textarea: "form",
+  select: "form",
+  checkbox: "form",
+  radio: "form",
+  switch: "settings",
+  label: "form",
+  form: "form",
+  table: "data",
+  card: "stats-cards",
+  avatar: "feed-comments",
+  alert: "alerts",
+  heading: "headings",
+  typography: "headings",
+  list: "stacked-list",
+  timeline: "timeline",
+  pagination: "data",
+  empty: "empty",
+  icon: "stats-brand",
+  link: "alerts-banner",
+  notification: "alerts",
+  badge: "empty",
+};
+
+export function exampleHrefForComponent(nameEn: string): string {
+  const id = componentExampleMap[nameEn];
+  return id ? `/examples#${id}` : "/examples";
+}
+
 function PromptBlock({ prompt }: { prompt: string }) {
   const [copied, setCopied] = React.useState(false);
   const onCopy = React.useCallback(async () => {
@@ -3761,13 +4581,19 @@ export function ExamplesGallery() {
       )
     : pageExamples;
 
+  const scrollToCat = (cat: string) => {
+    document
+      .getElementById(cat)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-center gap-3">
         <Input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="搜索示例内容…"
+          placeholder="搜索页面画廊内容…"
           className="max-w-xs"
         />
         {s && (
@@ -3777,51 +4603,112 @@ export function ExamplesGallery() {
         )}
       </div>
 
+      {!s && (
+        <div className="flex flex-wrap gap-2">
+          {exampleCatOrder.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => scrollToCat(cat)}
+              className="rounded-full border bg-muted/30 px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              {exampleCatMeta[cat]}
+            </button>
+          ))}
+        </div>
+      )}
+
       {list.length === 0 && (
         <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
           未找到与「{q}」匹配的示例。
         </p>
       )}
 
-      <div className="space-y-10">
-        {list.map((e) => {
-          const Comp = e.Comp;
-          return (
-            <section
-              key={e.id}
-              id={e.id}
-              data-spy-group={e.id}
-              className="scroll-anchor space-y-3"
-            >
-              <div>
-                <h2 className="text-lg font-medium">
-                  {e.title}
-                  <span className="ml-2 font-mono text-sm font-normal text-muted-foreground/60">
-                    {e.nameEn}
+      {s ? (
+        <div className="space-y-10">
+          {list.map((e) => (
+            <ExampleSection key={e.id} e={e} />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-12">
+          {exampleCatOrder.map((cat) => {
+            const items = pageExamples.filter((e) => exampleCatMap[e.id] === cat);
+            // 「应用骨架」以三种布局总览（侧边栏 / 多栏 / 堆叠）打头，其下再列组件示例
+            if (cat === "shell") {
+              const overview = ["sidebar", "multi-column", "stacked"];
+              items.sort((a, b) => {
+                const ia = overview.indexOf(a.id);
+                const ib = overview.indexOf(b.id);
+                if (ia !== -1 && ib !== -1) return ia - ib;
+                if (ia !== -1) return -1;
+                if (ib !== -1) return 1;
+                return 0;
+              });
+            }
+            if (!items.length) return null;
+            return (
+              <section
+                key={cat}
+                id={cat}
+                data-spy-group={cat}
+                className="scroll-anchor space-y-6"
+              >
+                <div className="flex items-baseline justify-between border-b pb-2">
+                  <h2 className="text-xl font-semibold tracking-tight">
+                    {exampleCatMeta[cat]}
+                  </h2>
+                  <span className="text-xs text-muted-foreground">
+                    {items.length} 个
                   </span>
-                </h2>
-                <p className="text-sm text-muted-foreground">{e.desc}</p>
-                {e.usage && (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {e.usage.split(/[、,，]/).map((u) => (
-                      <span
-                        key={u}
-                        className="rounded-full border bg-muted/40 px-2 py-0.5 text-xs text-muted-foreground"
-                      >
-                        {u.trim()}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="hover-lift overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
-                <Comp />
-              </div>
-              {e.prompt && <PromptBlock prompt={e.prompt} />}
-            </section>
-          );
-        })}
-      </div>
+                </div>
+                <div className="space-y-10">
+                  {items.map((e) => (
+                    <ExampleSection key={e.id} e={e} />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+      )}
     </div>
+  );
+}
+
+function ExampleSection({ e }: { e: PageExample }) {
+  const Comp = e.Comp;
+  return (
+    <section
+      id={e.id}
+      data-spy-item={e.id}
+      className="scroll-anchor space-y-3"
+    >
+      <div>
+        <h3 className="text-lg font-medium">
+          {e.title}
+          <span className="ml-2 font-mono text-sm font-normal text-muted-foreground/60">
+            {e.nameEn}
+          </span>
+        </h3>
+        <p className="text-sm text-muted-foreground">{e.desc}</p>
+        {e.usage && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {e.usage.split(/[、,，]/).map((u) => (
+              <span
+                key={u}
+                className="rounded-full border bg-muted/40 px-2 py-0.5 text-xs text-muted-foreground"
+              >
+                {u.trim()}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="hover-lift overflow-hidden rounded-lg border bg-muted/20 p-4 sm:p-6">
+        <Comp />
+      </div>
+      {e.prompt && <PromptBlock prompt={e.prompt} />}
+    </section>
   );
 }
