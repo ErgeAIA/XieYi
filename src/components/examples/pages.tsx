@@ -75,6 +75,7 @@ import {
   Package,
   Palette,
   ShieldCheck,
+  UserPlus,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -1670,23 +1671,230 @@ function AlertDismissExample() {
   );
 }
 
-/* ---------- 15. 空状态（empty states） ---------- */
+/* ---------- 15. 空状态（feedback: empty states，6 个变体独立示例） ---------- */
 
+// 15.1 极简：圆形图标 + 短语 + 主按钮
 function EmptyStatesExample() {
   return (
-    <section className="example-canvas space-y-4">
-      <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed p-8 text-center">
-        <Inbox className="size-8 text-muted-foreground" />
-        <div className="text-sm font-medium">还没有任何项目</div>
-        <div className="text-xs text-muted-foreground">创建你的第一个项目开始吧。</div>
-        <Button size="sm" className="mt-1">
-          <Plus className="size-4" /> 新建项目
-        </Button>
-      </div>
-      <div className="flex flex-col items-center gap-1.5 rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
-        <Search className="size-6" />
-        <div>未找到匹配的结果</div>
-      </div>
+    <section className="example-canvas">
+      <Reveal>
+        <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed p-8 text-center">
+          <span className="flex size-12 items-center justify-center rounded-full bg-muted">
+            <Inbox className="size-6 text-muted-foreground" />
+          </span>
+          <div className="text-sm font-medium">还没有收到任何反馈</div>
+          <div className="max-w-xs text-xs text-muted-foreground">
+            组件发布后，使用者会在评论区留下使用感受与改进建议。
+          </div>
+          <Button size="sm" className="mt-1">
+            <Plus className="size-4" /> 写一条评论
+          </Button>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 15.2 边框卡片：居中引导
+function EmptyCardExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="mx-auto flex max-w-md flex-col items-center gap-1.5 rounded-lg border p-8 text-center">
+          <Sparkles className="size-6 text-muted-foreground" />
+          <div className="mt-1 text-sm font-medium">创建你的第一个示例</div>
+          <div className="text-xs leading-relaxed text-muted-foreground">
+            示例是学习组件用法最直接的入口。从常用页面布局开始，或复制提示词让
+            AI 先生成一版初稿。
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 15.3 快捷操作网格
+function EmptyQuickExample() {
+  const actions = [
+    { title: "新建组件", desc: "选择类别并补全描述", color: "bg-violet-500", icon: Component },
+    { title: "导入主题", desc: "粘贴 palette 一键换肤", color: "bg-blue-500", icon: Palette },
+    { title: "浏览示例", desc: "15 个页面级真实布局", color: "bg-emerald-500", icon: Sparkles },
+    { title: "提示词库", desc: "52 条工程场景提示词", color: "bg-amber-500", icon: MessagesSquare },
+    { title: "参考资源", desc: "26 项精选外部资源", color: "bg-pink-500", icon: BookOpen },
+    { title: "邀请成员", desc: "一起维护组件库", color: "bg-sky-500", icon: UserPlus },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div>
+          <h4 className="text-base font-semibold">开始使用写意</h4>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            这里还没有内容。可以从下面的任一操作开始，几分钟内建立你的第一个页面。
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            {actions.map((a) => (
+              <button
+                key={a.title}
+                className="flex items-start gap-2.5 rounded-lg border border-transparent p-2 text-left hover:border-border hover:bg-muted/30"
+              >
+                <span
+                  className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${a.color} text-white`}
+                >
+                  <a.icon className="size-5" />
+                </span>
+                <span>
+                  <span className="block text-sm font-medium">{a.title}</span>
+                  <span className="block text-xs text-muted-foreground">
+                    {a.desc}
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
+          <div className="mt-3">
+            <a href="#" className="text-xs font-medium text-primary hover:underline">
+              查看全部快捷操作 →
+            </a>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 15.4 邀请协作：深色卡 + 邀请表单 + 最近添加列表
+function EmptyInviteExample() {
+  const recent = [
+    { who: "李雷", role: "组件工程师" },
+    { who: "韩梅梅", role: "交互设计师" },
+    { who: "张伟", role: "前端开发" },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-lg bg-foreground p-6 text-background">
+          <div className="flex flex-col items-center text-center">
+            <UserPlus className="size-6" />
+            <div className="mt-2 text-sm font-medium">添加团队成员</div>
+            <div className="mt-1 max-w-sm text-xs text-background/60">
+              邀请协作维护组件库。成员可以在示例下评论、参与评审并接收版本通知。
+            </div>
+            <div className="mt-4 flex w-full max-w-sm gap-2">
+              <Input placeholder="输入邮箱" className="h-8 text-xs" />
+              <Button size="sm">发送邀请</Button>
+            </div>
+          </div>
+          <div className="mt-5 border-t border-background/15 pt-3">
+            <div className="text-xs text-background/60">最近添加</div>
+            <ul className="mt-2 space-y-2">
+              {recent.map((r) => (
+                <li key={r.who} className="flex items-center gap-2">
+                  <Avatar name={r.who} />
+                  <span className="font-medium">{r.who}</span>
+                  <span className="text-xs text-background/60">{r.role}</span>
+                  <button className="ml-auto text-xs hover:underline">
+                    移除
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 15.5 操作列表：纵向可点行
+function EmptyActionsExample() {
+  const actions = [
+    { title: "从模板开始", desc: "选择一个预置布局，一分钟搭好骨架", color: "bg-violet-500", icon: Component },
+    { title: "导入现有组件", desc: "粘贴代码或仓库链接，自动生成文档", color: "bg-blue-500", icon: Palette },
+    { title: "让 AI 生成", desc: "描述你的需求，提示词已备好", color: "bg-emerald-500", icon: Sparkles },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div>
+          <h4 className="text-base font-semibold">创建你的第一个项目</h4>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            还没有任何项目。以下三种方式都可以开始，之后随时可以回来补充。
+          </p>
+          <div className="mt-4 space-y-2">
+            {actions.map((a) => (
+              <button
+                key={a.title}
+                className="flex w-full items-center gap-3 rounded-lg border border-transparent p-3 text-left hover:border-border hover:bg-muted/30"
+              >
+                <span
+                  className={`flex size-9 shrink-0 items-center justify-center rounded-lg ${a.color} text-white`}
+                >
+                  <a.icon className="size-5" />
+                </span>
+                <span>
+                  <span className="block text-sm font-medium">{a.title}</span>
+                  <span className="block text-xs text-muted-foreground">
+                    {a.desc}
+                  </span>
+                </span>
+              </button>
+            ))}
+          </div>
+          <div className="mt-3">
+            <a href="#" className="text-xs font-medium text-primary hover:underline">
+              浏览更多建议 →
+            </a>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 15.6 推荐网格：居中引导 + 搜索 + 两列最近添加
+function EmptyGridExample() {
+  const recent = [
+    { who: "李雷", role: "组件工程师" },
+    { who: "韩梅梅", role: "交互设计师" },
+    { who: "张伟", role: "前端开发" },
+    { who: "王芳", role: "内容运营" },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-lg border p-6">
+          <div className="flex flex-col items-center text-center">
+            <span className="flex size-12 items-center justify-center rounded-full bg-muted">
+              <UserPlus className="size-6 text-muted-foreground" />
+            </span>
+            <div className="mt-2 text-sm font-medium">添加团队成员</div>
+            <div className="mt-1 max-w-sm text-xs text-muted-foreground">
+              按邮箱搜索或邀请，被邀请的成员将收到一封说明邮件。
+            </div>
+            <div className="mt-4 flex w-full max-w-md gap-2">
+              <Input placeholder="搜索成员或输入邮箱" className="h-8 text-xs" />
+              <Button size="sm">发送邀请</Button>
+            </div>
+          </div>
+          <div className="mt-5 border-t pt-3">
+            <div className="text-xs text-muted-foreground">最近添加</div>
+            <div className="mt-2 grid gap-2 sm:grid-cols-2">
+              {recent.map((r) => (
+                <div
+                  key={r.who}
+                  className="flex items-center gap-2 rounded-md border px-3 py-2"
+                >
+                  <Avatar name={r.who} />
+                  <span className="font-medium">{r.who}</span>
+                  <span className="ml-auto text-xs text-muted-foreground">
+                    {r.role}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -2182,26 +2390,156 @@ export const pageExamples: PageExample[] = [
   },
   {
     id: "empty",
-    title: "空状态",
-    nameEn: "Empty States",
-    desc: "图标 + 标题 + 描述 + 操作",
-    usage: "无数据占位、搜索无结果、引导新建、列表空白、首次使用引导",
-    keywords: "empty 空状态 无数据 占位 引导 新建 搜索无结果 空 图标",
-    prompt: `请生成一个「空状态（Empty States）」组件示例，技术栈 React + Tailwind CSS。
+    title: "空状态 · 极简",
+    nameEn: "Simple",
+    desc: "圆形图标 + 短语 + 主按钮",
+    usage: "列表无数据、评论区为空、首次进入",
+    keywords:
+      "empty 空状态 无数据 占位 引导 极简 simple 图标 主按钮 首次",
+    prompt: `请生成一个「极简空状态」组件，技术栈 React + Tailwind CSS。
 
-展示两种常见形态（桌面 ≥1024px）：
-- 主引导型：居中卡片，虚线边框（border-dashed），顶部大号 muted 图标（如 Inbox），标题（「还没有任何项目」），描述（「创建你的第一个项目开始吧」），下方主色按钮（图标 + 「新建项目」）。
-- 轻量型：更小尺寸虚线虚框，居中图标（如 Search）+ 一句 muted 文案（「未找到匹配的结果」），无按钮。
+使用场景：列表或评论区还没有任何数据时的首次呈现。
+
+样式（桌面 ≥1024px）：
+- 居中竖排卡片，虚线边框（border-dashed）：顶部圆形浅底图标（muted 圆底内放 muted 的 Inbox 图标）+ 一句粗体短语（如「还没有收到任何反馈」）+ 一句 muted 说明 + 主色按钮（如「写一条评论」，可带 Plus 图标）。
+- 各元素垂直间距均匀，内容居中对齐。
 
 样式约束：
-- 仅用 design token 类（bg-background、border-dashed、text-muted-foreground、text-primary 等），禁止硬编码颜色值。
-- 无衬线系统字体；图标用 lucide-react，尺寸适中（size-8 / size-6）；主色按钮用 text-primary 背景。
+- 仅用 design token 类（border-dashed、bg-muted、text-muted-foreground、text-primary 等），禁止硬编码颜色值；图标用 lucide-react。
+- 无衬线系统字体。
 
-响应式：
-- 移动端卡片占满宽度，内边距适度缩小。
+响应式：移动端内边距略缩。
 
-数据全部用占位 mock，不接后端。输出完整可运行组件。`,
+数据为静态文案。输出完整可运行组件。`,
     Comp: EmptyStatesExample,
+  },
+  {
+    id: "empty-card",
+    title: "空状态 · 边框卡片",
+    nameEn: "Bordered Card",
+    desc: "实线边框卡片内的居中引导",
+    usage: "板块首次使用、内容为空但功能已就绪",
+    keywords:
+      "empty 空状态 边框 卡片 card 居中 引导 创建 首次使用 说明",
+    prompt: `请生成一个「边框卡片空状态」组件，技术栈 React + Tailwind CSS。
+
+使用场景：某个板块首次使用、内容为空但功能已就绪，需要一段更完整的引导说明。
+
+样式（桌面 ≥1024px）：
+- 居中窄卡片（max-width 约 448px）：实线细边框圆角，内部居中排版：图标（如 Sparkles）+ 粗体标题（如「创建你的第一个示例」）+ 一到两句 muted 说明。
+- 说明要写清「接下来能做什么」与「有什么价值」，不放按钮，让用户自行探索入口。
+
+样式约束：
+- 仅用 design token 类（border、text-muted-foreground 等），禁止硬编码颜色值；图标用 lucide-react。
+- 无衬线系统字体；说明文字用 leading-relaxed 保证可读性。
+
+响应式：移动端卡片占满宽度、内边距略缩。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: EmptyCardExample,
+  },
+  {
+    id: "empty-quick",
+    title: "空状态 · 快捷操作",
+    nameEn: "Quick Actions",
+    desc: "彩色图标网格 + 底部更多链接",
+    usage: "新手引导、功能入口聚合、开始使用页",
+    keywords:
+      "empty 空状态 快捷操作 quick actions 网格 图标 彩色 新手 引导 入口",
+    prompt: `请生成一个「快捷操作空状态」组件，技术栈 React + Tailwind CSS。
+
+使用场景：新手引导——空页面不只会说「没有数据」，更要把常用的几个功能入口聚合起来。
+
+样式（桌面 ≥1024px）：
+- 左对齐标题（如「开始使用写意」，text-base font-semibold）+ 一句 muted 说明。
+- 下方图标网格（桌面 3 列、移动 1 列）：每项 = 彩色实底圆角方块图标（violet / blue / emerald / amber / pink / sky 各一，白色图标）+ 粗体操作名 + muted 一句描述；整项可点击，hover 时显示边框与浅底。
+- 底部一行品牌色文字链接「查看全部快捷操作 →」。
+
+样式约束：
+- 彩色仅用于图标方块（Tailwind 标准色板 500 系），其余一律 design token；图标用 lucide-react。
+- 无衬线系统字体。
+
+响应式：<640px 网格改单列。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: EmptyQuickExample,
+  },
+  {
+    id: "empty-invite",
+    title: "空状态 · 邀请协作",
+    nameEn: "Invite",
+    desc: "深色卡 + 邀请表单 + 最近添加列表",
+    usage: "邀请团队成员、冷启动协作、社区早期",
+    keywords:
+      "empty 空状态 邀请 invite 成员 深色卡 表单 最近添加 团队 协作",
+    prompt: `请生成一个「邀请协作空状态」组件，技术栈 React + Tailwind CSS。
+
+使用场景：邀请团队成员协作（冷启动阶段），同时展示最近添加的人来降低陌生感。
+
+样式（桌面 ≥1024px）：
+- 深色实底卡片：bg-foreground 搭配 text-background（前景背景互为反色，明暗主题下对比度天然达标）。
+- 上半部分居中：UserPlus 图标 + 粗体标题（如「添加团队成员」）+ muted 说明（用 text-background/60）+ 一行邀请表单（邮箱输入框 + 主色「发送邀请」按钮）。
+- 下半部分：细分隔线（border-background/15）+ 小字「最近添加」+ 纵向列表（头像 + 姓名 + muted 角色 + 行尾「移除」链接）。
+
+样式约束：
+- 只用 bg-foreground / text-background 这对反色 token 及其透明度变体；按钮用主色 token；图标用 lucide-react。
+- 无衬线系统字体。
+
+响应式：移动端表单按钮换行、列表保持纵向。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: EmptyInviteExample,
+  },
+  {
+    id: "empty-actions",
+    title: "空状态 · 操作列表",
+    nameEn: "Action List",
+    desc: "纵向操作行 + 描述 + 更多链接",
+    usage: "创建引导、多种起步路径、替代方案建议",
+    keywords:
+      "empty 空状态 操作列表 action list 纵向 行 起步 路径 建议",
+    prompt: `请生成一个「操作列表空状态」组件，技术栈 React + Tailwind CSS。
+
+使用场景：创建引导——给用户几条可选的起步路径，每条都说清能做什么。
+
+样式（桌面 ≥1024px）：
+- 左对齐标题（如「创建你的第一个项目」）+ muted 说明（如「以下三种方式都可以开始」）。
+- 纵向操作列表：每行 = 彩色实底圆角方块图标（violet / blue / emerald）+ 粗体操作名 + muted 一句描述；整行可点击，默认透明边框，hover 显示边框与浅底。
+- 底部一行品牌色链接「浏览更多建议 →」。
+
+样式约束：
+- 彩色仅用于图标方块（Tailwind 标准色板 500 系），其余一律 design token；图标用 lucide-react。
+- 无衬线系统字体。
+
+响应式：移动端行内文字换行。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: EmptyActionsExample,
+  },
+  {
+    id: "empty-grid",
+    title: "空状态 · 推荐网格",
+    nameEn: "Recommend Grid",
+    desc: "居中引导 + 搜索 + 两列最近添加",
+    usage: "邀请成员、推荐关注、最近项目展示",
+    keywords:
+      "empty 空状态 推荐 recommend grid 网格 搜索 邀请 两列 最近",
+    prompt: `请生成一个「推荐网格空状态」组件，技术栈 React + Tailwind CSS。
+
+使用场景：邀请成员 / 推荐关注的浅色变体——引导之外再用真实数据（最近添加）填充空隙。
+
+样式（桌面 ≥1024px）：
+- 边框圆角卡片内部居中：圆形浅底 UserPlus 图标 + 粗体标题（如「添加团队成员」）+ muted 说明 + 一行搜索输入框 + 主色「发送邀请」按钮。
+- 细分隔线下小字「最近添加」，随后两列网格（桌面 2 列、移动 1 列）：每格为边框圆角行（头像 + 姓名 + 行尾 muted 角色）。
+
+样式约束：
+- 仅用 design token 类（border、bg-muted、text-muted-foreground、text-primary 等），禁止硬编码颜色值；图标用 lucide-react。
+- 无衬线系统字体。
+
+响应式：移动端网格改单列。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: EmptyGridExample,
   },
 ];
 
