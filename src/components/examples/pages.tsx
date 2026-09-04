@@ -1522,83 +1522,150 @@ function HeadingsExample() {
   );
 }
 
-/* ---------- 14. 警报（alerts：描述 / 列表 / 操作 / 链接 / 强调边框 / 关闭） ---------- */
+/* ---------- 14. 警报（feedback: alerts，6 个变体独立示例） ---------- */
 
+// 14.1 描述型：图标 + 标题 + 描述
 function AlertsExample() {
-  const [showDismiss, setShowDismiss] = React.useState(true);
   return (
-    <section className="example-canvas space-y-3">
-      <div className="flex gap-3 rounded-md border p-3 text-sm">
-        <Info className="mt-0.5 size-4 shrink-0 text-primary" />
-        <div>
-          <div className="font-medium">已保存草稿</div>
-          <div className="text-muted-foreground">
-            你的更改已于 2 分钟前自动保存。
-          </div>
-        </div>
-      </div>
-      <div className="flex gap-3 rounded-md border p-3 text-sm">
-        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500" />
-        <div>
-          <div className="font-medium">有 2 项待处理</div>
-          <ul className="mt-1 list-disc space-y-0.5 pl-4 text-muted-foreground">
-            <li>支付凭证待上传</li>
-            <li>联系人信息不完整</li>
-          </ul>
-        </div>
-      </div>
-      <div className="flex items-center justify-between gap-3 rounded-md border p-3 text-sm">
-        <div className="flex gap-3">
-          <Bell className="mt-0.5 size-4 shrink-0 text-primary" />
+    <section className="example-canvas">
+      <Reveal>
+        <div className="flex gap-3 rounded-md border border-amber-500/30 bg-amber-500/5 p-3 text-sm">
+          <Info className="mt-0.5 size-4 shrink-0 text-amber-500" />
           <div>
-            <div className="font-medium">新版本可用</div>
-            <div className="text-muted-foreground">v2.3.0 已发布，建议升级。</div>
-          </div>
-        </div>
-        <Button size="sm">立即升级</Button>
-      </div>
-      <div className="flex items-center justify-between gap-3 rounded-md border p-3 text-sm">
-        <div className="flex gap-3">
-          <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
-          <div>
-            <div className="font-medium">部署成功</div>
-            <div className="text-muted-foreground">已发布到生产环境。</div>
-          </div>
-        </div>
-        <a
-          href="#"
-          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-        >
-          查看详情 <ArrowRight className="size-3.5" />
-        </a>
-      </div>
-      <div className="flex gap-3 rounded-md border-l-4 border-primary p-3 text-sm">
-        <Info className="mt-0.5 size-4 shrink-0 text-primary" />
-        <div>
-          <div className="font-medium">提示</div>
-          <div className="text-muted-foreground">
-            强调边框常用于突出关键信息。
-          </div>
-        </div>
-      </div>
-      {showDismiss && (
-        <div className="flex items-start justify-between gap-3 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm">
-          <div className="flex gap-3">
-            <X className="mt-0.5 size-4 shrink-0 text-destructive" />
-            <div>
-              <div className="font-medium">无法连接到服务器</div>
-              <div className="text-muted-foreground">请检查网络后重试。</div>
+            <div className="font-medium">注意：即将达到存储上限</div>
+            <div className="mt-0.5 text-muted-foreground">
+              当前空间已使用 92%，建议清理历史版本，或升级容量后继续上传。
             </div>
           </div>
-          <button
-            onClick={() => setShowDismiss(false)}
-            className="text-muted-foreground hover:text-foreground"
-            aria-label="关闭"
-          >
-            <X className="size-4" />
-          </button>
         </div>
-      )}
+      </Reveal>
+    </section>
+  );
+}
+
+// 14.2 错误列表型：摘要 + 无序列表
+function AlertListExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="flex gap-3 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
+          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
+          <div>
+            <div className="font-medium">提交失败，请修复 2 处错误</div>
+            <ul className="mt-1 list-disc space-y-0.5 pl-4 text-muted-foreground">
+              <li>组件名不能包含空格与特殊字符</li>
+              <li>版本号需符合语义化版本规范（如 1.4.0）</li>
+            </ul>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 14.3 操作型：成功提示 + 底部按钮组
+function AlertActionsExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-md border border-emerald-500/30 bg-emerald-500/5 p-3 text-sm">
+          <div className="flex gap-3">
+            <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
+            <div>
+              <div className="font-medium">发布完成</div>
+              <div className="mt-0.5 text-muted-foreground">
+                「写意 v1.5」已发布至生产环境，示例与文档已同步更新。
+              </div>
+            </div>
+          </div>
+          <div className="mt-3 flex gap-2">
+            <Button size="sm">查看详情</Button>
+            <Button size="sm" variant="outline">
+              知道了
+            </Button>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 14.4 实底通栏：深底横幅 + 右侧链接
+function AlertBannerExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="flex items-center justify-between gap-3 rounded-md bg-foreground px-3.5 py-2.5 text-sm text-background">
+          <p>写意 v1.5.0 现已可用：新增 12 个组件示例与 6 个页面布局。</p>
+          <a
+            href="#"
+            className="inline-flex shrink-0 items-center gap-1 font-medium hover:underline"
+          >
+            查看更新日志 <ArrowRight className="size-3.5" />
+          </a>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 14.5 强调边框：品牌色左竖条 + 内嵌链接
+function AlertBorderExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="flex items-center gap-3 rounded-md border-l-4 border-primary bg-muted/30 p-3 text-sm">
+          <AlertTriangle className="size-4 shrink-0 text-primary" />
+          <p className="text-muted-foreground">
+            免费额度即将用完，
+            <a href="#" className="font-medium text-primary hover:underline">
+              升级账户
+            </a>
+            以解锁无限组件导出。
+          </p>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 14.6 可关闭：成功提示 + 关闭按钮（可恢复演示）
+function AlertDismissExample() {
+  const [visible, setVisible] = React.useState(true);
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        {visible ? (
+          <div className="flex items-start justify-between gap-3 rounded-md border border-emerald-500/30 bg-emerald-500/5 p-3 text-sm">
+            <div className="flex gap-3">
+              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />
+              <div>
+                <div className="font-medium">上传成功</div>
+                <div className="mt-0.5 text-muted-foreground">
+                  「Button 按钮」示例包已发布到组件库。
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setVisible(false)}
+              className="text-muted-foreground hover:text-foreground"
+              aria-label="关闭"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+        ) : (
+          <div className="rounded-md border border-dashed p-3 text-center text-xs text-muted-foreground">
+            警报已关闭，
+            <button
+              onClick={() => setVisible(true)}
+              className="font-medium text-primary hover:underline"
+            >
+              重新显示
+            </button>
+          </div>
+        )}
+      </Reveal>
     </section>
   );
 }
@@ -1963,30 +2030,155 @@ export const pageExamples: PageExample[] = [
   },
   {
     id: "alerts",
-    title: "警报",
-    nameEn: "Alerts",
-    desc: "带描述 / 列表 / 操作 / 链接 / 强调边框 / 关闭",
-    usage: "表单提交反馈、系统通知横幅、操作成功提示、错误告警、引导性提示、全局消息",
-    keywords: "alert 警报 提示 通知 警告 错误 成功 横幅 banner 描述 列表 操作 关闭 强调边框",
-    prompt: `请生成一个「警报（Alerts）」组件示例，技术栈 React + Tailwind CSS。
+    title: "警报 · 描述提示",
+    nameEn: "Alert",
+    desc: "图标 + 标题 + 描述的浅底提示",
+    usage: "存储提醒、审核结果、维护公告、上下文提示",
+    keywords:
+      "alert 警报 提示 注意 描述 info 琥珀 amber 浅底 标题 描述 非错误",
+    prompt: `请生成一个「描述型警报」组件，技术栈 React + Tailwind CSS。
 
-展示多种形态（桌面 ≥1024px），每种一行：
-- 描述型：图标 + 标题 + 一段描述（如「已保存草稿 / 2 分钟前自动保存」）。
-- 列表型：警告图标 + 标题 + 无序列表（如「2 项待处理」）。
-- 操作型：图标 + 文案 + 右侧主色按钮（如「立即升级」）。
-- 链接型：成功图标 + 文案 + 右侧品牌色带箭头链接（「查看详情」）。
-- 强调边框型：左侧 4px 品牌色竖条（border-l-4 border-primary）+ 图标 + 文案，突出关键信息。
-- 可关闭型：错误色边框 + 图标 + 文案 + 右上角关闭按钮（点击移除，前端 state）。
+使用场景：需要引起注意但不是错误的提示，如存储上限提醒、维护公告、审核结果。
+
+样式（桌面 ≥1024px）：
+- 单条卡片：琥珀色浅底（bg-amber-500/5）+ 琥珀细边框（border-amber-500/30），内含琥珀色 Info 图标 + 粗体标题（如「注意：即将达到存储上限」）+ 一句 muted 描述。
+- 图标与文字左对齐，图标顶部对齐标题行。
 
 样式约束：
-- 仅用 design token 类（bg-background、border、text-muted-foreground、text-primary、text-destructive 等），图标可用 text-primary / text-amber-500 / text-emerald-500 / text-destructive 区分语义；禁止硬编码其他颜色值。
+- 语义色仅用于图标 / 边框 / 浅底（amber-500 系列），正文一律 design token（text-foreground、text-muted-foreground），不引入其他硬编码颜色。
 - 无衬线系统字体；圆角细边框；图标用 lucide-react。
 
-响应式：
-- 移动端操作 / 链接型改为纵向堆叠（按钮 / 链接换行）。
+响应式：移动端内边距略缩。
 
-数据全部用占位 mock，不接后端。输出完整可运行组件。`,
+数据为静态文案。输出完整可运行组件。`,
     Comp: AlertsExample,
+  },
+  {
+    id: "alerts-list",
+    title: "警报 · 错误列表",
+    nameEn: "Alert List",
+    desc: "错误摘要 + 无序列表逐条说明",
+    usage: "表单校验错误、导入失败清单、必填项缺失提示",
+    keywords:
+      "alert 警报 错误 列表 list 校验 失败 destructive 红 无序 列表 提交",
+    prompt: `请生成一个「错误列表型警报」组件，技术栈 React + Tailwind CSS。
+
+使用场景：表单提交校验失败、批量导入出错等需要逐条列明问题的场合。
+
+样式（桌面 ≥1024px）：
+- 单条卡片：错误色浅底（bg-destructive/5）+ 错误色细边框（border-destructive/30），内含红色 AlertTriangle 图标 + 粗体错误摘要（如「提交失败，请修复 2 处错误」）。
+- 摘要下方为无序列表（list-disc），逐条列出具体错误（如「组件名不能包含空格与特殊字符」「版本号需符合语义化版本规范」），列表文字用 muted。
+
+样式约束：
+- 语义色仅用于图标 / 边框 / 浅底（destructive 系列），正文一律 design token。
+- 无衬线系统字体；圆角细边框；图标用 lucide-react。
+
+响应式：移动端内边距略缩。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: AlertListExample,
+  },
+  {
+    id: "alerts-actions",
+    title: "警报 · 操作按钮",
+    nameEn: "Alert Actions",
+    desc: "成功提示 + 底部按钮组",
+    usage: "发布完成、支付成功、流程结束确认",
+    keywords:
+      "alert 警报 操作 actions 按钮 成功 发布 emerald 绿 确认 流程",
+    prompt: `请生成一个「带操作按钮的警报」组件，技术栈 React + Tailwind CSS。
+
+使用场景：流程结束后的确认反馈，如发布完成、订单支付成功，用户需要在此选择后续动作。
+
+样式（桌面 ≥1024px）：
+- 卡片：绿色浅底（bg-emerald-500/5）+ 绿色细边框（border-emerald-500/30）。
+- 上部：绿色 CheckCircle2 图标 + 粗体标题（如「发布完成」）+ 一句 muted 描述（如「已发布至生产环境，示例与文档已同步更新」）。
+- 底部：一行操作按钮组——主色「查看详情」+ 次要描边「知道了」。
+
+样式约束：
+- 语义色仅用于图标 / 边框 / 浅底（emerald 系列），按钮用 design token 主色。
+- 无衬线系统字体；圆角细边框；图标用 lucide-react。
+
+响应式：移动端按钮换行或占满宽度。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: AlertActionsExample,
+  },
+  {
+    id: "alerts-banner",
+    title: "警报 · 实底横幅",
+    nameEn: "Solid Banner",
+    desc: "深底通栏 + 右侧箭头链接",
+    usage: "新版本上线、系统公告、全站级重要消息",
+    keywords:
+      "alert 警报 横幅 banner 实底 通栏 公告 版本 链接 深底 全站",
+    prompt: `请生成一个「实底通栏横幅」组件，技术栈 React + Tailwind CSS。
+
+使用场景：全站级重要公告，如新版本上线、系统级通知，需要一眼扫过就能注意到。
+
+样式（桌面 ≥1024px）：
+- 整条深色实底横幅：bg-foreground 搭配 text-background（前景背景互为反色，明暗主题下对比度天然达标）。
+- 一行内容：左侧文案（如「写意 v1.5.0 现已可用：新增 12 个组件示例与 6 个页面布局」），右侧带箭头的链接「查看更新日志 →」（ArrowRight 图标，hover 下划线）。
+- 文案过长时链接不换行（shrink-0），文字可截断。
+
+样式约束：
+- 只用 bg-foreground / text-background 这对反色 token，不引入其他颜色；无衬线系统字体。
+
+响应式：移动端改为纵向堆叠（文案在上、链接在下）。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: AlertBannerExample,
+  },
+  {
+    id: "alerts-border",
+    title: "警报 · 强调边框",
+    nameEn: "Accent Border",
+    desc: "品牌色左竖条 + 内嵌链接",
+    usage: "额度提醒、升级引导、关键信息强调",
+    keywords:
+      "alert 警报 强调边框 accent border 左竖条 品牌色 升级 额度 内嵌链接",
+    prompt: `请生成一个「强调边框警报」组件，技术栈 React + Tailwind CSS。
+
+使用场景：在普通内容流中突出一条关键信息，如额度即将用完、需要升级引导。
+
+样式（桌面 ≥1024px）：
+- 单条卡片：默认浅底（bg-muted/30）+ 常规细边框，但左侧为 4px 品牌色竖条（border-l-4 border-primary）。
+- 内容为一句话，内嵌品牌色链接：muted 文字（如「免费额度即将用完，」）+ 品牌色粗体链接（如「升级账户」）+ muted 续文；可配品牌色 AlertTriangle 小图标。
+
+样式约束：
+- 强调色只用 text-primary / border-primary，正文与底色用 design token。
+- 无衬线系统字体；图标用 lucide-react。
+
+响应式：移动端文字换行、链接可独立成行。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: AlertBorderExample,
+  },
+  {
+    id: "alerts-dismiss",
+    title: "警报 · 可关闭",
+    nameEn: "Dismissible",
+    desc: "成功提示 + 右上角关闭（可恢复）",
+    usage: "上传成功、任务完成、可关闭的即时反馈",
+    keywords:
+      "alert 警报 可关闭 dismissible 关闭 上传成功 emerald X 重新显示 状态",
+    prompt: `请生成一个「可关闭警报」组件，技术栈 React + Tailwind CSS。
+
+使用场景：操作成功后的即时反馈，如上传成功、任务完成，用户看完即可关掉。
+
+样式（桌面 ≥1024px）：
+- 卡片：绿色浅底（bg-emerald-500/5）+ 绿色细边框，左侧绿色 CheckCircle2 图标 + 粗体标题（如「上传成功」）+ 一句 muted 描述。
+- 右上角 X 关闭按钮（aria-label="关闭"），点击后整条移除（前端 state）。
+- 关闭后显示一行虚线边框占位，内含「重新显示」品牌色链接，便于反复演示关闭 / 恢复。
+
+样式约束：
+- 语义色仅用于图标 / 边框 / 浅底（emerald 系列），其余用 design token。
+- 无衬线系统字体；图标用 lucide-react。
+
+响应式：移动端文案与关闭按钮保持同行，描述可换行。
+
+数据为静态文案，仅前端 state。输出完整可运行组件。`,
+    Comp: AlertDismissExample,
   },
   {
     id: "empty",
