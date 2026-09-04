@@ -66,7 +66,7 @@ export function PageHeader({
   );
 }
 
-/** 区块标题（h2 级，如组件画廊的分类标题）。可用 className 覆盖字号。 */
+/** 区块标题（h2 级，如组件画廊的分类标题）。默认 20px，与二级分组标题同级。 */
 export function SectionTitle({
   children,
   className,
@@ -76,14 +76,14 @@ export function SectionTitle({
 }) {
   return (
     <h2
-      className={cn("text-lg font-semibold tracking-tight text-foreground", className)}
+      className={cn("text-xl font-semibold tracking-tight text-foreground", className)}
     >
       {children}
     </h2>
   );
 }
 
-/** 分组标签（h2 级小标签，如概念/资源的分类名）。 */
+/** 分组标题（h2 级，如概念/框架/资源的分类名）。默认 20px 前景色，与正文（14px）拉开层级。 */
 export function GroupLabel({
   children,
   className,
@@ -94,7 +94,7 @@ export function GroupLabel({
 } & React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h2
-      className={cn("text-sm font-medium text-muted-foreground", className)}
+      className={cn("text-xl font-semibold tracking-tight text-foreground", className)}
       {...rest}
     >
       {children}

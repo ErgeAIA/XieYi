@@ -1,56 +1,37 @@
 "use client";
 
-import * as React from "react";
 import {
   PageContainer,
   PageHeader,
   GroupLabel,
   FieldLabel,
-  EmptyState,
 } from "@/components/page-shell";
 import { CopyBlock } from "@/components/copy-block";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
 import {
   promptLibrary,
   promptCategoryOrder,
   promptCategoryMeta,
+  promptCategoryDesc,
   type PromptLibraryItem,
 } from "@/content/prompt-library";
 
 export default function PromptsPage() {
-  const [q, setQ] = React.useState("");
-
-  const filtered = promptLibrary.filter((p) => {
-    const s = q.trim().toLowerCase();
-    if (!s) return true;
-    return (
-      p.titleZh + (p.titleEn ?? "") + p.prompt + (p.promptZh ?? "")
-    ).toLowerCase().includes(s);
-  });
-
   return (
     <PageContainer>
       <PageHeader
-        title="提示词实践指南"
-        description="收录 Claude Code 官方 52 条提示词实践，按场景分类，可直接复制进 Claude Code 使用。"
-        actions={
-          <Input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="搜索提示词…"
-            className="max-w-xs"
-          />
-        }
+        title="提示词指南"
+        description="收录 Claude Code 官方 52 条提示词，按场景分类，可直接复制进 Claude Code 使用。"
       />
 
       {promptCategoryOrder.map((c) => {
-        const items = filtered.filter((p) => p.category === c);
+        const items = promptLibrary.filter((p) => p.category === c);
         if (items.length === 0) return null;
         return (
           <section key={c} className="space-y-3">
             <GroupLabel>{promptCategoryMeta[c]}</GroupLabel>
+            <p className="text-sm text-muted-foreground">{promptCategoryDesc[c]}</p>
             <div className="columns-1 gap-3 sm:columns-2">
               {items.map((p, i) => (
                 <Reveal key={p.id} delay={i * 30}>
@@ -62,7 +43,6 @@ export default function PromptsPage() {
         );
       })}
 
-      {filtered.length === 0 && <EmptyState>没有匹配的提示词。</EmptyState>}
     </PageContainer>
   );
 }

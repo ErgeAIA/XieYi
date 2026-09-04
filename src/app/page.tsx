@@ -29,6 +29,11 @@ const entries = [
     title: "示例",
     desc: "数据面板、编辑器布局、看板、登录等 9 个完整页面级布局。",
   },
+  {
+    href: "/glossary",
+    title: "词典",
+    desc: "约 200 个 Vibe Coding 术语，配可直接复制给 AI 的提示词。",
+  },
 ];
 
 export default function Home() {

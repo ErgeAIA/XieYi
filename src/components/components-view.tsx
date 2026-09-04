@@ -1,20 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   componentCategories,
   componentCategoryMeta,
+  componentCategoryDesc,
   componentsByCategory,
   components,
   type ComponentCategory,
 } from "@/content/components";
 import { exampleRegistry } from "@/components/examples/registry";
 import { useScrollSpy } from "@/components/scroll-spy";
-import { SectionTitle, EmptyState } from "@/components/page-shell";
+import { SectionTitle } from "@/components/page-shell";
 import { Reveal } from "@/components/motion/reveal";
 import Link from "next/link";
 import { exampleHrefForComponent } from "@/components/examples/pages";
@@ -36,10 +36,7 @@ export function ComponentsView({
 }: {
   initialCat: ComponentCategory | null;
 }) {
-  const [q, setQ] = React.useState("");
-  const { activeCat, setActiveCat, setActiveComponent, setPinnedCat } =
-    useScrollSpy();
-  const s = q.trim().toLowerCase();
+  const { setActiveCat, setActiveComponent, setPinnedCat } = useScrollSpy();
 
   // 初始定位：优先锚点，其次分类。点击跳转时把目标分类钉住，
   // 滚动过程中忽略 spy 的中间值，停止后再交还，避免中间菜单开合波动。
@@ -128,7 +125,7 @@ export function ComponentsView({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("scrollend", onScrollEnd);
     };
-  }, [setActiveCat, q]);
+  }, [setActiveCat]);
 
   // 组件卡片 scroll-spy：高亮正在看的组件
   React.useEffect(() => {
@@ -150,56 +147,12 @@ export function ComponentsView({
     );
     cards.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [setActiveComponent, q]);
-
-  const hasResults = componentCategories.some((cat) =>
-    componentsByCategory(cat).filter((c) => {
-      if (!s) return true;
-      return (c.nameZh + c.nameEn + c.desc + c.usage)
-        .toLowerCase()
-        .includes(s);
-    }).length > 0
-  );
+  }, [setActiveComponent]);
 
   return (
     <div className="space-y-6">
-      {!hasResults && <EmptyState>没有匹配的组件。</EmptyState>}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1.5">
-          {componentCategories.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => {
-                document
-                  .getElementById(c)
-                  ?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }}
-              className={`rounded-md px-2.5 py-1 text-sm transition-colors ${
-                activeCat === c
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {componentCategoryMeta[c]}
-            </button>
-          ))}
-        </div>
-        <Input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="搜索组件…"
-          className="max-w-xs"
-        />
-      </div>
-
       {componentCategories.map((cat) => {
-        const items = componentsByCategory(cat).filter((c) => {
-          if (!s) return true;
-          return (
-            c.nameZh + c.nameEn + c.desc + c.usage
-          ).toLowerCase().includes(s);
-        });
+        const items = componentsByCategory(cat);
         if (!items.length) return null;
         return (
           <section
@@ -214,6 +167,7 @@ export function ComponentsView({
                 {items.length} 个
               </span>
             </SectionTitle>
+            <p className="text-sm text-muted-foreground">{componentCategoryDesc[cat]}</p>
             <div className="space-y-3">
               {items.map((c, i) => (
                 <Reveal key={c.nameEn} delay={i * 50}>

@@ -23,10 +23,12 @@ import {
   exampleCatMeta,
   exampleCatOrder,
   exampleCatMap,
+  shellOverviewOrder,
 } from "@/components/examples/pages";
 import { useScrollSpy } from "@/components/scroll-spy";
 import { useNavSpy } from "@/components/nav-spy";
-import { frameworks, frameworkGroups, frameworkGroupMeta, type FrameworkGroup } from "@/content/frameworks";
+import { frameworks, frameworkGroups, frameworkGroupMeta, frameworkGroupMetaEn, type FrameworkGroup } from "@/content/frameworks";
+import { glossary, glossaryCategoryOrder, glossaryCategoryMeta } from "@/content/glossary";
 import { TreeMenu, type TreeNode } from "@/components/sidebar-tree";
 
 const CATEGORY_EN: Record<ComponentCategory, string> = {
@@ -53,12 +55,6 @@ const EXAMPLE_CAT_EN: Record<string, string> = {
   lists: "Lists & Data",
   metrics: "Metrics",
   activity: "Activity",
-};
-
-const FRAMEWORK_GROUP_EN: Record<FrameworkGroup, string> = {
-  frontend: "Frontend",
-  backend: "Backend",
-  fullstack: "Full-stack",
 };
 
 const RESOURCE_CAT_EN: Record<ResourceCategory, string> = {
@@ -119,7 +115,7 @@ export function SidebarNav() {
       },
       {
         id: "prompts",
-        label: "提示词实践指南",
+        label: "提示词指南",
         en: "Prompt Guide",
         href: "/prompts",
         route: "/prompts",
@@ -136,6 +132,17 @@ export function SidebarNav() {
           const items = pageExamples.filter(
             (e) => exampleCatMap[e.id] === cat,
           );
+          // 应用骨架分组把布局总览排在最前
+          if (cat === "shell") {
+            items.sort((a, b) => {
+              const ia = shellOverviewOrder.indexOf(a.id as typeof shellOverviewOrder[number]);
+              const ib = shellOverviewOrder.indexOf(b.id as typeof shellOverviewOrder[number]);
+              if (ia !== -1 && ib !== -1) return ia - ib;
+              if (ia !== -1) return -1;
+              if (ib !== -1) return 1;
+              return 0;
+            });
+          }
           return {
             id: cat,
             label: exampleCatMeta[cat],
@@ -156,6 +163,23 @@ export function SidebarNav() {
         }),
       },
       {
+        id: "glossary",
+        label: "词典",
+        en: "Glossary",
+        href: "/glossary",
+        route: "/glossary",
+        count: glossary.length,
+        children: glossaryCategoryOrder.map((g) => ({
+          id: g,
+          label: glossaryCategoryMeta[g].zh,
+          en: glossaryCategoryMeta[g].en,
+          route: "/glossary",
+          href: `/glossary#${g}`,
+          spyGroup: g,
+          count: glossary.filter((t) => t.category === g).length,
+        })),
+      },
+      {
         id: "frameworks",
         label: "框架",
         en: "Frameworks",
@@ -165,7 +189,7 @@ export function SidebarNav() {
         children: frameworkGroups.map((g) => ({
           id: g,
           label: frameworkGroupMeta[g],
-          en: FRAMEWORK_GROUP_EN[g],
+          en: frameworkGroupMetaEn[g],
           route: "/frameworks",
           href: `/frameworks#${g}`,
           spyGroup: g,

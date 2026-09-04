@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
 import {
@@ -9,46 +7,36 @@ import {
   PageHeader,
   GroupLabel,
   FieldLabel,
-  EmptyState,
 } from "@/components/page-shell";
 import { CopyBlock } from "@/components/copy-block";
 import {
   frameworks,
   frameworkGroups,
   frameworkGroupMeta,
+  frameworkGroupMetaEn,
+  frameworkGroupDesc,
 } from "@/content/frameworks";
 
 export default function FrameworksPage() {
-  const [q, setQ] = React.useState("");
-
-  const filtered = frameworks.filter((f) => {
-    const s = q.trim().toLowerCase();
-    if (!s) return true;
-    return (
-      f.name + (f.nameEn ?? "") + f.tagline + f.scenario
-    ).toLowerCase().includes(s);
-  });
-
   return (
     <PageContainer>
       <PageHeader
         title="框架"
-        actions={
-          <Input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="搜索框架…"
-            className="max-w-xs"
-          />
-        }
+        description="主流前端、全栈、后端、边缘与 AI 框架一览，标注形态、AI 友好度与常见坑，辅助选型与避坑。"
       />
 
       {frameworkGroups.map((g) => {
-        const items = filtered.filter((f) => f.group === g);
+        const items = frameworks.filter((f) => f.group === g);
         if (items.length === 0) return null;
         return (
           <section key={g} id={g} className="scroll-anchor space-y-3">
-            <GroupLabel data-spy-group={g}>{frameworkGroupMeta[g]}</GroupLabel>
+            <GroupLabel data-spy-group={g}>
+              {frameworkGroupMeta[g]}
+              <span className="ml-2 text-xs font-normal text-muted-foreground">
+                {frameworkGroupMetaEn[g]}
+              </span>
+            </GroupLabel>
+            <p className="text-sm text-muted-foreground">{frameworkGroupDesc[g]}</p>
             <div className="space-y-3">
               {items.map((f, i) => (
                 <Reveal key={f.id} delay={i * 40}>
@@ -68,7 +56,15 @@ export default function FrameworksPage() {
                         ) : null}
                         {f.kind ? (
                           <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                            {f.kind === "language" ? "语言" : "框架"}
+                            {f.kind === "language"
+                              ? "语言"
+                              : f.kind === "library"
+                                ? "库"
+                                : f.kind === "framework"
+                                  ? "框架"
+                                  : f.kind === "meta-framework"
+                                    ? "元框架"
+                                    : "运行时"}
                           </span>
                         ) : null}
                         {f.note ? (
@@ -95,6 +91,36 @@ export default function FrameworksPage() {
                           label="向 AI 描述的示例"
                         />
                       </div>
+                      {f.aiFriendly ? (
+                        <p>
+                          <FieldLabel>AI 友好度：</FieldLabel>
+                          <span
+                            className={
+                              f.aiFriendly === "high"
+                                ? "text-emerald-600 dark:text-emerald-400"
+                                : f.aiFriendly === "medium"
+                                  ? "text-amber-600 dark:text-amber-400"
+                                  : "text-muted-foreground"
+                            }
+                          >
+                            {f.aiFriendly === "high"
+                              ? "高"
+                              : f.aiFriendly === "medium"
+                                ? "中"
+                                : "低"}
+                          </span>
+                        </p>
+                      ) : null}
+                      {f.pitfall?.length ? (
+                        <div className="rounded-md border border-destructive/20 bg-destructive/5 p-3">
+                          <FieldLabel>常见坑：</FieldLabel>
+                          <ul className="mt-1 list-disc space-y-1 pl-4 text-muted-foreground">
+                            {f.pitfall.map((p, i) => (
+                              <li key={i}>{p}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
                       <div className="flex flex-wrap gap-3 pt-1 text-sm">
                         <a
                           href={f.official}
@@ -124,7 +150,6 @@ export default function FrameworksPage() {
         );
       })}
 
-      {filtered.length === 0 && <EmptyState>没有匹配的框架。</EmptyState>}
     </PageContainer>
   );
 }

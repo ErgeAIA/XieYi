@@ -1,8 +1,6 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
 import {
@@ -10,42 +8,25 @@ import {
   PageHeader,
   GroupLabel,
   FieldLabel,
-  EmptyState,
 } from "@/components/page-shell";
 import { CopyBlock } from "@/components/copy-block";
-import { concepts, conceptGroups, conceptGroupMeta } from "@/content/concepts";
+import { concepts, conceptGroups, conceptGroupMeta, conceptGroupDesc } from "@/content/concepts";
 
 export default function ConceptsPage() {
-  const [q, setQ] = React.useState("");
-
-  const filtered = concepts.filter((c) => {
-    const s = q.trim().toLowerCase();
-    if (!s) return true;
-    return (c.nameZh + c.nameEn + c.definition + c.analogy)
-      .toLowerCase()
-      .includes(s);
-  });
-
   return (
     <PageContainer>
       <PageHeader
         title="基础概念"
-        actions={
-          <Input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="搜索概念…"
-            className="max-w-xs"
-          />
-        }
+        description="把 Vibe Coding 里反复出现的底层概念讲清楚，先建立共同语言，再让 AI 生成对的代码。"
       />
 
       {conceptGroups.map((g) => {
-        const items = filtered.filter((c) => c.group === g);
+        const items = concepts.filter((c) => c.group === g);
         if (items.length === 0) return null;
         return (
           <section key={g} id={g} className="scroll-anchor space-y-3">
             <GroupLabel data-spy-group={g}>{conceptGroupMeta[g]}</GroupLabel>
+            <p className="text-sm text-muted-foreground">{conceptGroupDesc[g]}</p>
             <div className="space-y-3">
               {items.map((c, i) => (
                 <Reveal key={c.id} delay={i * 50}>
@@ -141,7 +122,6 @@ export default function ConceptsPage() {
         );
       })}
 
-      {filtered.length === 0 && <EmptyState>没有匹配的概念。</EmptyState>}
     </PageContainer>
   );
 }

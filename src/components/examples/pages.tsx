@@ -58,7 +58,6 @@ import {
   ArrowRight,
   Bell,
   Inbox,
-  Search,
   Plus,
   MousePointerClick,
   LayoutDashboard,
@@ -79,6 +78,7 @@ import {
   ShieldCheck,
   UserPlus,
   Users,
+  XCircle,
   Mail,
   Check,
   Eye,
@@ -1269,7 +1269,7 @@ function TimelineHorizontalExample() {
 /* ---------- 10. 堆叠布局（application shell: stacked） ---------- */
 
 function StackedExample() {
-  const navItems = ["首页", "组件", "示例", "提示词实践指南"];
+  const navItems = ["首页", "组件", "示例", "提示词指南"];
   const meta: { label: string; value: string; href?: string }[] = [
     { label: "版本", value: "v1.4.0" },
     {
@@ -1476,7 +1476,7 @@ function SidebarExample() {
       items: [
         { label: "组件", icon: Component, badge: 28 },
         { label: "示例", icon: Sparkles },
-        { label: "提示词实践指南", icon: MessagesSquare, badge: 52 },
+        { label: "提示词指南", icon: MessagesSquare, badge: 52 },
         { label: "资源", icon: BookOpen },
       ],
     },
@@ -1705,7 +1705,7 @@ function MultiColumnExample() {
       title: "项目",
       items: [
         { label: "写意组件库", icon: Component },
-        { label: "提示词实践指南", icon: BookOpen },
+        { label: "提示词指南", icon: BookOpen },
       ],
     },
   ];
@@ -2118,38 +2118,90 @@ function ProgressExample() {
 
 /* ---------- 14. 警报（feedback: alerts，6 个变体独立示例） ---------- */
 
-// 14.1 描述型：图标 + 标题 + 描述
+// 14.1 描述型：四种严重级别堆叠，演示信息/警告/成功/错误的统一排版
 function AlertsExample() {
+  const alerts = [
+    {
+      icon: Info,
+      tone: "border-sky-500/30 bg-sky-500/5 text-sky-600 dark:text-sky-400",
+      title: "注意：即将达到存储上限",
+      desc: "当前空间已使用 92%，建议清理历史版本，或升级容量后继续上传。",
+    },
+    {
+      icon: AlertTriangle,
+      tone: "border-amber-500/30 bg-amber-500/5 text-amber-600 dark:text-amber-400",
+      title: "有 2 个组件待审核",
+      desc: "「Tabs 标签页」与「Tooltip 文字提示」已提交，等待维护者复核。",
+    },
+    {
+      icon: CheckCircle2,
+      tone: "border-emerald-500/30 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400",
+      title: "发布完成",
+      desc: "「写意 v1.5」已发布至生产环境，示例与文档已同步更新。",
+    },
+    {
+      icon: XCircle,
+      tone: "border-destructive/30 bg-destructive/5 text-destructive",
+      title: "提交失败，请修复 2 处错误",
+      desc: "组件名不能包含空格，版本号需符合语义化版本规范（如 1.4.0）。",
+    },
+  ];
   return (
     <section className="example-canvas">
       <Reveal>
-        <div className="flex gap-3 rounded-md border border-amber-500/30 bg-amber-500/5 p-3 text-sm">
-          <Info className="mt-0.5 size-4 shrink-0 text-amber-500" />
-          <div>
-            <div className="font-medium">注意：即将达到存储上限</div>
-            <div className="mt-0.5 text-muted-foreground">
-              当前空间已使用 92%，建议清理历史版本，或升级容量后继续上传。
-            </div>
-          </div>
+        <div className="space-y-3">
+          {alerts.map((a, i) => {
+            const Icon = a.icon;
+            return (
+              <div
+                key={i}
+                className={`flex gap-3 rounded-md border p-3 text-sm ${a.tone}`}
+              >
+                <Icon className="mt-0.5 size-4 shrink-0" />
+                <div>
+                  <div className="font-medium">{a.title}</div>
+                  <div className="mt-0.5 text-muted-foreground">{a.desc}</div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </Reveal>
     </section>
   );
 }
 
-// 14.2 错误列表型：摘要 + 无序列表
+// 14.2 错误列表型：摘要 + 多项错误 + 操作按钮
 function AlertListExample() {
+  const errors = [
+    "组件名不能包含空格与特殊字符",
+    "版本号需符合语义化版本规范（如 1.4.0）",
+    "描述字段长度不能超过 140 个字符",
+  ];
   return (
     <section className="example-canvas">
       <Reveal>
-        <div className="flex gap-3 rounded-md border border-destructive/30 bg-destructive/5 p-3 text-sm">
-          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
-          <div>
-            <div className="font-medium">提交失败，请修复 2 处错误</div>
-            <ul className="mt-1 list-disc space-y-0.5 pl-4 text-muted-foreground">
-              <li>组件名不能包含空格与特殊字符</li>
-              <li>版本号需符合语义化版本规范（如 1.4.0）</li>
-            </ul>
+        <div className="rounded-md border border-destructive/30 bg-destructive/5 p-4 text-sm">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
+            <div className="min-w-0 flex-1">
+              <div className="font-medium">
+                提交失败，请修复 {errors.length} 处错误
+              </div>
+              <ul className="mt-1.5 list-disc space-y-1 pl-4 text-muted-foreground">
+                {errors.map((e) => (
+                  <li key={e}>{e}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="mt-3 flex gap-2">
+            <Button size="sm" variant="outline">
+              修复全部
+            </Button>
+            <Button size="sm" variant="ghost">
+              忽略
+            </Button>
           </div>
         </div>
       </Reveal>
@@ -2319,6 +2371,12 @@ function EmptyStatesExample() {
           <Button size="sm" className="mt-1">
             <Plus className="size-4" /> 写一条评论
           </Button>
+          <p className="mt-3 text-xs text-muted-foreground">
+            或者
+            <a href="#" className="ml-1 font-medium text-primary hover:underline">
+              了解如何收集反馈
+            </a>
+          </p>
         </div>
       </Reveal>
     </section>
@@ -2361,7 +2419,7 @@ function EmptyQuickExample() {
     { title: "新建组件", desc: "选择类别并补全描述", color: "bg-violet-500", icon: Component },
     { title: "导入主题", desc: "粘贴 palette 一键换肤", color: "bg-blue-500", icon: Palette },
     { title: "浏览示例", desc: "15 个页面级真实布局", color: "bg-emerald-500", icon: Sparkles },
-    { title: "提示词实践指南", desc: "52 条工程场景提示词", color: "bg-amber-500", icon: MessagesSquare },
+    { title: "提示词指南", desc: "52 条工程场景提示词", color: "bg-amber-500", icon: MessagesSquare },
     { title: "参考资源", desc: "26 项精选外部资源", color: "bg-pink-500", icon: BookOpen },
     { title: "邀请成员", desc: "一起维护组件库", color: "bg-sky-500", icon: UserPlus },
   ];
@@ -2558,10 +2616,12 @@ function DescListExample() {
     <section className="example-canvas">
       <Reveal>
         <div>
-          <h4 className="text-base font-semibold">组件信息</h4>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            「Button 按钮」的基础属性一览。
-          </p>
+          <div className="border-b pb-3">
+            <h4 className="text-base font-semibold">组件信息</h4>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              「Button 按钮」的基础属性一览。
+            </p>
+          </div>
           <dl className="mt-4 grid grid-cols-[88px_1fr] gap-x-4 gap-y-2 text-sm">
             {DESC_ITEMS.map(([k, v]) => (
               <React.Fragment key={k}>
@@ -2630,30 +2690,6 @@ function DescListCardExample() {
             </dl>
           </CardContent>
         </Card>
-      </Reveal>
-    </section>
-  );
-}
-
-// 16.3 深色卡：反色版两列 dl
-function DescListDarkExample() {
-  return (
-    <section className="example-canvas">
-      <Reveal>
-        <div className="rounded-md bg-foreground p-5 text-background">
-          <h4 className="text-base font-semibold">组件信息</h4>
-          <p className="mt-0.5 text-xs text-background/60">
-            「Button 按钮」的基础属性一览。
-          </p>
-          <dl className="mt-4 grid grid-cols-[88px_1fr] gap-x-4 gap-y-2 text-sm">
-            {DESC_ITEMS.map(([k, v]) => (
-              <React.Fragment key={k}>
-                <dt className="text-background/60">{k}</dt>
-                <dd className="font-medium">{v}</dd>
-              </React.Fragment>
-            ))}
-          </dl>
-        </div>
       </Reveal>
     </section>
   );
@@ -2786,6 +2822,7 @@ function StackedListExample() {
       text: "评审了 Button 组件",
       meta: "hover 曲线建议统一改为 ease-out",
       time: "10:24",
+      unread: true,
     },
     {
       who: "韩梅梅",
@@ -2799,19 +2836,33 @@ function StackedListExample() {
       meta: "暗色下 focus 环不可见已修复",
       time: "3 天前",
     },
+    {
+      who: "王芳",
+      text: "合并了 PR #58",
+      meta: "新增时间轴横向示例",
+      time: "上周",
+    },
   ];
   return (
     <section className="example-canvas">
       <Reveal>
         <ul className="divide-y rounded-md border text-sm">
           {rows.map((r) => (
-            <li key={r.who} className="flex items-start gap-3 px-4 py-3">
+            <li
+              key={r.who}
+              className="flex items-start gap-3 px-4 py-3 transition-colors hover:bg-muted/40"
+            >
               <Avatar name={r.who} />
               <div className="min-w-0 flex-1">
-                <div className="font-medium">
-                  {r.who}{" "}
-                  <span className="font-normal text-muted-foreground">
-                    {r.text}
+                <div className="flex items-center gap-2">
+                  {r.unread && (
+                    <span className="size-1.5 shrink-0 rounded-full bg-primary" />
+                  )}
+                  <span className="font-medium">
+                    {r.who}{" "}
+                    <span className="font-normal text-muted-foreground">
+                      {r.text}
+                    </span>
                   </span>
                 </div>
                 <div className="mt-0.5 truncate text-xs text-muted-foreground">
@@ -2884,37 +2935,6 @@ function StackedListStatusExample() {
                 {r.time}
               </span>
               <Badge variant={variant(r.status)}>{r.status}</Badge>
-            </li>
-          ))}
-        </ul>
-      </Reveal>
-    </section>
-  );
-}
-
-// 17.3 深色卡：反色通知列表
-function StackedListDarkExample() {
-  const rows = [
-    { text: "新评论：李雷 评审了 Button 组件", time: "10:24" },
-    { text: "版本 v1.5.0 发布流程已开始", time: "08:00" },
-    { text: "系统备份完成", time: "昨天" },
-  ];
-  return (
-    <section className="example-canvas">
-      <Reveal>
-        <ul className="divide-y divide-background/15 rounded-md bg-foreground text-background">
-          {rows.map((r) => (
-            <li
-              key={r.text}
-              className="flex items-center justify-between gap-3 px-4 py-3 text-sm"
-            >
-              <span className="flex min-w-0 items-center gap-3">
-                <Bell className="size-4 shrink-0" />
-                <span className="truncate">{r.text}</span>
-              </span>
-              <span className="shrink-0 text-xs text-background/60">
-                {r.time}
-              </span>
             </li>
           ))}
         </ul>
@@ -2997,34 +3017,6 @@ function StatsTrendingExample() {
               </CardContent>
             </Card>
           ))}
-        </div>
-      </Reveal>
-    </section>
-  );
-}
-
-// 18.2 深色简版：深底面板多列大数字
-function StatsDarkExample() {
-  const stats: [string, string][] = [
-    ["构建次数", "405"],
-    ["平均构建时长", "3.65 分"],
-    ["服务数量", "3"],
-    ["成功率", "98.5%"],
-  ];
-  return (
-    <section className="example-canvas">
-      <Reveal>
-        <div className="rounded-lg bg-foreground p-5 text-background">
-          <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {stats.map(([k, v]) => (
-              <div key={k}>
-                <div className="text-xs text-background/60">{k}</div>
-                <div className="mt-1 text-2xl font-semibold tabular-nums">
-                  {v}
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </Reveal>
     </section>
@@ -4054,29 +4046,6 @@ export const pageExamples: PageExample[] = [
     Comp: DescListCardExample,
   },
   {
-    id: "desc-list-dark",
-    title: "描述列表 · 深色卡",
-    nameEn: "Dark Card",
-    desc: "深底反色版两列 dl",
-    usage: "深色主题区块、强调性详情面板",
-    keywords:
-      "description list 描述列表 深色 dark 反色 键值 详情 强调",
-    prompt: `请生成一个「深色卡描述列表」组件，技术栈 React + Tailwind CSS。
-
-使用场景：详情面板的强调版本，如摘要卡、深色主题区块。
-
-样式（桌面 ≥1024px）：
-- 深色实底卡片：bg-foreground 搭配 text-background（前景背景互为反色，明暗主题下对比度天然达标）。
-- 内部结构同左对齐版：标题 + 说明（text-background/60）+ dl 两列网格（dt 用 text-background/60，dd font-medium）。
-
-样式约束：只用 bg-foreground / text-background 及其透明度变体；无衬线系统字体。
-
-响应式：移动端 dl 改上下两行。
-
-数据为静态文案。输出完整可运行组件。`,
-    Comp: DescListDarkExample,
-  },
-  {
     id: "desc-list-columns",
     title: "描述列表 · 双栏",
     nameEn: "Two Columns",
@@ -4195,29 +4164,6 @@ export const pageExamples: PageExample[] = [
     Comp: StackedListStatusExample,
   },
   {
-    id: "stacked-list-dark",
-    title: "堆叠列表 · 深色卡",
-    nameEn: "Dark Card",
-    desc: "深底反色通知列表",
-    usage: "深色区块、系统通知中心",
-    keywords:
-      "stacked list 堆叠列表 深色 dark 反色 通知 中心 系统",
-    prompt: `请生成一个「深色堆叠列表」组件，技术栈 React + Tailwind CSS。
-
-使用场景：系统通知中心的深色区块版本，整体嵌入深色面板或需要强烈对比的场景。
-
-样式（桌面 ≥1024px）：
-- 深色实底容器（bg-foreground + text-background 反色对）+ 行间分隔线（divide-background/15）。
-- 每行：左侧 Bell 图标 + 一条通知文字（truncate）+ 行尾 muted 时间（text-background/60）。
-
-样式约束：只用 bg-foreground / text-background 及其透明度变体；无衬线系统字体。
-
-响应式：移动端长文本截断，时间保留。
-
-数据为静态文案。输出完整可运行组件。`,
-    Comp: StackedListDarkExample,
-  },
-  {
     id: "stacked-list-header",
     title: "堆叠列表 · 带列头",
     nameEn: "With Header",
@@ -4262,29 +4208,6 @@ export const pageExamples: PageExample[] = [
 
 数据为静态文案。输出完整可运行组件。`,
     Comp: StatsTrendingExample,
-  },
-  {
-    id: "stats-dark",
-    title: "统计 · 深色简版",
-    nameEn: "Simple Dark",
-    desc: "深底面板内多列大数字",
-    usage: "深色区块、构建信息、系统面板",
-    keywords:
-      "stats 统计 深色 dark 大数字 面板 部署 构建 系统",
-    prompt: `请生成一个「深色简版统计」组件，技术栈 React + Tailwind CSS。
-
-使用场景：深色面板内的关键数字陈列，如构建信息、系统运行概况。
-
-样式（桌面 ≥1024px）：
-- 深色实底面板：bg-foreground 搭配 text-background（反色对）。
-- 内部 4 列网格（移动 2 列）：每项 = muted 小字标签（text-background/60，如「构建次数」）+ 大号数字（text-2xl font-semibold tabular-nums，如 405 / 3.65 分 / 98.5%）。
-
-样式约束：只用 bg-foreground / text-background 及其透明度变体；无涨跌色。
-
-响应式：桌面 4 列、移动 2 列。
-
-数据为静态文案。输出完整可运行组件。`,
-    Comp: StatsDarkExample,
   },
   {
     id: "stats-cards",
@@ -4442,6 +4365,14 @@ export const exampleCatMeta = {
   activity: "动态流",
 } as const;
 
+export const exampleCatDesc: Record<(typeof exampleCatOrder)[number], string> = {
+  shell: "完整页面的整体布局参考：后台、IDE、表单页、数据页等骨架。先看这个，确定你的产品长什么样。",
+  feedback: "各种提示、加载、空状态、操作结果的页面示例。学怎么给用户「刚刚发生了什么」的反馈。",
+  lists: "表格、卡片列表、树形、看板等以「罗列内容」为主的页面。信息密度高时照这个排。",
+  metrics: "仪表盘、数据概览、图表汇总类页面。需要一眼掌握关键数字时参考。",
+  activity: "时间线、动态、通知、消息流这类「按时间滚动」的页面。做社区、工作台、日志时看这里。",
+};
+
 export const exampleCatOrder = [
   "shell",
   "feedback",
@@ -4449,6 +4380,9 @@ export const exampleCatOrder = [
   "metrics",
   "activity",
 ] as const;
+
+// 应用骨架分类中，三种布局总览要排在最前面。
+export const shellOverviewOrder = ["stacked", "sidebar", "multi-column"];
 
 // 每个示例所属分类（示例 id → 分类 key）。新增示例在此登记即进入对应分组。
 export const exampleCatMap: Record<
@@ -4484,16 +4418,13 @@ export const exampleCatMap: Record<
   "empty-grid": "feedback",
   "desc-list": "lists",
   "desc-list-card": "lists",
-  "desc-list-dark": "lists",
   "desc-list-columns": "lists",
   "desc-list-row": "lists",
   "desc-list-status": "lists",
   "stacked-list": "lists",
   "stacked-list-status": "lists",
-  "stacked-list-dark": "lists",
   "stacked-list-header": "lists",
   stats: "metrics",
-  "stats-dark": "metrics",
   "stats-cards": "metrics",
   "stats-brand": "metrics",
   "stats-borders": "metrics",
@@ -4571,107 +4502,47 @@ function PromptBlock({ prompt }: { prompt: string }) {
 }
 
 export function ExamplesGallery() {
-  const [q, setQ] = React.useState("");
-  const s = q.trim().toLowerCase();
-  const list = s
-    ? pageExamples.filter((e) =>
-        `${e.title} ${e.desc} ${e.keywords} ${e.usage ?? ""} ${e.prompt ?? ""}`
-          .toLowerCase()
-          .includes(s),
-      )
-    : pageExamples;
-
-  const scrollToCat = (cat: string) => {
-    document
-      .getElementById(cat)
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   return (
-    <div className="space-y-8">
-      <div className="flex flex-wrap items-center gap-3">
-        <Input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="搜索页面画廊内容…"
-          className="max-w-xs"
-        />
-        {s && (
-          <span className="text-xs text-muted-foreground">
-            找到 {list.length} 个
-          </span>
-        )}
-      </div>
-
-      {!s && (
-        <div className="flex flex-wrap gap-2">
-          {exampleCatOrder.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => scrollToCat(cat)}
-              className="rounded-full border bg-muted/30 px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            >
-              {exampleCatMeta[cat]}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {list.length === 0 && (
-        <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-          未找到与「{q}」匹配的示例。
-        </p>
-      )}
-
-      {s ? (
-        <div className="space-y-10">
-          {list.map((e) => (
-            <ExampleSection key={e.id} e={e} />
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-12">
-          {exampleCatOrder.map((cat) => {
-            const items = pageExamples.filter((e) => exampleCatMap[e.id] === cat);
-            // 「应用骨架」以三种布局总览（侧边栏 / 多栏 / 堆叠）打头，其下再列组件示例
-            if (cat === "shell") {
-              const overview = ["sidebar", "multi-column", "stacked"];
-              items.sort((a, b) => {
-                const ia = overview.indexOf(a.id);
-                const ib = overview.indexOf(b.id);
-                if (ia !== -1 && ib !== -1) return ia - ib;
-                if (ia !== -1) return -1;
-                if (ib !== -1) return 1;
-                return 0;
-              });
-            }
-            if (!items.length) return null;
-            return (
-              <section
-                key={cat}
-                id={cat}
-                data-spy-group={cat}
-                className="scroll-anchor space-y-6"
-              >
-                <div className="flex items-baseline justify-between border-b pb-2">
-                  <h2 className="text-xl font-semibold tracking-tight">
-                    {exampleCatMeta[cat]}
-                  </h2>
-                  <span className="text-xs text-muted-foreground">
-                    {items.length} 个
-                  </span>
-                </div>
-                <div className="space-y-10">
-                  {items.map((e) => (
-                    <ExampleSection key={e.id} e={e} />
-                  ))}
-                </div>
-              </section>
-            );
-          })}
-        </div>
-      )}
+    <div className="space-y-12">
+      {exampleCatOrder.map((cat) => {
+        const items = pageExamples.filter((e) => exampleCatMap[e.id] === cat);
+        // 「应用骨架」以三种布局总览（堆叠 / 侧边栏 / 多栏）打头，其下再列组件示例
+        if (cat === "shell") {
+          const overview = shellOverviewOrder;
+          items.sort((a, b) => {
+            const ia = overview.indexOf(a.id);
+            const ib = overview.indexOf(b.id);
+            if (ia !== -1 && ib !== -1) return ia - ib;
+            if (ia !== -1) return -1;
+            if (ib !== -1) return 1;
+            return 0;
+          });
+        }
+        if (!items.length) return null;
+        return (
+          <section
+            key={cat}
+            id={cat}
+            data-spy-group={cat}
+            className="scroll-anchor space-y-6"
+          >
+            <div className="flex items-baseline justify-between border-b pb-2">
+              <h2 className="text-xl font-semibold tracking-tight">
+                {exampleCatMeta[cat]}
+              </h2>
+              <span className="text-xs text-muted-foreground">
+                {items.length} 个
+              </span>
+            </div>
+            <p className="text-sm text-muted-foreground pt-1">{exampleCatDesc[cat]}</p>
+            <div className="space-y-10">
+              {items.map((e) => (
+                <ExampleSection key={e.id} e={e} />
+              ))}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }

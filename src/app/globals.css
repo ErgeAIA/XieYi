@@ -373,6 +373,43 @@ html[data-motion="off"] .copy-block {
   scrollbar-color: color-mix(in srgb, var(--foreground) 14%, transparent) transparent;
 }
 
+/* 全局默认滚动条：统一给所有 overflow 容器和页面主体一套细窄、主题色的滚动条，
+   避免原生滚动条在不同区块跳出深色/浅色反差（受总开关门控）。
+   aside 与 .copy-block 用更具体的选择器保留自定义 hover / gutter。 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 22%, transparent)
+    color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--foreground) 22%, transparent);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--primary) 45%, transparent);
+  background-clip: padding-box;
+}
+html[data-motion="off"] * {
+  scrollbar-color: color-mix(in srgb, var(--foreground) 14%, transparent) transparent;
+}
+
+/* 显式隐藏滚动条的辅助类（如 Command 列表）。 */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* 首页 hero「写意」：逐字墨晕入场（放慢到 1.5s，blur→清晰、上移、淡入，错峰）
    + 持续轻柔浮动「呼吸」+ 悬停笔锋回应（轻微放大/微旋）。
    受总开关（html[data-motion="off"]）与 prefers-reduced-motion 门控；关闭时两字静态可见。

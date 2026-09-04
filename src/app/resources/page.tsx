@@ -6,6 +6,7 @@ import {
   resources,
   resourceCategories,
   resourceCategoryMeta,
+  resourceCategoryDesc,
   resourceId,
 } from "@/content/resources";
 
@@ -34,6 +35,7 @@ export default function ResourcesPage() {
                 · {resourceCategoryMeta[cat]}
               </span>
             </GroupLabel>
+            <p className="text-sm text-muted-foreground">{resourceCategoryDesc[cat]}</p>
             <div className="grid gap-3 sm:grid-cols-2">
               {items.map((r, i) => (
                 <Reveal key={r.name} delay={i * 60}>

@@ -554,6 +554,18 @@ export const componentCategoryMeta: Record<ComponentCategory, string> = {
   "extra": "扩展"
 };
 
+export const componentCategoryDesc: Record<ComponentCategory, string> = {
+  "layout": "决定页面骨架和内容排布的基础组件：卡片、分隔线、侧边栏、标签页等。先搭好结构，再往里填东西。",
+  "form": "收集用户输入的组件：按钮、输入框、下拉、开关等。凡是让用户「填东西、做选择」都归这一类。",
+  "navigation": "帮用户在页面间或页面内移动的组件：菜单、面包屑、分页、步骤条。解决「怎么去到想去的地方」。",
+  "display": "把数据清晰呈现出来的组件：表格、列表、徽章、头像、标签。核心是「看得清、不费脑」。",
+  "feedback": "告诉用户「发生了什么」的组件：提示框、加载、进度条、空态。让操作有回应，减少不确定感。",
+  "overlay": "临时盖在页面之上、不打断主流程的组件：弹窗、抽屉、下拉菜单、悬浮卡。用于次要或情境化操作。",
+  "charts": "把数据画成图形的组件：折线、柱状、饼图等。适合需要一眼看出趋势和对比的场景。",
+  "chat": "聊天气泡、输入区等对话界面组件。做 AI 助手、客服这类产品时直接套用。",
+  "extra": "以上分类装不下的进阶组件：上传、日历、命令面板等。按需取用，不必全记。",
+};
+
 export const componentCategories: ComponentCategory[] = [
   "layout",
   "form",

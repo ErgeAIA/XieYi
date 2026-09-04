@@ -21,7 +21,10 @@ export default async function ComponentsPage({
 
   return (
     <PageContainer>
-      <PageHeader title="前端组件" />
+      <PageHeader
+        title="前端组件"
+        description="67 个 shadcn/ui 组件，按 9 大类拆解，每个都配使用场景与可交互示例。"
+      />
       <ComponentsView initialCat={initial} />
     </PageContainer>
   );

@@ -40,6 +40,16 @@ export const resourceCategoryMeta: Record<ResourceCategory, string> = {
   社区: "社区与源码",
 };
 
+export const resourceCategoryDesc: Record<ResourceCategory, string> = {
+  组件库: "别人已经做好的组件直接拿来用，省去从零造轮子。做页面时对照这里挑组件，再告诉 AI 用哪个。",
+  设计系统: "更底层的样式规范与无样式原语。想深度定制外观或保证一致性时，从这里打地基。",
+  图标库: "统一风格的界面图标集合。需要画「搜索、设置、删除」这类小图标时直接查。",
+  "AI 工具": "用 AI 生成界面、写代码、做可视化的工具。想更快出活，从这里找加速器。",
+  动画组件: "带过渡和动效的进阶组件。等基础页面成型后，可参考这里做视觉升级。",
+  学习资料: "官方文档与系统教程。遇到不会的概念，先来这里看权威说明。",
+  社区: "活跃的开源社区与源码仓库。卡住时来搜 issue、看别人怎么用。",
+};
+
 export const resources: ResourceItem[] = [
   // 组件库
   {
