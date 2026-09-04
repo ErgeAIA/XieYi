@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   componentCategories,
   componentCategoryMeta,
+  componentCategoryMetaEn,
   componentCategoryDesc,
   componentsByCategory,
   components,
@@ -163,6 +164,9 @@ export function ComponentsView({
           >
             <SectionTitle>
               {componentCategoryMeta[cat]}
+              <span className="ml-2 text-xs font-normal text-muted-foreground">
+                {componentCategoryMetaEn[cat]}
+              </span>
               <span className="ml-2 text-xs font-normal text-muted-foreground">
                 {items.length} 个
               </span>

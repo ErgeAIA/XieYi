@@ -527,6 +527,12 @@ export const conceptGroupMeta: Record<ConceptGroup, string> = {
   "web": "Web 基础"
 };
 
+export const conceptGroupMetaEn: Record<ConceptGroup, string> = {
+  "ai": "AI General",
+  "dev": "Engineering",
+  "web": "Web Basics",
+};
+
 export const conceptGroupDesc: Record<ConceptGroup, string> = {
   "ai": "围绕「AI 怎么听懂你的话、怎么和你协作」的通用概念。先把提示词、上下文、智能体这些词讲透，后面让 AI 干活时才不会各说各话。",
   "dev": "写代码本身涉及的概念：从需求到上线的流程、构建与测试、状态怎么管。不懂这些，AI 生成的代码你很可能看不懂也接不住。",

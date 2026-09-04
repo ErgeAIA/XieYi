@@ -22,6 +22,7 @@ export default function FrameworksPage() {
     <PageContainer>
       <PageHeader
         title="框架"
+        en="Frameworks"
         description="主流前端、全栈、后端、边缘与 AI 框架一览，标注形态、AI 友好度与常见坑，辅助选型与避坑。"
       />
 

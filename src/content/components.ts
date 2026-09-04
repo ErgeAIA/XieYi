@@ -554,6 +554,18 @@ export const componentCategoryMeta: Record<ComponentCategory, string> = {
   "extra": "扩展"
 };
 
+export const componentCategoryMetaEn: Record<ComponentCategory, string> = {
+  "layout": "Layout",
+  "form": "Form",
+  "navigation": "Navigation",
+  "display": "Data Display",
+  "feedback": "Feedback",
+  "overlay": "Overlay",
+  "charts": "Charts",
+  "chat": "Chat",
+  "extra": "Extended",
+};
+
 export const componentCategoryDesc: Record<ComponentCategory, string> = {
   "layout": "决定页面骨架和内容排布的基础组件：卡片、分隔线、侧边栏、标签页等。先搭好结构，再往里填东西。",
   "form": "收集用户输入的组件：按钮、输入框、下拉、开关等。凡是让用户「填东西、做选择」都归这一类。",

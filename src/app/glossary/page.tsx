@@ -20,6 +20,7 @@ export default function GlossaryPage() {
     <PageContainer>
       <PageHeader
         title="词典"
+        en="Glossary"
         description="不知道想要的效果叫什么？先搜再抄提示词。每个词都告诉你它是什么、加上能看到什么，以及怎么把这句话直接交给 AI。"
       />
 

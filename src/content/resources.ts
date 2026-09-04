@@ -40,6 +40,16 @@ export const resourceCategoryMeta: Record<ResourceCategory, string> = {
   社区: "社区与源码",
 };
 
+export const resourceCategoryMetaEn: Record<ResourceCategory, string> = {
+  组件库: "Component Libraries",
+  设计系统: "Design Systems",
+  图标库: "Icon Libraries",
+  "AI 工具": "AI Tools",
+  动画组件: "Animation",
+  学习资料: "Learning",
+  社区: "Community",
+};
+
 export const resourceCategoryDesc: Record<ResourceCategory, string> = {
   组件库: "别人已经做好的组件直接拿来用，省去从零造轮子。做页面时对照这里挑组件，再告诉 AI 用哪个。",
   设计系统: "更底层的样式规范与无样式原语。想深度定制外观或保证一致性时，从这里打地基。",

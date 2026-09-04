@@ -13,6 +13,7 @@ import {
   promptLibrary,
   promptCategoryOrder,
   promptCategoryMeta,
+  promptCategoryMetaEn,
   promptCategoryDesc,
   type PromptLibraryItem,
 } from "@/content/prompt-library";
@@ -22,6 +23,7 @@ export default function PromptsPage() {
     <PageContainer>
       <PageHeader
         title="提示词指南"
+        en="Prompt Guide"
         description="收录 Claude Code 官方 52 条提示词，按场景分类，可直接复制进 Claude Code 使用。"
       />
 
@@ -30,7 +32,12 @@ export default function PromptsPage() {
         if (items.length === 0) return null;
         return (
           <section key={c} className="space-y-3">
-            <GroupLabel>{promptCategoryMeta[c]}</GroupLabel>
+            <GroupLabel>
+              {promptCategoryMeta[c]}
+              <span className="ml-2 text-xs font-normal text-muted-foreground">
+                {promptCategoryMetaEn[c]}
+              </span>
+            </GroupLabel>
             <p className="text-sm text-muted-foreground">{promptCategoryDesc[c]}</p>
             <div className="columns-1 gap-3 sm:columns-2">
               {items.map((p, i) => (

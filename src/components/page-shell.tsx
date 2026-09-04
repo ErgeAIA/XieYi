@@ -35,11 +35,13 @@ export function PageContainer({
 /** 页面级标题区：标题 + 可选描述 + 可选操作区（如搜索框）。 */
 export function PageHeader({
   title,
+  en,
   description,
   actions,
   className,
 }: {
   title: string;
+  en?: string;
   description?: React.ReactNode;
   actions?: React.ReactNode;
   className?: string;
@@ -54,6 +56,11 @@ export function PageHeader({
       <div className="space-y-2">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
           {title}
+          {en ? (
+            <span className="ml-2 text-xs font-normal text-muted-foreground">
+              {en}
+            </span>
+          ) : null}
         </h1>
         {description ? (
           <p className="max-w-2xl text-sm text-muted-foreground">{description}</p>

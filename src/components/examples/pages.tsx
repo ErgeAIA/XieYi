@@ -4365,6 +4365,14 @@ export const exampleCatMeta = {
   activity: "动态流",
 } as const;
 
+export const exampleCatMetaEn: Record<(typeof exampleCatOrder)[number], string> = {
+  shell: "Application Shell",
+  feedback: "Feedback & Alerts",
+  lists: "Lists & Data",
+  metrics: "Metrics",
+  activity: "Activity",
+};
+
 export const exampleCatDesc: Record<(typeof exampleCatOrder)[number], string> = {
   shell: "完整页面的整体布局参考：后台、IDE、表单页、数据页等骨架。先看这个，确定你的产品长什么样。",
   feedback: "各种提示、加载、空状态、操作结果的页面示例。学怎么给用户「刚刚发生了什么」的反馈。",
@@ -4529,6 +4537,9 @@ export function ExamplesGallery() {
             <div className="flex items-baseline justify-between border-b pb-2">
               <h2 className="text-xl font-semibold tracking-tight">
                 {exampleCatMeta[cat]}
+                <span className="ml-2 text-xs font-normal text-muted-foreground">
+                  {exampleCatMetaEn[cat]}
+                </span>
               </h2>
               <span className="text-xs text-muted-foreground">
                 {items.length} 个

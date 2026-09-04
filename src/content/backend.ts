@@ -1,12 +1,23 @@
 // 后端相关：对前后端不熟时，用准确术语和 AI 对齐后端概念，让它生成对的代码。
+export type BackendTopicId = "api" | "database" | "auth" | "deploy" | "cache" | "storage";
+
 export interface BackendTopic {
-  id: string;
+  id: BackendTopicId;
   name: string;
   note: string;
   explain: string;
   terms: string[];
   examplePrompt: string;
 }
+
+export const backendTopicMetaEn: Record<BackendTopicId, string> = {
+  api: "API",
+  database: "Database",
+  auth: "Auth",
+  deploy: "Deployment",
+  cache: "Cache",
+  storage: "File Storage",
+};
 
 export const backendTopics: BackendTopic[] = [
   {

@@ -55,6 +55,24 @@ export const promptCategoryMeta: Record<PromptCategory, string> = {
   "自动化": "把重复动作沉淀为技能 / 钩子",
 };
 
+export const promptCategoryMetaEn: Record<PromptCategory, string> = {
+  "入门": "Getting Started",
+  "理解": "Understanding",
+  "计划": "Planning",
+  "原型": "Prototyping",
+  "实现": "Implementation",
+  "测试": "Testing",
+  "重构": "Refactoring",
+  "审查": "Review",
+  "引导": "Guidance",
+  "Git": "Git",
+  "发布": "Release",
+  "调试": "Debugging",
+  "事件": "Incident",
+  "数据": "Data",
+  "自动化": "Automation",
+};
+
 export const promptCategoryDesc: Record<PromptCategory, string> = {
   "入门": "刚拿到一个陌生代码库，先别急着改。用这几条让 AI 带你摸清架构、关键目录和模块关系，建立全局认知再动手。",
   "理解": "遇到看不懂的代码或拿不准的改动，让 AI 解释原理、梳理调用链、评估影响范围，避免瞎改引出新 bug。",

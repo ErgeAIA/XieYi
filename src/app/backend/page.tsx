@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
 import { PageContainer, PageHeader, FieldLabel } from "@/components/page-shell";
 import { CopyBlock } from "@/components/copy-block";
-import { backendTopics } from "@/content/backend";
+import { backendTopics, backendTopicMetaEn } from "@/content/backend";
 
 export const metadata: Metadata = {
   title: "后端相关 · 写意",
@@ -16,6 +16,7 @@ export default function BackendPage() {
     <PageContainer>
       <PageHeader
         title="后端相关"
+        en="Backend"
         description="对前后端不熟时，用准确术语和 AI 对齐后端概念，让它生成对的代码。"
       />
 
@@ -32,6 +33,9 @@ export default function BackendPage() {
               <CardHeader className="pb-2">
                 <CardTitle className="text-base">
                   {t.name}
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    {backendTopicMetaEn[t.id]}
+                  </span>
                   <span className="ml-2 text-xs font-normal text-muted-foreground">
                     {t.note}
                   </span>

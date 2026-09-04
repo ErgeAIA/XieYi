@@ -5,76 +5,32 @@ import { usePathname } from "next/navigation";
 import {
   componentCategories,
   componentCategoryMeta,
+  componentCategoryMetaEn,
   componentsByCategory,
   type ComponentCategory,
 } from "@/content/components";
-import { concepts, conceptGroups, conceptGroupMeta } from "@/content/concepts";
-import type { ConceptGroup } from "@/content/types";
+import { concepts, conceptGroups, conceptGroupMeta, conceptGroupMetaEn } from "@/content/concepts";
 import { promptLibrary } from "@/content/prompt-library";
 import {
   resources,
   resourceCategories,
+  resourceCategoryMetaEn,
   resourceId,
-  type ResourceCategory,
 } from "@/content/resources";
-import { backendTopics } from "@/content/backend";
+import { backendTopics, backendTopicMetaEn } from "@/content/backend";
 import {
   pageExamples,
   exampleCatMeta,
+  exampleCatMetaEn,
   exampleCatOrder,
   exampleCatMap,
   shellOverviewOrder,
 } from "@/components/examples/pages";
 import { useScrollSpy } from "@/components/scroll-spy";
 import { useNavSpy } from "@/components/nav-spy";
-import { frameworks, frameworkGroups, frameworkGroupMeta, frameworkGroupMetaEn, type FrameworkGroup } from "@/content/frameworks";
+import { frameworks, frameworkGroups, frameworkGroupMeta, frameworkGroupMetaEn } from "@/content/frameworks";
 import { glossary, glossaryCategoryOrder, glossaryCategoryMeta } from "@/content/glossary";
 import { TreeMenu, type TreeNode } from "@/components/sidebar-tree";
-
-const CATEGORY_EN: Record<ComponentCategory, string> = {
-  layout: "Layout",
-  form: "Form",
-  navigation: "Navigation",
-  display: "Data Display",
-  feedback: "Feedback",
-  overlay: "Overlay",
-  charts: "Charts",
-  chat: "Chat",
-  extra: "Extended",
-};
-
-const CONCEPT_GROUP_EN: Record<ConceptGroup, string> = {
-  ai: "AI General",
-  dev: "Engineering",
-  web: "Web Basics",
-};
-
-const EXAMPLE_CAT_EN: Record<string, string> = {
-  shell: "Application Shell",
-  feedback: "Feedback & Alerts",
-  lists: "Lists & Data",
-  metrics: "Metrics",
-  activity: "Activity",
-};
-
-const RESOURCE_CAT_EN: Record<ResourceCategory, string> = {
-  组件库: "Component Libraries",
-  设计系统: "Design Systems",
-  图标库: "Icon Libraries",
-  "AI 工具": "AI Tools",
-  动画组件: "Animation",
-  学习资料: "Learning",
-  社区: "Community",
-};
-
-const BACKEND_EN: Record<string, string> = {
-  api: "API",
-  database: "Database",
-  auth: "Auth",
-  deploy: "Deployment",
-  cache: "Cache",
-  storage: "File Storage",
-};
 
 export function SidebarNav() {
   const pathname = usePathname();
@@ -96,7 +52,7 @@ export function SidebarNav() {
         children: conceptGroups.map((g) => ({
           id: g,
           label: conceptGroupMeta[g],
-          en: CONCEPT_GROUP_EN[g],
+          en: conceptGroupMetaEn[g],
           route: "/concepts",
           href: `/concepts#${g}`,
           spyGroup: g,
@@ -146,7 +102,7 @@ export function SidebarNav() {
           return {
             id: cat,
             label: exampleCatMeta[cat],
-            en: EXAMPLE_CAT_EN[cat],
+            en: exampleCatMetaEn[cat],
             route: "/examples",
             href: `/examples#${cat}`,
             spyGroup: cat,
@@ -219,7 +175,7 @@ export function SidebarNav() {
         children: componentCategories.map((cat) => ({
           id: cat,
           label: componentCategoryMeta[cat],
-          en: CATEGORY_EN[cat],
+          en: componentCategoryMetaEn[cat],
           route: "/components",
           href: `/components?cat=${cat}`,
           spyGroup: cat,
@@ -244,7 +200,7 @@ export function SidebarNav() {
         children: backendTopics.map((t) => ({
           id: t.id,
           label: t.name,
-          en: BACKEND_EN[t.id],
+          en: backendTopicMetaEn[t.id],
           route: "/backend",
           href: `/backend#${t.id}`,
           spyGroup: t.id,
@@ -260,7 +216,7 @@ export function SidebarNav() {
         children: resourceCategories.map((cat) => ({
           id: cat,
           label: cat,
-          en: RESOURCE_CAT_EN[cat],
+          en: resourceCategoryMetaEn[cat],
           route: "/resources",
           href: `/resources#${cat}`,
           spyGroup: cat,

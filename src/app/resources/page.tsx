@@ -5,7 +5,7 @@ import { PageContainer, PageHeader, GroupLabel } from "@/components/page-shell";
 import {
   resources,
   resourceCategories,
-  resourceCategoryMeta,
+  resourceCategoryMetaEn,
   resourceCategoryDesc,
   resourceId,
 } from "@/content/resources";
@@ -21,6 +21,7 @@ export default function ResourcesPage() {
     <PageContainer>
       <PageHeader
         title="参考资源"
+        en="Resources"
         description="与 AI 沟通组件或前后端时，可对照这些资源给出更准确的需求。点击名称跳转。"
       />
 
@@ -31,8 +32,8 @@ export default function ResourcesPage() {
           <section key={cat} id={cat} className="scroll-anchor space-y-3">
             <GroupLabel data-spy-group={cat}>
               {cat}
-              <span className="ml-2 font-normal">
-                · {resourceCategoryMeta[cat]}
+              <span className="ml-2 text-xs font-normal text-muted-foreground">
+                {resourceCategoryMetaEn[cat]}
               </span>
             </GroupLabel>
             <p className="text-sm text-muted-foreground">{resourceCategoryDesc[cat]}</p>
