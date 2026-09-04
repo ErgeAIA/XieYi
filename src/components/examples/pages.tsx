@@ -1416,6 +1416,7 @@ function EmptyStatesExample() {
 interface PageExample {
   id: string;
   title: string;
+  nameEn: string;
   desc: string;
   keywords: string;
   Comp: React.ComponentType;
@@ -1427,6 +1428,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "dashboard",
     title: "数据面板",
+    nameEn: "Dashboard",
     desc: "指标卡 + 趋势图 + 动态流",
     usage: "后台首页概览、运营数据周报、个人中心数据墙、SaaS 产品指标页",
     keywords:
@@ -1451,6 +1453,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "ide",
     title: "编辑器布局",
+    nameEn: "IDE",
     desc: "文件树 + 代码区 + 预览三栏",
     usage: "代码编辑器、IDE 工作台、在线预览工具、低代码搭建器",
     keywords: "ide 编辑器 代码 文件树 资源管理器 预览 高亮 终端 布局",
@@ -1474,6 +1477,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "form",
     title: "表单填写页面",
+    nameEn: "Form",
     desc: "输入、文本域、下拉、勾选",
     usage: "新建/编辑表单、用户注册资料、配置创建、反馈收集",
     keywords:
@@ -1498,6 +1502,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "data",
     title: "数据列表管理",
+    nameEn: "Data Table",
     desc: "搜索 + 表格 + 删除确认",
     usage: "后台数据表、用户管理、订单列表、内容审核后台",
     keywords:
@@ -1523,6 +1528,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "auth",
     title: "登录 / 注册页",
+    nameEn: "Auth",
     desc: "Tab 切换的认证卡片",
     usage: "产品登录入口、注册引导、账号密码认证页",
     keywords: "auth 登录 注册 login 认证 账号 密码 邮箱 tab 切换 卡片",
@@ -1546,6 +1552,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "settings",
     title: "设置页",
+    nameEn: "Settings",
     desc: "分组 Tab 与开关项",
     usage: "产品偏好设置、账户设置中心、后台配置页",
     keywords: "settings 设置 偏好 通用 通知 安全 开关 switch 语言 昵称 分组",
@@ -1569,6 +1576,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "kanban",
     title: "看板",
+    nameEn: "Kanban",
     desc: "待办 / 进行中 / 已完成",
     usage: "任务看板、项目管理板、销售漏斗、工作流看板",
     keywords: "kanban 看板 任务 卡片 拖拽 列 待办 进行中 已完成 流程",
@@ -1592,6 +1600,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "todo",
     title: "任务待办",
+    nameEn: "Todo",
     desc: "增删改的清单",
     usage: "个人待办清单、购物清单、每日任务、轻量事项管理",
     keywords: "todo 任务 待办 清单 勾选 添加 删除 完成 列表 增删改",
@@ -1615,6 +1624,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "timeline",
     title: "时间轴",
+    nameEn: "Timeline",
     desc: "垂直时间线",
     usage: "项目进展时间线、版本更新日志、订单流转、个人履历",
     keywords: "timeline 时间轴 时间线 事件 历史 节点 垂直 里程碑 进度",
@@ -1638,6 +1648,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "stacked",
     title: "堆叠布局",
+    nameEn: "Stacked",
     desc: "顶部栏 + 居中窄栏堆叠的详情页",
     usage: "应用主框架、资源详情页、组件详情、项目概览、工单 / 订单详情",
     keywords: "stacked 堆叠 布局 详情页 detail 应用壳 顶栏 窄栏 描述列表 动态 feed",
@@ -1663,6 +1674,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "sidebar",
     title: "侧边栏布局",
+    nameEn: "Sidebar",
     desc: "左侧分组导航 + 顶栏 + 内容区",
     usage: "管理后台、桌面应用框架、组件管理系统、文档控制台、工作台",
     keywords:
@@ -1686,6 +1698,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "multi-column",
     title: "多栏布局",
+    nameEn: "Multi-column",
     desc: "左导航 + 中列表 + 右详情的三栏联动",
     usage: "邮件收件箱、消息中心、工单系统、项目管理工具、文件管理器",
     keywords:
@@ -1710,6 +1723,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "headings",
     title: "标题",
+    nameEn: "Headings",
     desc: "页面 / 卡片 / 章节三级标题",
     usage: "页面排版规范、组件文档、设置分组标题、表单区块标题、内容层级示范",
     keywords: "heading 标题 页面标题 卡片标题 章节标题 排版 typography 层级 h1 h2 h3",
@@ -1733,6 +1747,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "alerts",
     title: "警报",
+    nameEn: "Alerts",
     desc: "带描述 / 列表 / 操作 / 链接 / 强调边框 / 关闭",
     usage: "表单提交反馈、系统通知横幅、操作成功提示、错误告警、引导性提示、全局消息",
     keywords: "alert 警报 提示 通知 警告 错误 成功 横幅 banner 描述 列表 操作 关闭 强调边框",
@@ -1759,6 +1774,7 @@ export const pageExamples: PageExample[] = [
   {
     id: "empty",
     title: "空状态",
+    nameEn: "Empty States",
     desc: "图标 + 标题 + 描述 + 操作",
     usage: "无数据占位、搜索无结果、引导新建、列表空白、首次使用引导",
     keywords: "empty 空状态 无数据 占位 引导 新建 搜索无结果 空 图标",
@@ -1859,7 +1875,12 @@ export function ExamplesGallery() {
               className="scroll-anchor space-y-3"
             >
               <div>
-                <h2 className="text-lg font-medium">{e.title}</h2>
+                <h2 className="text-lg font-medium">
+                  {e.title}
+                  <span className="ml-2 font-mono text-sm font-normal text-muted-foreground/60">
+                    {e.nameEn}
+                  </span>
+                </h2>
                 <p className="text-sm text-muted-foreground">{e.desc}</p>
                 {e.usage && (
                   <div className="mt-2 flex flex-wrap gap-1.5">

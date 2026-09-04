@@ -85,6 +85,7 @@ export function SidebarNav() {
         children: pageExamples.map((e) => ({
           id: e.id,
           label: e.title,
+          en: e.nameEn,
           route: "/examples",
           href: `/examples#${e.id}`,
           spyGroup: e.id,
