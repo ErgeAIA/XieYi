@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <g fill="#ff6a2b">
+    <!-- 左花括号 { -->
+    <path d="M36 22 C18 18 4 28 10 42 C13 49 13 51 10 58 C4 72 18 82 36 78"
+          stroke="#ff6a2b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <!-- 毛笔 X -->
+    <path d="M40 34 L46 34 L60 66 L54 66 Z" />
+    <path d="M60 34 L54 34 L40 66 L46 66 Z" />
+    <!-- 右花括号 } -->
+    <path d="M64 22 C82 18 96 28 90 42 C87 49 87 51 90 58 C96 72 82 82 64 78"
+          stroke="#ff6a2b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  </g>
+</svg>
