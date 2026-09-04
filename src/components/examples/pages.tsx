@@ -639,11 +639,15 @@ function TimelineExample() {
 
 function StackedExample() {
   const navItems = ["首页", "组件", "示例", "提示词库"];
-  const meta: [string, string][] = [
-    ["版本", "v1.4.0"],
-    ["作者", "李雷"],
-    ["最后更新", "2 小时前"],
-    ["依赖", "@base-ui/react"],
+  const meta: { label: string; value: string; href?: string }[] = [
+    { label: "版本", value: "v1.4.0" },
+    {
+      label: "作者",
+      value: "B站·宝藏二哥AIA",
+      href: "https://space.bilibili.com/67221461",
+    },
+    { label: "最后更新", value: "2 小时前" },
+    { label: "依赖", value: "@base-ui/react" },
   ];
   const usages = [
     { page: "数据面板", usage: "导出报表", count: 4 },
@@ -709,10 +713,23 @@ function StackedExample() {
 
             {/* 元信息描述列表 */}
             <dl className="grid grid-cols-2 gap-4 rounded-md border bg-muted/20 p-4 sm:grid-cols-4">
-              {meta.map(([k, v]) => (
-                <div key={k}>
-                  <dt className="text-xs text-muted-foreground">{k}</dt>
-                  <dd className="mt-0.5 text-sm font-medium">{v}</dd>
+              {meta.map((m) => (
+                <div key={m.label}>
+                  <dt className="text-xs text-muted-foreground">{m.label}</dt>
+                  <dd className="mt-0.5 text-sm font-medium">
+                    {m.href ? (
+                      <a
+                        href={m.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        {m.value}
+                      </a>
+                    ) : (
+                      m.value
+                    )}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -1214,7 +1231,7 @@ export const pageExamples: PageExample[] = [
 - 顶部应用栏：左侧品牌名，中部横向导航（当前项高亮），右侧用户头像。
 - 下方居中窄栏（max-width 约 768px）竖向堆叠：
   - 抬头区：左侧图标方块 + 眉题（如「组件」）+ 标题（如「Button 按钮」）+ 状态 Badge；右侧操作按钮（次要「复制名称」+ 主色「复制提示词」）。
-  - 元信息条：2–4 列描述列表（版本 / 作者 / 最后更新 / 依赖）。
+  - 元信息条：2–4 列描述列表（版本 / 作者 / 最后更新 / 依赖；作者署名固定为「B站·宝藏二哥AIA」，带链接 https://space.bilibili.com/67221461，新窗口打开）。
   - 左右分栏（左主右辅）：左侧卡片含表格（使用位置：页面 / 用法 / 次数，底部合计行）；右侧窄栏为统计卡（大数字 + 同比变化）与「最近动态」feed（头像 + 文案 + 相对时间），feed 底部输入框可添加备注。
 
 样式约束：
