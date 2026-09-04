@@ -59,6 +59,13 @@ import {
   Search,
   Plus,
   MousePointerClick,
+  LayoutDashboard,
+  TrendingUp,
+  Component,
+  Sparkles,
+  MessagesSquare,
+  BookOpen,
+  Settings,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -822,7 +829,193 @@ function StackedExample() {
   );
 }
 
-/* ---------- 11. 多栏布局（multi-column） ---------- */
+/* ---------- 11. 侧边栏布局（application shell: sidebar） ---------- */
+
+function SidebarExample() {
+  const groups: {
+    title: string;
+    items: {
+      label: string;
+      icon: React.ComponentType<{ className?: string }>;
+      badge?: number;
+    }[];
+  }[] = [
+    {
+      title: "工作台",
+      items: [
+        { label: "概览", icon: LayoutDashboard },
+        { label: "数据分析", icon: TrendingUp },
+      ],
+    },
+    {
+      title: "内容",
+      items: [
+        { label: "组件", icon: Component, badge: 28 },
+        { label: "示例", icon: Sparkles },
+        { label: "提示词库", icon: MessagesSquare, badge: 52 },
+        { label: "资源", icon: BookOpen },
+      ],
+    },
+    { title: "系统", items: [{ label: "设置", icon: Settings }] },
+  ];
+  const [current, setCurrent] = React.useState("概览");
+  const stats = [
+    { label: "组件总数", value: "28" },
+    { label: "本周新增", value: "4" },
+    { label: "待审核", value: "2" },
+  ];
+  const rows = [
+    { name: "Button 按钮", cat: "输入", status: "已发布", updated: "2 小时前" },
+    { name: "Dialog 对话框", cat: "浮层", status: "已发布", updated: "昨天" },
+    { name: "Accordion 手风琴", cat: "导航", status: "审核中", updated: "3 天前" },
+    { name: "Calendar 日历", cat: "数据展示", status: "草稿", updated: "上周" },
+  ];
+  const statusVariant = (s: string) =>
+    s === "已发布" ? "default" : s === "审核中" ? "secondary" : "outline";
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="flex h-[460px] overflow-hidden rounded-md border text-sm">
+          {/* 侧边栏 */}
+          <aside className="hidden w-56 shrink-0 flex-col border-r bg-muted/30 md:flex">
+            <div className="flex items-center justify-between px-4 py-4">
+              <span className="font-semibold">写意</span>
+              <Badge variant="secondary">v1.4</Badge>
+            </div>
+            <nav className="flex-1 space-y-4 overflow-y-auto px-2 pb-2">
+              {groups.map((g) => (
+                <div key={g.title}>
+                  <div className="px-2 pb-1 text-xs font-medium text-muted-foreground">
+                    {g.title}
+                  </div>
+                  <div className="space-y-0.5">
+                    {g.items.map((it) => (
+                      <button
+                        key={it.label}
+                        onClick={() => setCurrent(it.label)}
+                        className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left ${
+                          current === it.label
+                            ? "bg-accent font-medium text-accent-foreground"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        }`}
+                      >
+                        <it.icon className="size-4 shrink-0" />
+                        <span className="flex-1">{it.label}</span>
+                        {it.badge && (
+                          <Badge
+                            variant="secondary"
+                            className="px-1.5 py-0 text-[10px]"
+                          >
+                            {it.badge}
+                          </Badge>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </nav>
+            <div className="flex items-center gap-2 border-t p-3">
+              <Avatar name="二哥" />
+              <div className="min-w-0 flex-1 leading-tight">
+                <div className="truncate font-medium">二哥</div>
+                <div className="truncate text-xs text-muted-foreground">
+                  管理员
+                </div>
+              </div>
+              <Settings className="size-4 shrink-0 text-muted-foreground" />
+            </div>
+          </aside>
+
+          {/* 主区 */}
+          <div className="flex min-w-0 flex-1 flex-col">
+            <header className="flex h-12 shrink-0 items-center gap-3 border-b px-4">
+              <div className="flex items-center gap-1.5 text-xs">
+                <span className="text-muted-foreground">首页</span>
+                <span className="text-muted-foreground">/</span>
+                <span className="font-medium">{current}</span>
+              </div>
+              <div className="ml-auto flex items-center gap-2">
+                <Input placeholder="搜索…" className="h-8 w-36 text-xs" />
+                <button
+                  className="relative text-muted-foreground hover:text-foreground"
+                  aria-label="通知"
+                >
+                  <Bell className="size-4" />
+                  <span className="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-primary" />
+                </button>
+                <Avatar name="二哥" />
+              </div>
+            </header>
+            <div className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-base font-semibold">
+                    {current === "概览" ? "组件管理" : current}
+                  </h4>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    管理写意的组件资产与发布流程
+                  </p>
+                </div>
+                <Button size="sm">
+                  <Plus className="size-4" /> 新建组件
+                </Button>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {stats.map((s) => (
+                  <Card key={s.label}>
+                    <CardHeader className="pb-1">
+                      <CardDescription>{s.label}</CardDescription>
+                      <CardTitle className="text-xl">{s.value}</CardTitle>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">最近组件</CardTitle>
+                  <CardDescription>按更新时间排序</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <table className="w-full text-sm">
+                    <thead className="text-left text-xs text-muted-foreground">
+                      <tr>
+                        <th className="pb-2 font-medium">组件</th>
+                        <th className="pb-2 font-medium">分类</th>
+                        <th className="pb-2 font-medium">状态</th>
+                        <th className="pb-2 text-right font-medium">
+                          更新时间
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((r) => (
+                        <tr key={r.name} className="border-t">
+                          <td className="py-2 font-medium">{r.name}</td>
+                          <td className="py-2 text-muted-foreground">{r.cat}</td>
+                          <td className="py-2">
+                            <Badge variant={statusVariant(r.status)}>
+                              {r.status}
+                            </Badge>
+                          </td>
+                          <td className="py-2 text-right text-muted-foreground">
+                            {r.updated}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+/* ---------- 12. 多栏布局（multi-column） ---------- */
 
 function MultiColumnExample() {
   return (
@@ -868,7 +1061,7 @@ function MultiColumnExample() {
   );
 }
 
-/* ---------- 12. 标题（page / card / section headings） ---------- */
+/* ---------- 13. 标题（page / card / section headings） ---------- */
 
 function HeadingsExample() {
   return (
@@ -895,7 +1088,7 @@ function HeadingsExample() {
   );
 }
 
-/* ---------- 13. 警报（alerts：描述 / 列表 / 操作 / 链接 / 强调边框 / 关闭） ---------- */
+/* ---------- 14. 警报（alerts：描述 / 列表 / 操作 / 链接 / 强调边框 / 关闭） ---------- */
 
 function AlertsExample() {
   const [showDismiss, setShowDismiss] = React.useState(true);
@@ -976,7 +1169,7 @@ function AlertsExample() {
   );
 }
 
-/* ---------- 14. 空状态（empty states） ---------- */
+/* ---------- 15. 空状态（empty states） ---------- */
 
 function EmptyStatesExample() {
   return (
@@ -1243,6 +1436,29 @@ export const pageExamples: PageExample[] = [
 
 数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: StackedExample,
+  },
+  {
+    id: "sidebar",
+    title: "侧边栏布局",
+    desc: "左侧分组导航 + 顶栏 + 内容区",
+    usage: "管理后台、桌面应用框架、组件管理系统、文档控制台、工作台",
+    keywords:
+      "sidebar 侧边栏 布局 应用壳 分组导航 顶栏 面包屑 后台 管理端 工作台 桌面",
+    prompt: `请生成一个「侧边栏布局（Sidebar Layout）」应用框架，技术栈 React + Tailwind CSS。
+
+布局（桌面 ≥768px）：
+- 左侧固定侧栏（宽约 224px）：顶部品牌区（品牌名 + 版本 Badge）；中部竖向分组导航（分组标题用 muted 小字，项含图标 + 名称 + 可选数量 Badge，当前项用 accent 浅底高亮，支持点击切换）；底部用户卡（头像 + 姓名 + 角色 + 设置入口）。
+- 右侧主区竖向堆叠：顶栏（左侧面包屑「首页 / 当前页」，右侧搜索框 + 通知铃铛带小红点 + 头像）；下方滚动内容区：页头（标题随当前导航变化 + 一句描述 + 主色「新建」按钮）、3 列指标卡、含表格的卡片（组件 / 分类 / 状态 Badge / 更新时间）。
+
+样式约束：
+- 仅用 design token 类（bg-background、bg-muted/30、text-muted-foreground、border、bg-accent、text-primary 等），禁止硬编码颜色值。
+- 无衬线系统字体，不引入装饰字体；侧栏与内容区用细边框 + 浅底区分层级。
+
+响应式：
+- <768px 隐藏侧栏（可由按钮唤出抽屉），主区占满全宽。
+
+数据全部用占位 mock，不接后端。输出完整可运行组件。`,
+    Comp: SidebarExample,
   },
   {
     id: "multi-column",
