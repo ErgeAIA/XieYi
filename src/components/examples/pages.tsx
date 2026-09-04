@@ -58,6 +58,7 @@ import {
   Inbox,
   Search,
   Plus,
+  MousePointerClick,
 } from "lucide-react";
 
 function Avatar({ name }: { name: string }) {
@@ -637,44 +638,169 @@ function TimelineExample() {
 /* ---------- 10. 堆叠布局（application shell: stacked） ---------- */
 
 function StackedExample() {
+  const navItems = ["首页", "组件", "示例", "提示词库"];
+  const meta: [string, string][] = [
+    ["版本", "v1.4.0"],
+    ["作者", "李雷"],
+    ["最后更新", "2 小时前"],
+    ["依赖", "@base-ui/react"],
+  ];
+  const usages = [
+    { page: "数据面板", usage: "导出报表", count: 4 },
+    { page: "登录 / 注册页", usage: "登录、注册提交", count: 2 },
+    { page: "设置页", usage: "保存、更新操作", count: 3 },
+    { page: "看板", usage: "添加卡片", count: 3 },
+  ];
+  const total = usages.reduce((s, u) => s + u.count, 0);
+  const [notes, setNotes] = React.useState([
+    { who: "李雷", what: "优化 hover 态过渡曲线", time: "2 小时前" },
+    { who: "韩梅梅", what: "修复暗色下 focus 环不可见", time: "昨天" },
+    { who: "张伟", what: "新增 loading 图标位", time: "3 天前" },
+  ]);
+  const [draft, setDraft] = React.useState("");
+  const addNote = () => {
+    if (!draft.trim()) return;
+    setNotes((p) => [{ who: "我", what: draft.trim(), time: "刚刚" }, ...p]);
+    setDraft("");
+  };
   return (
     <section className="example-canvas">
-      <div className="overflow-hidden rounded-md border">
-        <div className="flex items-center justify-between border-b bg-muted/30 px-4 py-2.5">
-          <span className="text-sm font-medium">写意</span>
-          <nav className="flex gap-3 text-xs text-muted-foreground">
-            <span>首页</span>
-            <span className="text-foreground">项目</span>
-            <span>文档</span>
-          </nav>
-        </div>
-        <div className="space-y-4 p-4">
-          <div>
-            <h3 className="text-lg font-semibold">我的项目</h3>
-            <p className="text-sm text-muted-foreground">
-              共 12 个项目，3 个进行中。
-            </p>
+      <Reveal>
+        <div className="overflow-hidden rounded-md border">
+          {/* 顶部应用栏 */}
+          <div className="flex items-center justify-between gap-3 border-b px-4 py-2.5">
+            <span className="text-sm font-semibold">写意</span>
+            <nav className="flex gap-4 text-xs text-muted-foreground">
+              {navItems.map((n, i) => (
+                <span
+                  key={n}
+                  className={i === 1 ? "font-medium text-foreground" : ""}
+                >
+                  {n}
+                </span>
+              ))}
+            </nav>
+            <Avatar name="李雷" />
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {[
-              ["项目 A", "更新于 2 小时前"],
-              ["项目 B", "更新于昨天"],
-            ].map(([name, time]) => (
-              <div key={name} className="rounded-md border p-3">
-                <div className="text-sm font-medium">{name}</div>
-                <div className="text-xs text-muted-foreground">{time}</div>
+
+          {/* 居中窄栏：竖向堆叠的详情内容 */}
+          <div className="mx-auto max-w-3xl space-y-5 px-4 py-6 sm:px-6">
+            {/* 抬头：标识 + 操作 */}
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-md border bg-muted/30">
+                  <MousePointerClick className="size-5 text-primary" />
+                </span>
+                <div>
+                  <div className="text-xs text-muted-foreground">组件</div>
+                  <div className="mt-0.5 flex items-center gap-2">
+                    <h3 className="text-lg font-semibold">Button 按钮</h3>
+                    <Badge>已发布</Badge>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-          <div className="rounded-md border p-3 text-sm">
-            <div className="font-medium">最近动态</div>
-            <div className="mt-2 space-y-2 text-muted-foreground">
-              <div>李雷 发布了新组件</div>
-              <div>韩梅梅 更新了设置页</div>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline">
+                  复制名称
+                </Button>
+                <Button size="sm">复制提示词</Button>
+              </div>
+            </div>
+
+            {/* 元信息描述列表 */}
+            <dl className="grid grid-cols-2 gap-4 rounded-md border bg-muted/20 p-4 sm:grid-cols-4">
+              {meta.map(([k, v]) => (
+                <div key={k}>
+                  <dt className="text-xs text-muted-foreground">{k}</dt>
+                  <dd className="mt-0.5 text-sm font-medium">{v}</dd>
+                </div>
+              ))}
+            </dl>
+
+            {/* 左主栏表格 + 右侧栏统计与动态 */}
+            <div className="grid items-start gap-4 lg:grid-cols-[1fr_230px]">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">使用位置</CardTitle>
+                  <CardDescription>该按钮在示例站点各页面的分布</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <table className="w-full text-sm">
+                    <thead className="text-left text-xs text-muted-foreground">
+                      <tr>
+                        <th className="pb-2 font-medium">页面</th>
+                        <th className="pb-2 font-medium">用法</th>
+                        <th className="pb-2 text-right font-medium">次数</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {usages.map((u) => (
+                        <tr key={u.page} className="border-t">
+                          <td className="py-2">{u.page}</td>
+                          <td className="py-2 text-muted-foreground">{u.usage}</td>
+                          <td className="py-2 text-right">{u.count}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot>
+                      <tr className="border-t font-medium">
+                        <td className="pt-2" colSpan={2}>
+                          合计
+                        </td>
+                        <td className="pt-2 text-right">{total}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </CardContent>
+              </Card>
+
+              <div className="space-y-4">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardDescription>本周使用</CardDescription>
+                    <CardTitle className="text-2xl">128 次</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <span className="text-xs text-muted-foreground">
+                      较上周 +12%
+                    </span>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">最近动态</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {notes.map((n, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <Avatar name={n.who} />
+                        <div className="text-xs">
+                          <div>
+                            <span className="font-medium">{n.who}</span> {n.what}
+                          </div>
+                          <div className="text-muted-foreground">{n.time}</div>
+                        </div>
+                      </div>
+                    ))}
+                    <div className="flex gap-2">
+                      <Input
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && addNote()}
+                        placeholder="添加备注…"
+                        className="h-8 text-xs"
+                      />
+                      <Button size="sm" onClick={addNote}>
+                        发送
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -1079,24 +1205,24 @@ export const pageExamples: PageExample[] = [
   {
     id: "stacked",
     title: "堆叠布局",
-    desc: "顶部栏 + 竖向堆叠的内容块",
-    usage: "应用主框架、项目概览页、个人主页、设置中心外壳、仪表盘容器",
-    keywords: "stacked 堆叠 布局 应用壳 顶栏 内容块 纵向 栏目 设置 项目 应用框架",
-    prompt: `请生成一个「堆叠布局（Stacked Layout）」页面，技术栈 React + Tailwind CSS。
+    desc: "顶部栏 + 居中窄栏堆叠的详情页",
+    usage: "应用主框架、资源详情页、组件详情、项目概览、工单 / 订单详情",
+    keywords: "stacked 堆叠 布局 详情页 detail 应用壳 顶栏 窄栏 描述列表 动态 feed",
+    prompt: `请生成一个「堆叠布局（Stacked Detail）」详情页，技术栈 React + Tailwind CSS。
 
 布局（桌面 ≥1024px）：
-- 顶部应用栏（app bar）：左侧品牌名（如「写意」），右侧横向导航（首页 / 项目 / 文档，当前项高亮、其余 muted），底部细边框分隔。
-- 下方竖向堆叠内容块区（单列、最大宽度约 960px 居中或占满）：
-  - 区块一：页面标题（如「我的项目」）+ 一句 muted 描述（「共 12 个项目，3 个进行中」）。
-  - 区块二：项目卡网格（桌面 2 列、移动 1 列），每张卡含项目名 + 更新时间（muted）。
-  - 区块三：信息块（如「最近动态」），内部纵向列表（头像 / 姓名 + 动作描述）。
+- 顶部应用栏：左侧品牌名，中部横向导航（当前项高亮），右侧用户头像。
+- 下方居中窄栏（max-width 约 768px）竖向堆叠：
+  - 抬头区：左侧图标方块 + 眉题（如「组件」）+ 标题（如「Button 按钮」）+ 状态 Badge；右侧操作按钮（次要「复制名称」+ 主色「复制提示词」）。
+  - 元信息条：2–4 列描述列表（版本 / 作者 / 最后更新 / 依赖）。
+  - 左右分栏（左主右辅）：左侧卡片含表格（使用位置：页面 / 用法 / 次数，底部合计行）；右侧窄栏为统计卡（大数字 + 同比变化）与「最近动态」feed（头像 + 文案 + 相对时间），feed 底部输入框可添加备注。
 
 样式约束：
 - 仅用 design token 类（bg-background、bg-card、text-muted-foreground、border、text-primary 等），禁止硬编码颜色值。
-- 无衬线系统字体，不引入装饰字体；顶部栏浅底（bg-muted/30），内容区留白充足、区块之间用空间区隔。
+- 无衬线系统字体，不引入装饰字体；区块间用留白与细边框区隔，层级清晰。
 
 响应式：
-- <640px 项目卡单列，导航可收起为抽屉或简化为横向滚动。
+- <1024px 右侧栏下移堆叠为单列；<640px 元信息条 2 列、导航可简化。
 
 数据全部用占位 mock，不接后端。输出完整可运行组件。`,
     Comp: StackedExample,
