@@ -1899,6 +1899,402 @@ function EmptyGridExample() {
   );
 }
 
+/* ---------- 16. 描述列表（data display: description lists，6 个变体独立示例） ---------- */
+
+const DESC_ITEMS: [string, string][] = [
+  ["版本", "v1.4.0"],
+  ["分类", "输入"],
+  ["作者", "B站·宝藏二哥AIA"],
+  ["最后更新", "2 小时前"],
+  ["依赖", "@base-ui/react"],
+  ["许可", "MIT"],
+];
+
+// 16.1 左对齐：裸 dl 两列网格
+function DescListExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div>
+          <h4 className="text-base font-semibold">组件信息</h4>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            「Button 按钮」的基础属性一览。
+          </p>
+          <dl className="mt-4 grid grid-cols-[88px_1fr] gap-x-4 gap-y-2 text-sm">
+            {DESC_ITEMS.map(([k, v]) => (
+              <React.Fragment key={k}>
+                <dt className="text-muted-foreground">{k}</dt>
+                <dd className="font-medium">{v}</dd>
+              </React.Fragment>
+            ))}
+          </dl>
+          <div className="mt-3">
+            <a
+              href="#"
+              className="text-xs font-medium text-primary hover:underline"
+            >
+              查看完整文档 →
+            </a>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 16.2 卡片内：同款 dl 包进边框卡片
+function DescListCardExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-md border p-4">
+          <h4 className="text-base font-semibold">组件信息</h4>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            「Button 按钮」的基础属性一览。
+          </p>
+          <dl className="mt-4 grid grid-cols-[88px_1fr] gap-x-4 gap-y-2 text-sm">
+            {DESC_ITEMS.map(([k, v]) => (
+              <React.Fragment key={k}>
+                <dt className="text-muted-foreground">{k}</dt>
+                <dd className="font-medium">{v}</dd>
+              </React.Fragment>
+            ))}
+          </dl>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 16.3 深色卡：反色版两列 dl
+function DescListDarkExample() {
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-md bg-foreground p-5 text-background">
+          <h4 className="text-base font-semibold">组件信息</h4>
+          <p className="mt-0.5 text-xs text-background/60">
+            「Button 按钮」的基础属性一览。
+          </p>
+          <dl className="mt-4 grid grid-cols-[88px_1fr] gap-x-4 gap-y-2 text-sm">
+            {DESC_ITEMS.map(([k, v]) => (
+              <React.Fragment key={k}>
+                <dt className="text-background/60">{k}</dt>
+                <dd className="font-medium">{v}</dd>
+              </React.Fragment>
+            ))}
+          </dl>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 16.4 双栏：字段多时左右两栏纵向成对
+function DescListColumnsExample() {
+  const pairs: [string, string][] = [
+    ["组件总数", "28"],
+    ["当前版本", "v1.5.0"],
+    ["页面示例", "25"],
+    ["站点作者", "B站·宝藏二哥AIA"],
+    ["基础概念", "21"],
+    ["上次发布", "2 小时前"],
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div>
+          <h4 className="text-base font-semibold">站点信息</h4>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            字段较多时，拆成左右两栏能保持一屏读完。
+          </p>
+          <dl className="mt-4 grid grid-cols-2 gap-x-8 gap-y-4 text-sm">
+            {pairs.map(([k, v]) => (
+              <div key={k}>
+                <dt className="text-xs text-muted-foreground">{k}</dt>
+                <dd className="mt-0.5 font-medium">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 16.5 分行操作：每行键值 + 行尾更新/移除
+function DescListRowExample() {
+  const rows = [
+    { name: "GitHub 仓库", desc: "提交记录自动同步到变更日志" },
+    { name: "Figma 镜像", desc: "设计稿与组件一一对应" },
+    { name: "Vercel 预览", desc: "每个 PR 自动生成预览环境" },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div>
+          <h4 className="text-base font-semibold">集成应用</h4>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            已接入的外部服务，可随时更新或移除。
+          </p>
+          <div className="mt-3 divide-y rounded-md border">
+            {rows.map((r) => (
+              <div
+                key={r.name}
+                className="flex items-center justify-between gap-3 px-3 py-2.5"
+              >
+                <div>
+                  <div className="font-medium">{r.name}</div>
+                  <div className="text-xs text-muted-foreground">{r.desc}</div>
+                </div>
+                <div className="flex shrink-0 gap-3 text-xs font-medium text-primary">
+                  <button className="hover:underline">更新</button>
+                  <button className="hover:underline">移除</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+// 16.6 带状态：行尾状态圆点（深色卡）
+function DescListStatusExample() {
+  const rows = [
+    { name: "构建服务", desc: "每 30 分钟巡检一次", status: "运行中", on: true },
+    { name: "文档站", desc: "静态托管，全球加速", status: "运行中", on: true },
+    { name: "预览环境", desc: "夜间自动回收", status: "已暂停", on: false },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-md bg-foreground p-5 text-background">
+          <h4 className="text-base font-semibold">服务状态</h4>
+          <p className="mt-0.5 text-xs text-background/60">
+            站点依赖的内部服务实时状态。
+          </p>
+          <div className="mt-3 divide-y divide-background/15 rounded-md border border-background/20">
+            {rows.map((r) => (
+              <div
+                key={r.name}
+                className="flex items-center justify-between gap-3 px-3 py-2.5"
+              >
+                <div>
+                  <div className="font-medium">{r.name}</div>
+                  <div className="text-xs text-background/60">{r.desc}</div>
+                </div>
+                <span className="inline-flex shrink-0 items-center gap-1.5 text-xs">
+                  <span
+                    className={`size-1.5 rounded-full ${
+                      r.on ? "bg-emerald-400" : "bg-background/40"
+                    }`}
+                  />
+                  {r.status}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-3">
+            <a href="#" className="text-xs font-medium hover:underline">
+              查看服务总览 →
+            </a>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
+/* ---------- 17. 堆叠列表（lists: stacked lists，4 个变体独立示例） ---------- */
+
+// 17.1 基础：头像 + 双行文字 + 元信息 + 行尾操作
+function StackedListExample() {
+  const rows = [
+    {
+      who: "李雷",
+      text: "评审了 Button 组件",
+      meta: "hover 曲线建议统一改为 ease-out",
+      time: "10:24",
+    },
+    {
+      who: "韩梅梅",
+      text: "更新了示例文档",
+      meta: "9 个页面级示例补充了使用场景说明",
+      time: "昨天",
+    },
+    {
+      who: "张伟",
+      text: "关闭了 issue #42",
+      meta: "暗色下 focus 环不可见已修复",
+      time: "3 天前",
+    },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <ul className="divide-y rounded-md border text-sm">
+          {rows.map((r) => (
+            <li key={r.who} className="flex items-start gap-3 px-4 py-3">
+              <Avatar name={r.who} />
+              <div className="min-w-0 flex-1">
+                <div className="font-medium">
+                  {r.who}{" "}
+                  <span className="font-normal text-muted-foreground">
+                    {r.text}
+                  </span>
+                </div>
+                <div className="mt-0.5 truncate text-xs text-muted-foreground">
+                  {r.meta}
+                </div>
+              </div>
+              <div className="flex shrink-0 items-center gap-3 text-xs">
+                <span className="text-muted-foreground">{r.time}</span>
+                <a
+                  href="#"
+                  className="font-medium text-primary hover:underline"
+                >
+                  查看
+                </a>
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  编辑
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+    </section>
+  );
+}
+
+// 17.2 带状态：每行带彩色状态徽章
+function StackedListStatusExample() {
+  const rows = [
+    {
+      name: "Button 按钮 · hover 态优化",
+      desc: "过渡曲线与时长统一",
+      time: "2 小时前",
+      status: "已发布",
+    },
+    {
+      name: "Dialog 对话框 · 焦点陷阱修复",
+      desc: "关闭后焦点回到触发器",
+      time: "昨天",
+      status: "审核中",
+    },
+    {
+      name: "Accordion · 键盘导航",
+      desc: "支持方向键在项之间移动",
+      time: "3 天前",
+      status: "草稿",
+    },
+  ];
+  const variant = (s: string) =>
+    s === "已发布" ? "default" : s === "审核中" ? "secondary" : "outline";
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <ul className="divide-y rounded-md border text-sm">
+          {rows.map((r) => (
+            <li key={r.name} className="flex items-center gap-3 px-4 py-3">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-muted">
+                <Component className="size-4 text-muted-foreground" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="font-medium">{r.name}</div>
+                <div className="truncate text-xs text-muted-foreground">
+                  {r.desc}
+                </div>
+              </div>
+              <span className="shrink-0 text-xs text-muted-foreground">
+                {r.time}
+              </span>
+              <Badge variant={variant(r.status)}>{r.status}</Badge>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+    </section>
+  );
+}
+
+// 17.3 深色卡：反色通知列表
+function StackedListDarkExample() {
+  const rows = [
+    { text: "新评论：李雷 评审了 Button 组件", time: "10:24" },
+    { text: "版本 v1.5.0 发布流程已开始", time: "08:00" },
+    { text: "系统备份完成", time: "昨天" },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <ul className="divide-y divide-background/15 rounded-md bg-foreground text-background">
+          {rows.map((r) => (
+            <li
+              key={r.text}
+              className="flex items-center justify-between gap-3 px-4 py-3 text-sm"
+            >
+              <span className="flex min-w-0 items-center gap-3">
+                <Bell className="size-4 shrink-0" />
+                <span className="truncate">{r.text}</span>
+              </span>
+              <span className="shrink-0 text-xs text-background/60">
+                {r.time}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+    </section>
+  );
+}
+
+// 17.4 带列头：列头行 + 邮箱式对齐行
+function StackedListHeaderExample() {
+  const rows = [
+    { who: "李雷", subject: "Button hover 态评审", time: "10:24" },
+    { who: "韩梅梅", subject: "示例页排版走查结果", time: "09:41" },
+    { who: "系统", subject: "每周构建报告", time: "周一" },
+  ];
+  return (
+    <section className="example-canvas">
+      <Reveal>
+        <div className="rounded-md border text-sm">
+          <div className="flex items-center gap-3 border-b bg-muted/40 px-4 py-2 text-xs text-muted-foreground">
+            <span className="flex-1">发件人 / 主题</span>
+            <span className="shrink-0">时间</span>
+            <span className="w-10 shrink-0 text-right">操作</span>
+          </div>
+          <ul className="divide-y">
+            {rows.map((r) => (
+              <li key={r.who} className="flex items-center gap-3 px-4 py-2.5">
+                <Avatar name={r.who} />
+                <span className="min-w-0 flex-1 truncate font-medium">
+                  {r.subject}
+                </span>
+                <span className="shrink-0 text-xs text-muted-foreground">
+                  {r.time}
+                </span>
+                <a
+                  href="#"
+                  className="w-10 shrink-0 text-right text-xs font-medium text-primary hover:underline"
+                >
+                  查看
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
 interface PageExample {
   id: string;
   title: string;
@@ -2540,6 +2936,241 @@ export const pageExamples: PageExample[] = [
 
 数据为静态文案。输出完整可运行组件。`,
     Comp: EmptyGridExample,
+  },
+  {
+    id: "desc-list",
+    title: "描述列表 · 左对齐",
+    nameEn: "Left Aligned",
+    desc: "dt/dd 两列网格展示详情字段",
+    usage: "组件详情、申请信息、对象属性一览",
+    keywords:
+      "description list 描述列表 dl 键值 详情 dt dd 左对齐 字段 属性",
+    prompt: `请生成一个「左对齐描述列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：展示单个对象的详情字段——一排「标签： 值」成对出现，不可编辑、无表头。注意它不是表格：没有列筛选与行操作，纯展示。
+
+样式（桌面 ≥1024px）：
+- 标题（h4，text-base font-semibold）+ 一句 muted 说明。
+- dl 两列网格：dt 占固定窄列（约 88px，muted 色），dd 占满余下宽度（font-medium）；六对键值纵向排布。
+- 底部一行品牌色文字链接（如「查看完整文档 →」）。
+
+样式约束：仅用 design token 类；无衬线系统字体；不引入装饰字体。
+
+响应式：移动端 dt/dd 改为上下两行（dt 在上、dd 在下）。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: DescListExample,
+  },
+  {
+    id: "desc-list-card",
+    title: "描述列表 · 卡片内",
+    nameEn: "In Card",
+    desc: "同款两列 dl 包进边框卡片",
+    usage: "详情面板、侧栏信息块、内容流内嵌",
+    keywords:
+      "description list 描述列表 卡片 card 包裹 详情 键值 内嵌",
+    prompt: `请生成一个「卡片内描述列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：与左对齐版内容相同，但需要放进内容流或侧栏，用卡片边界与周围内容区隔。
+
+样式（桌面 ≥1024px）：
+- 边框圆角卡片（rounded-md border）内：标题 + muted 说明 + dl 两列网格（dt 固定窄列 muted，dd font-medium）。
+- 与裸版唯一的区别就是外层多了卡片容器。
+
+样式约束：仅用 design token 类；无衬线系统字体。
+
+响应式：移动端 dl 改上下两行。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: DescListCardExample,
+  },
+  {
+    id: "desc-list-dark",
+    title: "描述列表 · 深色卡",
+    nameEn: "Dark Card",
+    desc: "深底反色版两列 dl",
+    usage: "深色主题区块、强调性详情面板",
+    keywords:
+      "description list 描述列表 深色 dark 反色 键值 详情 强调",
+    prompt: `请生成一个「深色卡描述列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：详情面板的强调版本，如摘要卡、深色主题区块。
+
+样式（桌面 ≥1024px）：
+- 深色实底卡片：bg-foreground 搭配 text-background（前景背景互为反色，明暗主题下对比度天然达标）。
+- 内部结构同左对齐版：标题 + 说明（text-background/60）+ dl 两列网格（dt 用 text-background/60，dd font-medium）。
+
+样式约束：只用 bg-foreground / text-background 及其透明度变体；无衬线系统字体。
+
+响应式：移动端 dl 改上下两行。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: DescListDarkExample,
+  },
+  {
+    id: "desc-list-columns",
+    title: "描述列表 · 双栏",
+    nameEn: "Two Columns",
+    desc: "字段多时左右两栏纵向成对",
+    usage: "站点信息、报告汇总、多字段详情",
+    keywords:
+      "description list 描述列表 双栏 two columns 字段 多 键值 汇总",
+    prompt: `请生成一个「双栏描述列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：字段较多（六个以上）时，单列会拉得很长，拆成左右两栏能保持一屏读完。
+
+样式（桌面 ≥1024px）：
+- 标题 + muted 说明。
+- dl 两栏网格（grid-cols-2，栏间距大）：每对字段为上下结构——dt 是 muted 小字（text-xs），dd 在其下（mt-0.5，font-medium）；六对字段左右两栏各三个。
+
+样式约束：仅用 design token 类；无衬线系统字体。
+
+响应式：移动端改单列。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: DescListColumnsExample,
+  },
+  {
+    id: "desc-list-row",
+    title: "描述列表 · 分行操作",
+    nameEn: "Row Actions",
+    desc: "每行键值 + 行尾更新/移除",
+    usage: "集成管理、关联账号、可变更配置",
+    keywords:
+      "description list 描述列表 行 操作 update remove 集成 管理 配置",
+    prompt: `请生成一个「分行操作描述列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：每个条目不只展示、还要能操作——如集成管理、关联账号列表。每行是一条记录而非一对字段。
+
+样式（桌面 ≥1024px）：
+- 标题 + muted 说明。
+- 圆角边框行列表（divide-y 分隔）：每行左侧为粗体名称 + muted 一句描述，行尾为品牌色文字按钮组「更新」「移除」。
+- 行内边距均匀（px-3 py-2.5），操作按钮 shrink-0 不换行。
+
+样式约束：仅用 design token 类（text-primary 用于操作链接）；无衬线系统字体。
+
+响应式：移动端行改为上下结构（信息在上、操作在下）。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: DescListRowExample,
+  },
+  {
+    id: "desc-list-status",
+    title: "描述列表 · 带状态",
+    nameEn: "With Status",
+    desc: "行尾状态圆点指示（深色卡）",
+    usage: "服务状态、任务进度、健康检查",
+    keywords:
+      "description list 描述列表 状态 status 圆点 服务 健康 深色",
+    prompt: `请生成一个「带状态描述列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：展示一组服务的实时状态，每行需要一眼看出健康与否。
+
+样式（桌面 ≥1024px）：
+- 深色实底卡片（bg-foreground + text-background 反色对）。
+- 标题 + muted 说明（text-background/60）。
+- 圆角边框行列表（border-background/20 边框、divide-background/15 分隔）：每行左侧为粗体名称 + muted 描述，行尾为状态指示——彩色小圆点（运行中用 emerald-400，已暂停用半透明）+ 状态文字（text-xs）。
+- 底部一行浅色链接「查看服务总览 →」。
+
+样式约束：主底色只用反色对；状态点可用 emerald-400 语义色；无衬线系统字体。
+
+响应式：移动端行保持结构，说明文字可换行。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: DescListStatusExample,
+  },
+  {
+    id: "stacked-list",
+    title: "堆叠列表 · 基础",
+    nameEn: "Basic",
+    desc: "头像 + 双行文字 + 元信息 + 行尾操作",
+    usage: "动态流、通知列表、成员列表",
+    keywords:
+      "stacked list 堆叠列表 行 列表 头像 通知 动态 分隔 时间线",
+    prompt: `请生成一个「基础堆叠列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：纵向列一排同类对象（动态、通知、成员）——每行信息比表格行更丰富，但不需要列筛选。
+
+样式（桌面 ≥1024px）：
+- 圆角边框容器 + 行间分隔线（divide-y）。
+- 每行：左侧头像（圆形浅底首字）+ 中部双行文字（第一行粗体名字 + 常规动作描述；第二行 truncate 的 muted 摘要）+ 行尾元信息与操作（muted 时间 + 品牌色「查看」+ muted「编辑」链接，shrink-0）。
+
+样式约束：仅用 design token 类；无衬线系统字体；头像用浅底首字占位。
+
+响应式：移动端行尾操作可隐藏或收纳进更多菜单。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StackedListExample,
+  },
+  {
+    id: "stacked-list-status",
+    title: "堆叠列表 · 带状态",
+    nameEn: "With Status",
+    desc: "每行带彩色状态徽章",
+    usage: "任务工单、内容审核、发布流程",
+    keywords:
+      "stacked list 堆叠列表 状态 badge 徽章 工单 审核 发布 流程",
+    prompt: `请生成一个「带状态堆叠列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：流程中的条目列表——每条有明确状态（已发布 / 审核中 / 草稿），一眼扫出色进度。
+
+样式（桌面 ≥1024px）：
+- 圆角边框容器 + 行间分隔线。
+- 每行：左侧 muted 图标方块（Component 图标）+ 中部双行（粗体条目名 + muted 摘要，truncate）+ 行尾 muted 时间 + 状态徽章（Badge：已发布 default / 审核中 secondary / 草稿 outline）。
+
+样式约束：仅用 design token 类；状态用 Badge 变体区分而非自造颜色；无衬线系统字体。
+
+响应式：移动端时间可隐藏，徽章保留。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StackedListStatusExample,
+  },
+  {
+    id: "stacked-list-dark",
+    title: "堆叠列表 · 深色卡",
+    nameEn: "Dark Card",
+    desc: "深底反色通知列表",
+    usage: "深色区块、系统通知中心",
+    keywords:
+      "stacked list 堆叠列表 深色 dark 反色 通知 中心 系统",
+    prompt: `请生成一个「深色堆叠列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：系统通知中心的深色区块版本，整体嵌入深色面板或需要强烈对比的场景。
+
+样式（桌面 ≥1024px）：
+- 深色实底容器（bg-foreground + text-background 反色对）+ 行间分隔线（divide-background/15）。
+- 每行：左侧 Bell 图标 + 一条通知文字（truncate）+ 行尾 muted 时间（text-background/60）。
+
+样式约束：只用 bg-foreground / text-background 及其透明度变体；无衬线系统字体。
+
+响应式：移动端长文本截断，时间保留。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StackedListDarkExample,
+  },
+  {
+    id: "stacked-list-header",
+    title: "堆叠列表 · 带列头",
+    nameEn: "With Header",
+    desc: "列头行 + 邮箱式对齐行",
+    usage: "消息收件、申请列表、多列对齐",
+    keywords:
+      "stacked list 堆叠列表 列头 header 收件 对齐 邮箱 申请",
+    prompt: `请生成一个「带列头堆叠列表」组件，技术栈 React + Tailwind CSS。
+
+使用场景：列表行有多列信息（发件人、时间、操作）时，加一行列头让每列对齐关系一目了然——比表格轻，比无头列表更易读。
+
+样式（桌面 ≥1024px）：
+- 圆角边框容器：顶部列头行（bg-muted/40 浅底 + muted 小字：发件人 / 主题 · 时间 · 操作），flex 布局与下方行共享同一份列宽逻辑（flex-1 + 固定宽度）。
+- 数据行：头像 + truncate 的粗体主题（flex-1）+ muted 时间（shrink-0）+ 品牌色「查看」链接（固定宽度右对齐）。
+- 行间分隔线（divide-y）。
+
+样式约束：仅用 design token 类；无衬线系统字体。
+
+响应式：移动端隐藏时间列。
+
+数据为静态文案。输出完整可运行组件。`,
+    Comp: StackedListHeaderExample,
   },
 ];
 
