@@ -10,13 +10,13 @@ import {
   FieldLabel,
 } from "@/components/page-shell";
 import { CopyBlock } from "@/components/copy-block";
-import { concepts, conceptGroups, conceptGroupMeta, conceptGroupMetaEn, conceptGroupDesc } from "@/content/concepts";
+import { concepts, conceptGroups, conceptGroupMeta, conceptGroupMetaEn, conceptGroupAlias, conceptGroupDesc } from "@/content/concepts";
 
 export default function ConceptsPage() {
   return (
     <PageContainer>
       <PageHeader
-        title="基础概念"
+        title="筑基·基础概念"
         en="Concepts"
         description="把 Vibe Coding 里反复出现的底层概念讲清楚，先建立共同语言，再让 AI 生成对的代码。"
       />
@@ -27,7 +27,7 @@ export default function ConceptsPage() {
         return (
           <section key={g} id={g} className="scroll-anchor space-y-3">
             <GroupLabel data-spy-group={g}>
-              {conceptGroupMeta[g]}
+              {conceptGroupAlias[g]}·{conceptGroupMeta[g]}
               <span className="ml-2 text-xs font-normal text-muted-foreground">
                 {conceptGroupMetaEn[g]}
               </span>

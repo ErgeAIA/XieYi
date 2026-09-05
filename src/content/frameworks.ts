@@ -64,6 +64,15 @@ export const frameworkGroupDesc: Record<FrameworkGroup, string> = {
   ai: "专门用来搭智能体、接大模型、做检索增强的框架。想让应用真正「会思考」，从这里起步。",
 };
 
+// 二级分组国风雅称（仅展示层；原始名 frameworkGroupMeta / 英文 frameworkGroupMetaEn 不变）
+export const frameworkGroupAlias: Record<FrameworkGroup, string> = {
+  frontend: "笔锋",
+  fullstack: "周流",
+  backend: "地枢",
+  edge: "疾影",
+  ai: "法相",
+};
+
 export const frameworks: FrameworkItem[] = [
   // ===== 前端库与元框架 =====
   {

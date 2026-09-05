@@ -56,6 +56,24 @@ export const glossaryCategoryMeta: Record<
   security: { zh: "安全与合规", en: "Security", desc: "加密、鉴权、防注入等「怎么不让系统出事」的术语。" },
 };
 
+// 二级分类国风雅称（仅展示层；原始名 glossaryCategoryMeta[].zh / 英文 [].en 不变）
+export const glossaryCategoryAlias: Record<GlossaryCategory, string> = {
+  layout: "格局",
+  visual: "色相",
+  responsive: "随形",
+  interaction: "机杼",
+  "ui-style": "风骨",
+  typography: "字阵",
+  "dev-process": "匠律",
+  ops: "镇守",
+  "page-section": "堂庑",
+  content: "辞章",
+  "auth-state": "关钥",
+  "ai-prompt": "法旨",
+  performance: "御风",
+  security: "金汤",
+};
+
 export const glossaryCategoryOrder: GlossaryCategory[] = [
   "layout",
   "visual",

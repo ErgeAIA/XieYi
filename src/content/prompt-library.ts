@@ -91,6 +91,25 @@ export const promptCategoryDesc: Record<PromptCategory, string> = {
   "自动化": "把反复做的事沉淀成技能、钩子或脚本，让 AI 在合适时机自动触发，省下重复劳动。",
 };
 
+// 二级分类国风雅称（仅展示层；原始名用分类 key、英文 promptCategoryMetaEn 不变）
+export const promptCategoryAlias: Record<PromptCategory, string> = {
+  "入门": "初探",
+  "理解": "参详",
+  "计划": "谋定",
+  "原型": "塑形",
+  "实现": "铸就",
+  "测试": "试炼",
+  "重构": "易筋",
+  "审查": "勘验",
+  "引导": "驯化",
+  "Git": "留痕",
+  "发布": "颁行",
+  "调试": "辨症",
+  "事件": "应劫",
+  "数据": "演数",
+  "自动化": "自运",
+};
+
 export interface PromptLibraryItem {
   id: string;
   titleZh: string;

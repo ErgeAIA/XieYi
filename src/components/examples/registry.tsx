@@ -987,7 +987,7 @@ function InputGroupExample() {
 }
 
 function InputOTPExample() {
-  const [vals, setVals] = React.useState(["", "", "", ""]);
+  const [vals, setVals] = React.useState(["", "", "", "", "", ""]);
   const refs = React.useRef<(HTMLInputElement | null)[]>([]);
   const set = (i: number, ch: string) => {
     const n = ch.replace(/\D/g, "").slice(-1);
@@ -996,7 +996,7 @@ function InputOTPExample() {
       c[i] = n;
       return c;
     });
-    if (n && i < 3) refs.current[i + 1]?.focus();
+    if (n && i < vals.length - 1) refs.current[i + 1]?.focus();
   };
   return (
     <div className="flex gap-2">
@@ -1008,6 +1008,9 @@ function InputOTPExample() {
           }}
           value={v}
           onChange={(e) => set(i, e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Backspace" && !v && i > 0) refs.current[i - 1]?.focus();
+          }}
           maxLength={1}
           inputMode="numeric"
           className="size-10 rounded-md border text-center text-lg outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"

@@ -36,5 +36,6 @@ export interface ComponentItem {
   nameEn: string;
   desc: string;
   usage: string;
+  aiPrompt: string; // 可直接复制给 AI 的组件生成提示词（纯文本，含技术栈声明），用于组件卡片「如何向 AI 描述」
   example?: string; // 真实示例将在阶段 B 用可交互 shadcn 组件重写，此处暂留原 HTML 片段
 }

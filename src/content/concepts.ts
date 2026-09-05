@@ -539,4 +539,11 @@ export const conceptGroupDesc: Record<ConceptGroup, string> = {
   "web": "网页是怎么搭起来的底层概念：HTML、CSS、JS、路由、响应式。理解这些，你才能把「我要什么样的页面」说清楚。",
 };
 
+// 二级分组国风雅称（仅展示层；原始名 conceptGroupMeta / 英文 conceptGroupMetaEn 不变）
+export const conceptGroupAlias: Record<ConceptGroup, string> = {
+  web: "地脉",
+  dev: "营造",
+  ai: "灵机",
+};
+
 export const conceptGroups: ConceptGroup[] = ["ai", "dev", "web"];

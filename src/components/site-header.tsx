@@ -15,13 +15,14 @@ import { useTheme } from "@/components/theme-provider";
 import { useMotionPref } from "@/components/motion-provider";
 import { CommandSearch } from "@/components/command-search";
 import { SidebarNav } from "@/components/site-sidebar";
+import { Logo } from "@/components/logo";
 
 export function SiteHeader() {
   const { theme, toggle } = useTheme();
   const { motionOn, toggle: toggleMotion } = useMotionPref();
 
   return (
-    <header className="sticky top-0 z-30 flex min-h-14 items-center gap-3 border-b bg-background/80 px-4 py-2.5 backdrop-blur">
+    <header className="sticky top-0 z-30 flex min-h-14 items-center gap-3 border-b border-sidebar-border bg-sidebar px-5 py-2.5">
       <Sheet>
         <SheetTrigger
           render={
@@ -41,17 +42,20 @@ export function SiteHeader() {
         </SheetContent>
       </Sheet>
 
-      <Link href="/" className="flex flex-col gap-0.5 leading-tight">
-        <span className="flex items-baseline gap-2">
-          <span className="font-brush text-xl font-semibold tracking-tight">
-            写意
+      <Link href="/" className="flex items-center gap-2.5">
+        <Logo size={30} className="shrink-0" />
+        <span className="flex flex-col gap-0.5 leading-tight">
+          <span className="flex items-baseline gap-2">
+            <span className="font-brush text-xl font-semibold tracking-tight">
+              写意
+            </span>
+            <span className="hidden font-brush text-sm tracking-wide text-primary sm:inline">
+              XIEYI
+            </span>
           </span>
-          <span className="hidden text-xs tracking-wide text-muted-foreground sm:inline">
-            XIEYI
+          <span className="hidden max-w-[36ch] truncate text-[11px] text-muted-foreground/70 lg:block">
+            以意运码，码落而器成。胸中之构，言而为品。
           </span>
-        </span>
-        <span className="hidden max-w-[36ch] truncate text-[11px] text-muted-foreground/70 lg:block">
-          以意运码，码落而器成。胸中之构，言而为品。
         </span>
       </Link>
 

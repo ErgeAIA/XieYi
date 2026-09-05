@@ -8,6 +8,7 @@ import {
   componentCategories,
   componentCategoryMeta,
   componentCategoryMetaEn,
+  componentCategoryAlias,
   componentCategoryDesc,
   componentsByCategory,
   components,
@@ -15,8 +16,9 @@ import {
 } from "@/content/components";
 import { exampleRegistry } from "@/components/examples/registry";
 import { useScrollSpy } from "@/components/scroll-spy";
-import { SectionTitle } from "@/components/page-shell";
+import { SectionTitle, FieldLabel } from "@/components/page-shell";
 import { Reveal } from "@/components/motion/reveal";
+import { CopyBlock } from "@/components/copy-block";
 import Link from "next/link";
 import { exampleHrefForComponent } from "@/components/examples/pages";
 
@@ -163,7 +165,7 @@ export function ComponentsView({
             className="scroll-anchor space-y-3"
           >
             <SectionTitle>
-              {componentCategoryMeta[cat]}
+              {componentCategoryAlias[cat]}·{componentCategoryMeta[cat]}
               <span className="ml-2 text-xs font-normal text-muted-foreground">
                 {componentCategoryMetaEn[cat]}
               </span>
@@ -178,7 +180,7 @@ export function ComponentsView({
                   <Card
                     id={c.nameEn}
                     data-spy-component={c.nameEn}
-                    className="hover-lift scroll-anchor"
+                    className="hover-lift scroll-anchor overflow-visible"
                   >
                   <CardHeader className="pb-2">
                     <CardTitle className="flex items-center gap-2 text-base">
@@ -206,6 +208,14 @@ export function ComponentsView({
                         cat={c.cat}
                         html={c.example}
                       />
+                      <div className="mt-3 rounded-md bg-muted/50 p-3">
+                        <FieldLabel>如何向 AI 描述</FieldLabel>
+                        <CopyBlock
+                          value={c.aiPrompt}
+                          label="向 AI 描述（可复制）"
+                          className="mt-1"
+                        />
+                      </div>
                       <Link
                         href={exampleHrefForComponent(c.nameEn)}
                         className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80"

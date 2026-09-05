@@ -14,6 +14,7 @@ import {
   frameworkGroups,
   frameworkGroupMeta,
   frameworkGroupMetaEn,
+  frameworkGroupAlias,
   frameworkGroupDesc,
 } from "@/content/frameworks";
 
@@ -21,7 +22,7 @@ export default function FrameworksPage() {
   return (
     <PageContainer>
       <PageHeader
-        title="框架"
+        title="阵法·框架"
         en="Frameworks"
         description="主流前端、全栈、后端、边缘与 AI 框架一览，标注形态、AI 友好度与常见坑，辅助选型与避坑。"
       />
@@ -32,7 +33,7 @@ export default function FrameworksPage() {
         return (
           <section key={g} id={g} className="scroll-anchor space-y-3">
             <GroupLabel data-spy-group={g}>
-              {frameworkGroupMeta[g]}
+              {frameworkGroupAlias[g]}·{frameworkGroupMeta[g]}
               <span className="ml-2 text-xs font-normal text-muted-foreground">
                 {frameworkGroupMetaEn[g]}
               </span>

@@ -4373,6 +4373,15 @@ export const exampleCatMetaEn: Record<(typeof exampleCatOrder)[number], string> 
   activity: "Activity",
 };
 
+// 二级分类国风雅称（仅展示层；原始名 exampleCatMeta / 英文 exampleCatMetaEn 不变）
+export const exampleCatAlias: Record<string, string> = {
+  shell: "骨相",
+  feedback: "鸣钟",
+  lists: "卷册",
+  metrics: "圭表",
+  activity: "长河",
+};
+
 export const exampleCatDesc: Record<(typeof exampleCatOrder)[number], string> = {
   shell: "完整页面的整体布局参考：后台、IDE、表单页、数据页等骨架。先看这个，确定你的产品长什么样。",
   feedback: "各种提示、加载、空状态、操作结果的页面示例。学怎么给用户「刚刚发生了什么」的反馈。",
@@ -4489,7 +4498,7 @@ function PromptBlock({ prompt }: { prompt: string }) {
     <Accordion>
       <AccordionItem value="prompt" className="border-b-0">
         <AccordionTrigger className="text-xs font-medium text-primary hover:text-primary/80 [&_svg]:text-primary">
-          给 AI 的提示词（点击展开）
+          号令 AI 的真言（点击展开）
         </AccordionTrigger>
         <AccordionContent className="space-y-2">
           <div className="flex items-center justify-between gap-3">
@@ -4536,7 +4545,7 @@ export function ExamplesGallery() {
           >
             <div className="flex items-baseline justify-between border-b pb-2">
               <h2 className="text-xl font-semibold tracking-tight">
-                {exampleCatMeta[cat]}
+                {exampleCatAlias[cat]}·{exampleCatMeta[cat]}
                 <span className="ml-2 text-xs font-normal text-muted-foreground">
                   {exampleCatMetaEn[cat]}
                 </span>

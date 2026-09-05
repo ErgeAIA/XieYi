@@ -10,7 +10,7 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = React.createContext<ThemeContextValue>({
-  theme: "light",
+  theme: "dark",
   toggle: () => {},
 });
 
@@ -18,12 +18,10 @@ const STORAGE_KEY = "xieyi-theme";
 const EVT = "xieyi-theme-change";
 
 function readTheme(): Theme {
-  if (typeof document === "undefined") return "light"; // SSR 默认浅色
+  if (typeof document === "undefined") return "dark"; // SSR 默认深色
   const saved = localStorage.getItem(STORAGE_KEY) as Theme | null;
   if (saved === "light" || saved === "dark") return saved;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  return "dark"; // 无保存偏好时默认深色
 }
 
 function subscribeTheme(cb: () => void) {
@@ -35,7 +33,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = React.useSyncExternalStore<Theme>(
     subscribeTheme,
     readTheme,
-    () => "light",
+    () => "dark",
   );
 
   React.useEffect(() => {

@@ -13,13 +13,14 @@ import {
   glossary,
   glossaryCategoryOrder,
   glossaryCategoryMeta,
+  glossaryCategoryAlias,
 } from "@/content/glossary";
 
 export default function GlossaryPage() {
   return (
     <PageContainer>
       <PageHeader
-        title="词典"
+        title="玉简·词典"
         en="Glossary"
         description="不知道想要的效果叫什么？先搜再抄提示词。每个词都告诉你它是什么、加上能看到什么，以及怎么把这句话直接交给 AI。"
       />
@@ -35,9 +36,12 @@ export default function GlossaryPage() {
             className="scroll-anchor mb-10 space-y-3"
           >
             <GroupLabel data-spy-group={cat}>
-              {meta.zh}
+              {glossaryCategoryAlias[cat]}·{meta.zh}
               <span className="ml-2 text-xs font-normal text-muted-foreground">
                 {meta.en}
+              </span>
+              <span className="ml-2 rounded bg-muted px-1.5 py-0.5 text-xs tabular-nums text-muted-foreground/80">
+                {items.length}
               </span>
             </GroupLabel>
             <p className="text-sm text-muted-foreground">{meta.desc}</p>
