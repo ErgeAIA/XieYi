@@ -6,7 +6,8 @@ import path from "node:path";
 
 const ROOT = path.resolve(process.cwd());
 const PKG = "lxgw-wenkai-webfont@1.7.0";
-const BASE = `https://cdn.jsdelivr.net/npm/${PKG}`;
+// jsDelivr 主站（Fastly）当前环境连不通，走 gcore 镜像；主站恢复可改回 cdn.jsdelivr.net
+const BASE = `https://gcore.jsdelivr.net/npm/${PKG}`;
 const OUT_DIR = path.join(ROOT, "public/fonts/lxgw-wenkai");
 const CSS_OUT = path.join(OUT_DIR, "lxgw-wenkai.css");
 

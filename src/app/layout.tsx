@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import Script from "next/script";
 import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,12 +39,23 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${spaceGrotesk.variable} ${plexMono.variable} antialiased`}
     >
       <head>
-        <Script id="xieyi-motion-init" strategy="beforeInteractive">
-          {`(function(){try{var s=localStorage.getItem('xieyi-motion');var r=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var on=s===null?!r:s!=='off';document.documentElement.setAttribute('data-motion',on?'on':'off');}catch(e){}})();`}
-        </Script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('xieyi-theme');var dark=s===null||s==='dark';document.documentElement.classList.toggle('dark',dark);}catch(e){document.documentElement.classList.add('dark');}})();`,
+          }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('xieyi-motion');var r=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var on=s===null?!r:s!=='off';document.documentElement.setAttribute('data-motion',on?'on':'off');}catch(e){}})();`,
+          }}
+        />
         <link
           rel="stylesheet"
           href="/fonts/lxgw-wenkai/lxgw-wenkai.css"
+        />
+        <link
+          rel="stylesheet"
+          href="/fonts/ma-shan-zheng/ma-shan-zheng.css"
         />
       </head>
       <body className="min-h-screen bg-background text-foreground">
@@ -57,24 +67,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <TooltipProvider>
               <ScrollSpyProvider>
                 <NavSpyProvider>
-                <div className="flex min-h-screen">
-                <aside className="sticky top-0 hidden h-screen w-80 shrink-0 self-start overflow-y-auto border-r border-sidebar-border bg-sidebar p-5 md:block">
-                  <div className="mb-5 flex items-center gap-2 px-2">
-                    <span className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-primary-hover shadow-sm" />
-                    <span className="font-brush text-2xl font-semibold tracking-tight">
-                      写意
-                    </span>
-                  </div>
-                  <Suspense fallback={null}>
-                    <SidebarNav />
-                  </Suspense>
-                </aside>
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <SiteHeader />
-                  <main className="flex-1 px-4 md:px-8">{children}</main>
+                <SiteHeader />
+                <div className="flex min-h-[calc(100vh-3.5rem)]">
+                  <aside className="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-80 shrink-0 self-start overflow-y-auto border-r border-sidebar-border bg-sidebar p-5 md:block">
+                    <Suspense fallback={null}>
+                      <SidebarNav />
+                    </Suspense>
+                  </aside>
+                  <main className="min-w-0 flex-1 px-4 md:px-8 py-6">{children}</main>
+                  <ScrollToTop />
                 </div>
-                <ScrollToTop />
-              </div>
                 </NavSpyProvider>
               </ScrollSpyProvider>
             </TooltipProvider>
