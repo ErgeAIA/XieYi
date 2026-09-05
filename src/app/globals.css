@@ -31,6 +31,8 @@
      （见下方 .preview / .example-canvas 强制回落无衬线规则）。 */
   --font-app-song: "LXGW WenKai", "Songti SC", "SimSun", serif;
   --font-app-brush: "QijiFallback", "Songti SC", serif;
+  /* 星名标签：马善政毛笔楷书（碑拓笔意），回落霞鹜文楷 */
+  --font-app-libi: "Ma Shan Zheng", "LXGW WenKai", "Songti SC", "SimSun", serif;
 }
 
 @theme inline {
@@ -490,5 +492,183 @@ html[data-motion="off"] * {
   50.01%,
   100% {
     opacity: 0;
+  }
+}
+
+/* ===== 首页 Hero 北斗九星背景 =====
+   自绘 SVG 连线 + HTML 星点；初始灰调隐约，进入首页沿斗柄顺序逐个点亮，
+   全亮后错峰呼吸闪烁。配色跟随站点 --primary（暖琥珀）。受总动效开关与
+   reduced-motion 门控：关闭动效时组件不挂 is-anim，元素回退到下方「已点亮」基线态。 */
+.hero-constellation {
+  color: var(--primary);
+}
+
+.hero-seg {
+  stroke: currentColor;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  color: var(--primary);
+  opacity: 0.8;
+  will-change: opacity;
+}
+
+.hero-star {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  color: var(--primary);
+  opacity: 1;
+  box-shadow: 0 0 9px 1px color-mix(in srgb, var(--primary) 45%, transparent);
+  pointer-events: auto;
+  cursor: pointer;
+  text-decoration: none;
+  will-change: transform, opacity, box-shadow;
+}
+
+.hero-star-label {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 6px;
+  white-space: nowrap;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: currentColor;
+  font-family: var(--font-app-libi);
+  opacity: 0.9;
+  pointer-events: none;
+}
+/* 标签方位变体：避让连线（默认下方） */
+.hero-star-label[data-pos="top"] {
+  top: auto;
+  bottom: 100%;
+  transform: translateX(-50%);
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+.hero-star-label[data-pos="left"] {
+  left: auto;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0;
+  margin-right: 6px;
+}
+.hero-star-label[data-pos="right"] {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0;
+  margin-left: 6px;
+}
+
+.hero-star:hover {
+  box-shadow: 0 0 16px 2px color-mix(in srgb, var(--primary) 70%, transparent);
+}
+.hero-star:hover .hero-star-label {
+  opacity: 1;
+  color: var(--foreground);
+}
+.hero-star:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* 主星炸亮：星点从灰暗弹出（scale 1.4 + 光晕扩散）再落回 */
+@keyframes xieyi-star-burst {
+  0% {
+    color: var(--muted-foreground);
+    opacity: 0.28;
+    transform: translate(-50%, -50%) scale(0.6);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  55% {
+    color: var(--primary);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.4);
+    box-shadow: 0 0 24px 7px
+      color-mix(in srgb, var(--primary) 60%, transparent);
+  }
+  100% {
+    color: var(--primary);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 10px 1px
+      color-mix(in srgb, var(--primary) 55%, transparent);
+  }
+}
+/* 辅星（左辅/右弼）为「隐星」：炸亮更轻、常亮比主星暗一档 */
+@keyframes xieyi-star-burst-soft {
+  0% {
+    color: var(--muted-foreground);
+    opacity: 0.28;
+    transform: translate(-50%, -50%) scale(0.7);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  55% {
+    color: var(--primary);
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 0 14px 4px
+      color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+  100% {
+    color: var(--primary);
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 8px 1px
+      color-mix(in srgb, var(--primary) 40%, transparent);
+  }
+}
+/* 全亮后呼吸 + 透明度微闪（交相闪烁） */
+@keyframes xieyi-star-breathe {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.16);
+    opacity: 0.78;
+  }
+}
+/* 流光走线：线头从上一颗星「流」到本颗星（pathLength=1 归一化，
+   与线段实际长度无关，preserveAspectRatio=none 下也均匀） */
+@keyframes xieyi-seg-flow {
+  0% {
+    stroke-dashoffset: 1;
+    color: var(--primary);
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    color: var(--primary);
+    opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 节奏：每 1.4s 一拍——第 i 星在第 i 拍炸亮，第 d 段线在前一拍内流光画完，
+     线头到达瞬间星点炸亮；全程约 13s 画完，随后进入呼吸。 */
+  html:not([data-motion="off"]) .hero-constellation.is-anim .hero-star {
+    animation:
+      xieyi-star-burst 1.4s var(--motion-ease) calc(var(--i) * 1.4s) both,
+      xieyi-star-breathe 3.4s var(--motion-ease-in-out)
+        calc(var(--i) * 1.4s + 13s) infinite;
+  }
+  html:not([data-motion="off"]) .hero-constellation.is-anim .hero-star[data-aux] {
+    animation-name: xieyi-star-burst-soft, xieyi-star-breathe;
+  }
+  html:not([data-motion="off"]) .hero-constellation.is-anim .hero-seg {
+    stroke-dasharray: 1;
+    animation: xieyi-seg-flow 1.4s var(--motion-ease-in-out)
+      calc((var(--d) - 1) * 1.4s) both;
   }
 }
