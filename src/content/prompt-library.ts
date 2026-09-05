@@ -120,6 +120,7 @@ export interface PromptLibraryItem {
   whyEffective?: string; // 对应「为什么这样做有效」的模式
   isStarter?: boolean; // 五个「从这里开始」
   source?: string; // 官方来源链接
+  origin?: PromptOrigin; // 来源分区：缺省 official（官学）
 }
 
 const WHY = {
@@ -715,5 +716,83 @@ export const promptLibrary: PromptLibraryItem[] = [
     category: "自动化",
     whyEffective: WHY.result,
     source: "https://code.claude.com/docs/zh-CN/prompt-library",
+  },
+
+  // ===== 撷英 · 来自网络 =====
+  {
+    id: "web-metaprompt",
+    titleZh: "元提示：让 AI 替你写提示词",
+    titleEn: "Metaprompt",
+    prompt:
+      "You are a prompt engineer. Based on my task description below, craft a high-quality prompt for me: clarify the goal, the audience, the output format and the constraints, then output the final prompt only.\n\n我的任务：<在此描述你的任务>",
+    promptZh: "转写简化版：让 AI 充当提示词工程师，替你把任务描述打磨成结构化提示词；完整原文见来源。",
+    category: "引导",
+    origin: "web",
+    whyEffective:
+      "写好提示词本身就是一门手艺，把它交给专门的「提示词工程师」角色，往往比自己硬凑更快。",
+    source: "Anthropic 提示词工程互动教程（Metaprompt）· github.com/anthropics/prompt-eng-interactive-tutorial",
+  },
+  {
+    id: "web-clarify-first",
+    titleZh: "先提问，再动手",
+    titleEn: "Ask Questions First",
+    prompt:
+      "Before implementing, ask me up to 5 clarifying questions about requirements that are ambiguous or missing. Wait for my answers before writing any code.\n\n需求：<在此描述你的需求>",
+    promptZh: "转写自 Anthropic 教程中的提问模式：让 AI 先把需求里的模糊点问清楚。",
+    category: "引导",
+    origin: "web",
+    whyEffective:
+      "需求的坑在动手前填最便宜——五连问能逼出你没写进需求里的隐含假设。",
+    source: "Anthropic 提示词工程互动教程 · github.com/anthropics/prompt-eng-interactive-tutorial",
+  },
+  {
+    id: "web-zero-shot-cot",
+    titleZh: "一步一步思考",
+    titleEn: "Zero-shot Chain-of-Thought",
+    prompt: "请一步一步思考，再给出最终答案。(Let's think step by step.)",
+    promptZh: "在任意任务后追加这句，能明显提升推理类任务的准确率。",
+    category: "理解",
+    origin: "web",
+    whyEffective:
+      "把「直接给答案」变成「展示推理过程」，模型的中间步骤会自己纠错。出自 Kojima et al. 2022 论文级别的发现。",
+    source: "Kojima et al., Large Language Models are Zero-Shot Reasoners (2022) · arxiv.org/abs/2205.11916",
+  },
+];
+
+// ===== 来源三分：官学 / 撷英 / 心法（页面一级分区） =====
+export type PromptOrigin = "official" | "web" | "own";
+
+export interface PromptOriginGroup {
+  id: PromptOrigin;
+  alias: string;
+  name: string;
+  en: string;
+  explain: string;
+}
+
+export const promptOriginGroups: PromptOriginGroup[] = [
+  {
+    id: "official",
+    alias: "官学",
+    name: "Claude Code 官方",
+    en: "Claude Code Official",
+    explain:
+      "Anthropic 官方提示词库完整收录，按场景分类。用词经过官方打磨，适合作为标准起手式。",
+  },
+  {
+    id: "web",
+    alias: "撷英",
+    name: "来自网络",
+    en: "From the Web",
+    explain:
+      "从官方教程与经典文献里采撷的提示词，条条署名出处。宁缺毋滥，只收经得起复用的。",
+  },
+  {
+    id: "own",
+    alias: "心法",
+    name: "我的真言",
+    en: "My Prompts",
+    explain:
+      "本站主理人在实战中磨出来的自用真言，附使用心得。整理中，敬请期待。",
   },
 ];
