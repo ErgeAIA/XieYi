@@ -6,30 +6,50 @@ import {
   componentCategories,
   componentCategoryMeta,
   componentCategoryMetaEn,
+  componentCategoryAlias,
   componentsByCategory,
   type ComponentCategory,
 } from "@/content/components";
-import { concepts, conceptGroups, conceptGroupMeta, conceptGroupMetaEn } from "@/content/concepts";
+import {
+  concepts,
+  conceptGroups,
+  conceptGroupMeta,
+  conceptGroupMetaEn,
+  conceptGroupAlias,
+} from "@/content/concepts";
 import { promptLibrary } from "@/content/prompt-library";
 import {
   resources,
   resourceCategories,
   resourceCategoryMetaEn,
+  resourceCategoryAlias,
   resourceId,
 } from "@/content/resources";
-import { backendTopics, backendTopicMetaEn } from "@/content/backend";
+import { backendTopics, backendTopicMetaEn, backendTopicAlias } from "@/content/backend";
 import {
   pageExamples,
   exampleCatMeta,
   exampleCatMetaEn,
+  exampleCatAlias,
   exampleCatOrder,
   exampleCatMap,
   shellOverviewOrder,
 } from "@/components/examples/pages";
 import { useScrollSpy } from "@/components/scroll-spy";
 import { useNavSpy } from "@/components/nav-spy";
-import { frameworks, frameworkGroups, frameworkGroupMeta, frameworkGroupMetaEn } from "@/content/frameworks";
-import { glossary, glossaryCategoryOrder, glossaryCategoryMeta } from "@/content/glossary";
+import {
+  frameworks,
+  frameworkGroups,
+  frameworkGroupMeta,
+  frameworkGroupMetaEn,
+  frameworkGroupAlias,
+} from "@/content/frameworks";
+import {
+  glossary,
+  glossaryCategoryOrder,
+  glossaryCategoryMeta,
+  glossaryCategoryAlias,
+} from "@/content/glossary";
 import { TreeMenu, type TreeNode } from "@/components/sidebar-tree";
 
 export function SidebarNav() {
@@ -41,18 +61,18 @@ export function SidebarNav() {
   // 统一文件树：一级标题即可展开/收起，后端相关/参考资源/示例一并纳入。
   const nodes = React.useMemo<TreeNode[]>(
     () => [
-      { id: "home", label: "首页", en: "Home", href: "/", route: "/" },
+      { id: "home", label: "山门", tooltip: "首页 Home", href: "/", route: "/" },
       {
         id: "concepts",
-        label: "基础概念",
-        en: "Concepts",
+        label: "筑基",
+        tooltip: "基础概念 Concepts",
         href: "/concepts",
         route: "/concepts",
         count: concepts.length,
         children: conceptGroups.map((g) => ({
-          id: g,
-          label: conceptGroupMeta[g],
-          en: conceptGroupMetaEn[g],
+          id: `concepts-${g}`,
+          label: conceptGroupAlias[g],
+          tooltip: `${conceptGroupMeta[g]} ${conceptGroupMetaEn[g]}`,
           route: "/concepts",
           href: `/concepts#${g}`,
           spyGroup: g,
@@ -60,7 +80,7 @@ export function SidebarNav() {
           children: concepts
             .filter((c) => c.group === g)
             .map((c) => ({
-              id: c.id,
+              id: `concepts-${c.id}`,
               label: c.nameZh,
               en: c.nameEn,
               route: "/concepts",
@@ -71,16 +91,16 @@ export function SidebarNav() {
       },
       {
         id: "prompts",
-        label: "提示词指南",
-        en: "Prompt Guide",
+        label: "真言",
+        tooltip: "提示词指南 Prompt Guide",
         href: "/prompts",
         route: "/prompts",
         count: promptLibrary.length,
       },
       {
         id: "examples",
-        label: "页面画廊",
-        en: "Page Gallery",
+        label: "图卷",
+        tooltip: "页面画廊 Page Gallery",
         href: "/examples",
         route: "/examples",
         count: pageExamples.length,
@@ -100,15 +120,15 @@ export function SidebarNav() {
             });
           }
           return {
-            id: cat,
-            label: exampleCatMeta[cat],
-            en: exampleCatMetaEn[cat],
+            id: `examples-${cat}`,
+            label: exampleCatAlias[cat],
+            tooltip: `${exampleCatMeta[cat]} ${exampleCatMetaEn[cat]}`,
             route: "/examples",
             href: `/examples#${cat}`,
             spyGroup: cat,
             count: items.length,
             children: items.map((e) => ({
-              id: e.id,
+              id: `examples-${e.id}`,
               label: e.title,
               en: e.nameEn,
               route: "/examples",
@@ -120,15 +140,15 @@ export function SidebarNav() {
       },
       {
         id: "glossary",
-        label: "词典",
-        en: "Glossary",
+        label: "玉简",
+        tooltip: "词典 Glossary",
         href: "/glossary",
         route: "/glossary",
         count: glossary.length,
         children: glossaryCategoryOrder.map((g) => ({
-          id: g,
-          label: glossaryCategoryMeta[g].zh,
-          en: glossaryCategoryMeta[g].en,
+          id: `glossary-${g}`,
+          label: glossaryCategoryAlias[g],
+          tooltip: `${glossaryCategoryMeta[g].zh} ${glossaryCategoryMeta[g].en}`,
           route: "/glossary",
           href: `/glossary#${g}`,
           spyGroup: g,
@@ -137,15 +157,18 @@ export function SidebarNav() {
       },
       {
         id: "frameworks",
-        label: "框架",
-        en: "Frameworks",
+        label: "阵法",
+        tooltip: "框架 Frameworks",
         href: "/frameworks",
         route: "/frameworks",
         count: frameworks.length,
         children: frameworkGroups.map((g) => ({
-          id: g,
-          label: frameworkGroupMeta[g],
-          en: frameworkGroupMetaEn[g],
+          // id 加前缀避免与一级「灵脉」(id: backend) 撞车——
+          // 侧栏 nodeById/openSet 均按 id 索引，重复 id 会导致高亮/展开串节点。
+          // 锚点定位走 href 的 hash，不依赖 node.id。
+          id: `frameworks-${g}`,
+          label: frameworkGroupAlias[g],
+          tooltip: `${frameworkGroupMeta[g]} ${frameworkGroupMetaEn[g]}`,
           route: "/frameworks",
           href: `/frameworks#${g}`,
           spyGroup: g,
@@ -164,8 +187,8 @@ export function SidebarNav() {
       },
       {
         id: "components",
-        label: "前端组件",
-        en: "Components",
+        label: "法器",
+        tooltip: "前端组件 Components",
         href: "/components",
         route: "/components",
         count: componentCategories.reduce(
@@ -173,15 +196,15 @@ export function SidebarNav() {
           0
         ),
         children: componentCategories.map((cat) => ({
-          id: cat,
-          label: componentCategoryMeta[cat],
-          en: componentCategoryMetaEn[cat],
+          id: `components-${cat}`,
+          label: componentCategoryAlias[cat],
+          tooltip: `${componentCategoryMeta[cat]} ${componentCategoryMetaEn[cat]}`,
           route: "/components",
           href: `/components?cat=${cat}`,
           spyGroup: cat,
           count: componentsByCategory(cat).length,
           children: componentsByCategory(cat).map((c) => ({
-            id: c.nameEn,
+            id: `components-${cat}-${c.nameEn}`,
             label: c.nameZh,
             en: c.nameEn,
             route: "/components",
@@ -192,15 +215,15 @@ export function SidebarNav() {
       },
       {
         id: "backend",
-        label: "后端相关",
-        en: "Backend",
+        label: "灵脉",
+        tooltip: "后端相关 Backend",
         href: "/backend",
         route: "/backend",
         count: backendTopics.length,
         children: backendTopics.map((t) => ({
-          id: t.id,
-          label: t.name,
-          en: backendTopicMetaEn[t.id],
+          id: `backend-${t.id}`,
+          label: backendTopicAlias[t.id],
+          tooltip: `${t.name} ${backendTopicMetaEn[t.id]}`,
           route: "/backend",
           href: `/backend#${t.id}`,
           spyGroup: t.id,
@@ -208,15 +231,15 @@ export function SidebarNav() {
       },
       {
         id: "resources",
-        label: "参考资源",
-        en: "Resources",
+        label: "藏经阁",
+        tooltip: "参考资源 Resources",
         href: "/resources",
         route: "/resources",
         count: resources.length,
         children: resourceCategories.map((cat) => ({
-          id: cat,
-          label: cat,
-          en: resourceCategoryMetaEn[cat],
+          id: `resources-${cat}`,
+          label: resourceCategoryAlias[cat],
+          tooltip: `${cat} ${resourceCategoryMetaEn[cat]}`,
           route: "/resources",
           href: `/resources#${cat}`,
           spyGroup: cat,
@@ -226,7 +249,7 @@ export function SidebarNav() {
             .map((r) => {
               const rid = resourceId(r);
               return {
-                id: rid,
+                id: `resources-${rid}`,
                 label: r.name,
                 route: "/resources",
                 href: `/resources#${rid}`,

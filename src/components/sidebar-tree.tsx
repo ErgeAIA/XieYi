@@ -3,11 +3,19 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 
 export interface TreeNode {
   id: string;
   label: string;
   en?: string;
+  /** 菜单仅显示雅称时，hover 浮层展示「原始名 + 英文」 */
+  tooltip?: string;
   href?: string;
   /** 该节点所属路由（用于判断同路由精确跳转） */
   route?: string;
@@ -30,7 +38,7 @@ export function TreeMenu({
 }) {
   const pathname = usePathname();
 
-  const { nodeById, parentMap } = React.useMemo(() => {
+  const { parentMap } = React.useMemo(() => {
     const byId = new Map<string, TreeNode>();
     const parent = new Map<string, string>();
     const walk = (list: TreeNode[], parentId?: string) => {
@@ -57,6 +65,33 @@ export function TreeMenu({
     [parentMap]
   );
 
+  // 在「当前路由」范围内按条件找节点：spy id 只在归属页内命中，
+  // 防止不同页面复用同一 key（如 /backend 与 /frameworks#backend）互相串高亮。
+  const findByRoute = React.useCallback(
+    (pred: (n: TreeNode) => boolean): TreeNode | null => {
+      let found: TreeNode | null = null;
+      const walk = (list: TreeNode[]) => {
+        for (const n of list) {
+          if (found) return;
+          if (n.route === pathname && pred(n)) {
+            found = n;
+            return;
+          }
+          if (n.children) walk(n.children);
+        }
+      };
+      walk(nodes);
+      return found;
+    },
+    [nodes, pathname]
+  );
+
+  // 节点的页面锚点 id 取自 href 的 hash（node.id 不保证等于 DOM id）
+  const anchorOf = (n: TreeNode): string | null => {
+    const h = n.href?.split("#")[1];
+    return h ? decodeURIComponent(h) : null;
+  };
+
   const [openSet, setOpenSet] = React.useState<Set<string>>(new Set());
   const [instantSet, setInstantSet] = React.useState<Set<string>>(new Set());
 
@@ -82,11 +117,12 @@ export function TreeMenu({
     let leaf: TreeNode | null = null;
     if (hash) {
       leaf =
-        nodeById.get(hash) ??
-        [...nodeById.values()].find((n) => n.spyItem === hash) ??
+        findByRoute((n) => n.spyItem === hash) ??
+        findByRoute((n) => n.spyGroup === hash) ??
+        findByRoute((n) => n.id === hash) ??
         null;
     } else if (cat) {
-      leaf = nodeById.get(cat) ?? null;
+      leaf = findByRoute((n) => n.spyGroup === cat || n.id === cat);
     }
     if (leaf) {
       ancestors(leaf.id).forEach((a) => open.add(a));
@@ -97,7 +133,8 @@ export function TreeMenu({
     setManualActiveId(null);
     if (leaf) {
       const t = window.setTimeout(() => {
-        const el = document.getElementById(leaf!.id);
+        const anchor = anchorOf(leaf);
+        const el = anchor ? document.getElementById(anchor) : null;
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
         setInstantSet(new Set());
       }, 80);
@@ -136,7 +173,8 @@ export function TreeMenu({
       history.replaceState(null, "", node.href);
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
-          const el = document.getElementById(node.id);
+          const anchor = anchorOf(node);
+          const el = anchor ? document.getElementById(anchor) : null;
           if (el) {
             el.scrollIntoView({ behavior: "smooth", block: "start" });
           } else {
@@ -156,7 +194,7 @@ export function TreeMenu({
     if (!activeItemId) return null;
     const walk = (list: TreeNode[]): string | null => {
       for (const n of list) {
-        if (n.spyItem === activeItemId) return n.id;
+        if (n.route === pathname && n.spyItem === activeItemId) return n.id;
         if (n.children) {
           const found = walk(n.children);
           if (found) return found;
@@ -165,14 +203,14 @@ export function TreeMenu({
       return null;
     };
     return walk(nodes);
-  }, [nodes, activeItemId]);
+  }, [nodes, activeItemId, pathname]);
 
   const activeGroupNodeId = React.useMemo(() => {
     if (activeLeafId) return null;
     if (!activeGroupId) return null;
     const walk = (list: TreeNode[]): string | null => {
       for (const n of list) {
-        if (n.spyGroup === activeGroupId) return n.id;
+        if (n.route === pathname && n.spyGroup === activeGroupId) return n.id;
         if (n.children) {
           const found = walk(n.children);
           if (found) return found;
@@ -181,7 +219,7 @@ export function TreeMenu({
       return null;
     };
     return walk(nodes);
-  }, [nodes, activeGroupId, activeLeafId]);
+  }, [nodes, activeGroupId, activeLeafId, pathname]);
 
   const activeRouteId = React.useMemo(() => {
     if (activeLeafId || activeGroupNodeId) return null;
@@ -227,31 +265,62 @@ export function TreeMenu({
     const active = isActive(node);
 
     if (!hasChildren) {
-      return (
-        <Link
-          key={node.id}
-          href={node.href ?? "#"}
-          onClick={(e) => jump(e, node)}
-          className={`group relative flex items-baseline gap-1.5 rounded-md py-1 pr-2 transition-colors duration-200 ${
-            depth === 0 ? "text-sm" : "text-xs"
-          } ${
-            active
-              ? "bg-primary/10 font-medium text-primary"
-              : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
-          }`}
-          style={{ paddingLeft: `${depth * 12 + 10}px` }}
-        >
+      const inner = (
+        <>
           <span
             className={`pointer-events-none absolute left-0 top-1/2 h-3.5 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ${
               active ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`}
           />
           {node.label}
-          {node.en && (
+          {!node.tooltip && node.en && (
             <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
               {node.en}
             </span>
           )}
+          {typeof node.count === "number" && (
+            <span className="ml-auto rounded bg-muted px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground/70">
+              {node.count}
+            </span>
+          )}
+        </>
+      );
+      const className = `group relative flex items-baseline gap-1.5 rounded-md py-1 pr-2 transition-colors duration-200 ${
+        depth === 0 ? "text-sm" : "text-xs"
+      } ${
+        active
+          ? "bg-primary/10 font-medium text-primary"
+          : "text-muted-foreground hover:bg-accent/40 hover:text-foreground"
+      }`;
+      const style = { paddingLeft: `${depth * 12 + 10}px` } as const;
+      if (node.tooltip) {
+        return (
+          <Tooltip key={node.id}>
+            <TooltipTrigger
+              render={
+                <Link
+                  href={node.href ?? "#"}
+                  onClick={(e) => jump(e, node)}
+                  className={className}
+                  style={style}
+                />
+              }
+            >
+              {inner}
+            </TooltipTrigger>
+            <TooltipContent>{node.tooltip}</TooltipContent>
+          </Tooltip>
+        );
+      }
+      return (
+        <Link
+          key={node.id}
+          href={node.href ?? "#"}
+          onClick={(e) => jump(e, node)}
+          className={className}
+          style={style}
+        >
+          {inner}
         </Link>
       );
     }
@@ -295,23 +364,45 @@ export function TreeMenu({
               />
             </svg>
           </button>
-          <Link
-            href={node.href ?? "#"}
-            onClick={(e) => jump(e, node)}
-            className="flex flex-1 items-baseline gap-1.5 py-1.5 text-sm"
-          >
-            {node.label}
-            {node.en && (
-              <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
-                {node.en}
-              </span>
-            )}
-            {typeof node.count === "number" && (
-              <span className="ml-auto rounded bg-muted px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground/70">
-                {node.count}
-              </span>
-            )}
-          </Link>
+          {node.tooltip ? (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Link
+                    href={node.href ?? "#"}
+                    onClick={(e) => jump(e, node)}
+                    className="flex flex-1 items-baseline gap-1.5 py-1.5 text-sm"
+                  />
+                }
+              >
+                {node.label}
+                {typeof node.count === "number" && (
+                  <span className="ml-auto rounded bg-muted px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground/70">
+                    {node.count}
+                  </span>
+                )}
+              </TooltipTrigger>
+              <TooltipContent>{node.tooltip}</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link
+              href={node.href ?? "#"}
+              onClick={(e) => jump(e, node)}
+              className="flex flex-1 items-baseline gap-1.5 py-1.5 text-sm"
+            >
+              {node.label}
+              {node.en && (
+                <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
+                  {node.en}
+                </span>
+              )}
+              {typeof node.count === "number" && (
+                <span className="ml-auto rounded bg-muted px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground/70">
+                  {node.count}
+                </span>
+              )}
+            </Link>
+          )}
         </div>
         <div
           className={`overflow-hidden transition-all duration-[350ms] ease-[cubic-bezier(.16,1,.3,1)] ${
@@ -333,6 +424,10 @@ export function TreeMenu({
   };
 
   return (
-    <div className="flex flex-col gap-0.5">{nodes.map((n) => renderNode(n, 0))}</div>
+    <TooltipProvider>
+      <div className="flex flex-col gap-0.5">
+        {nodes.map((n) => renderNode(n, 0))}
+      </div>
+    </TooltipProvider>
   );
 }
