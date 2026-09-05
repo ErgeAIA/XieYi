@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { LucideIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipTrigger,
@@ -13,6 +14,8 @@ import {
 export interface TreeNode {
   id: string;
   label: string;
+  /** 徽章：贴合菜单语义的 Lucide 图标 */
+  icon?: LucideIcon;
   en?: string;
   /** 菜单仅显示雅称时，hover 浮层展示「原始名 + 英文」 */
   tooltip?: string;
@@ -270,6 +273,7 @@ export function TreeMenu({
     const active = isActive(node);
 
     if (!hasChildren) {
+      const Icon = node.icon;
       const inner = (
         <>
           <span
@@ -277,6 +281,13 @@ export function TreeMenu({
               active ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`}
           />
+          {Icon ? (
+            <Icon
+              className={`shrink-0 self-center opacity-70 ${
+                depth === 0 ? "size-4" : "size-3.5"
+              }`}
+            />
+          ) : null}
           {node.label}
           {!node.tooltip && node.en && (
             <span className="font-mono text-[11px] font-normal text-muted-foreground/55">
@@ -376,10 +387,13 @@ export function TreeMenu({
                   <Link
                     href={node.href ?? "#"}
                     onClick={(e) => jump(e, node)}
-                    className="flex flex-1 items-baseline gap-1.5 py-1.5 text-sm"
+                    className="flex flex-1 items-center gap-1.5 py-1.5 text-sm"
                   />
                 }
               >
+                {node.icon ? (
+                  <node.icon className="size-4 shrink-0 opacity-70" />
+                ) : null}
                 {node.label}
                 {typeof node.count === "number" && (
                   <span className="ml-auto rounded bg-muted px-1.5 py-0.5 text-[11px] tabular-nums text-muted-foreground/70">

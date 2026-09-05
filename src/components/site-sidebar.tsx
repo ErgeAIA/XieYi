@@ -51,6 +51,169 @@ import {
   glossaryCategoryAlias,
 } from "@/content/glossary";
 import { TreeMenu, type TreeNode } from "@/components/sidebar-tree";
+import {
+  Activity,
+  ArrowLeftRight,
+  BadgeCheck,
+  BarChart3,
+  BellRing,
+  BookOpen,
+  Bot,
+  Boxes,
+  Brain,
+  BrainCircuit,
+  Braces,
+  Brush,
+  CalendarClock,
+  ChartPie,
+  Clapperboard,
+  Compass,
+  Component,
+  Database,
+  Feather,
+  FileText,
+  FlaskConical,
+  Gauge,
+  Globe,
+  GraduationCap,
+  Grid3x3,
+  Flame,
+  Waves,
+  Hammer,
+  HardDrive,
+  Images,
+  KeyRound,
+  Landmark,
+  LayoutDashboard,
+  LayoutTemplate,
+  Library,
+  LockKeyhole,
+  MessageSquare,
+  MessagesSquare,
+  Monitor,
+  Network,
+  Package,
+  Palette,
+  PanelsTopLeft,
+  PenTool,
+  Pointer,
+  RefreshCw,
+  Rocket,
+  ScrollText,
+  Server,
+  Shapes,
+  Shield,
+  ShieldCheck,
+  SlidersHorizontal,
+  Smartphone,
+  Sparkles,
+  SquareStack,
+  Sticker,
+  Swords,
+  Table,
+  TextCursorInput,
+  Timer,
+  Type,
+  Users,
+  Workflow,
+  Wrench,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+
+// 菜单徽章：一级/二级各挂一个贴合语义的 Lucide 图标
+const topLevelIcons: Record<string, LucideIcon> = {
+  home: Landmark,
+  concepts: BookOpen,
+  prompts: Sparkles,
+  examples: Images,
+  glossary: ScrollText,
+  frameworks: Boxes,
+  components: Component,
+  backend: Activity,
+  resources: Library,
+};
+
+const conceptGroupIcons: Record<string, LucideIcon> = {
+  ai: Brain,
+  dev: Hammer,
+  web: Globe,
+};
+
+const promptOriginIcons: Record<string, LucideIcon> = {
+  official: BadgeCheck,
+  web: Feather,
+  own: Flame,
+};
+
+const exampleCatIcons: Record<string, LucideIcon> = {
+  shell: LayoutDashboard,
+  feedback: BellRing,
+  lists: Table,
+  metrics: BarChart3,
+  activity: Waves,
+};
+
+const glossaryCategoryIcons: Record<string, LucideIcon> = {
+  layout: LayoutTemplate,
+  visual: Palette,
+  responsive: Smartphone,
+  interaction: Pointer,
+  "ui-style": Brush,
+  typography: Type,
+  "dev-process": Workflow,
+  ops: Wrench,
+  "page-section": PanelsTopLeft,
+  content: FileText,
+  "auth-state": KeyRound,
+  "ai-prompt": Bot,
+  performance: Gauge,
+  security: ShieldCheck,
+};
+
+const frameworkGroupIcons: Record<string, LucideIcon> = {
+  frontend: PenTool,
+  fullstack: RefreshCw,
+  backend: Server,
+  edge: Zap,
+  ai: BrainCircuit,
+};
+
+const componentCategoryIcons: Record<string, LucideIcon> = {
+  layout: Grid3x3,
+  form: TextCursorInput,
+  navigation: Compass,
+  display: Monitor,
+  feedback: MessageSquare,
+  overlay: SquareStack,
+  charts: ChartPie,
+  chat: MessagesSquare,
+  extra: Shapes,
+};
+
+const backendTopicIcons: Record<string, LucideIcon> = {
+  structure: Network,
+  api: ArrowLeftRight,
+  database: Database,
+  cache: Timer,
+  storage: HardDrive,
+  auth: LockKeyhole,
+  security: Shield,
+  env: SlidersHorizontal,
+  jobs: CalendarClock,
+  deploy: Rocket,
+};
+
+const resourceCategoryIcons: Record<string, LucideIcon> = {
+  组件库: Package,
+  底层原语: Braces,
+  图标库: Sticker,
+  动画组件: Clapperboard,
+  "AI 工具": Swords,
+  "后端与服务": FlaskConical,
+  学习资料: GraduationCap,
+  社区: Users,
+};
 
 export function SidebarNav() {
   const pathname = usePathname();
@@ -61,16 +224,18 @@ export function SidebarNav() {
   // 统一文件树：一级标题即可展开/收起，后端相关/参考资源/示例一并纳入。
   const nodes = React.useMemo<TreeNode[]>(
     () => [
-      { id: "home", label: "山门", tooltip: "首页 Home", href: "/", route: "/" },
+      { id: "home", label: "山门", icon: topLevelIcons.home, tooltip: "首页 Home", href: "/", route: "/" },
       {
         id: "concepts",
         label: "筑基",
+        icon: topLevelIcons.concepts,
         tooltip: "基础概念 Concepts",
         href: "/concepts",
         route: "/concepts",
         count: concepts.length,
         children: conceptGroups.map((g) => ({
           id: `concepts-${g}`,
+          icon: conceptGroupIcons[g],
           label: conceptGroupAlias[g],
           tooltip: `${conceptGroupMeta[g]} ${conceptGroupMetaEn[g]}`,
           route: "/concepts",
@@ -92,12 +257,14 @@ export function SidebarNav() {
       {
         id: "prompts",
         label: "真言",
+        icon: topLevelIcons.prompts,
         tooltip: "提示词指南 Prompt Guide",
         href: "/prompts",
         route: "/prompts",
         count: promptLibrary.length,
         children: promptOriginGroups.map((g) => ({
           id: `prompts-${g.id}`,
+          icon: promptOriginIcons[g.id],
           label: g.alias,
           tooltip: `${g.name} ${g.en}`,
           route: "/prompts",
@@ -111,6 +278,7 @@ export function SidebarNav() {
       {
         id: "examples",
         label: "图卷",
+        icon: topLevelIcons.examples,
         tooltip: "页面画廊 Page Gallery",
         href: "/examples",
         route: "/examples",
@@ -132,6 +300,7 @@ export function SidebarNav() {
           }
           return {
             id: `examples-${cat}`,
+            icon: exampleCatIcons[cat],
             label: exampleCatAlias[cat],
             tooltip: `${exampleCatMeta[cat]} ${exampleCatMetaEn[cat]}`,
             route: "/examples",
@@ -152,12 +321,14 @@ export function SidebarNav() {
       {
         id: "glossary",
         label: "玉简",
+        icon: topLevelIcons.glossary,
         tooltip: "词典 Glossary",
         href: "/glossary",
         route: "/glossary",
         count: glossary.length,
         children: glossaryCategoryOrder.map((g) => ({
           id: `glossary-${g}`,
+          icon: glossaryCategoryIcons[g],
           label: glossaryCategoryAlias[g],
           tooltip: `${glossaryCategoryMeta[g].zh} ${glossaryCategoryMeta[g].en}`,
           route: "/glossary",
@@ -169,6 +340,7 @@ export function SidebarNav() {
       {
         id: "frameworks",
         label: "阵法",
+        icon: topLevelIcons.frameworks,
         tooltip: "框架 Frameworks",
         href: "/frameworks",
         route: "/frameworks",
@@ -178,6 +350,7 @@ export function SidebarNav() {
           // 侧栏 nodeById/openSet 均按 id 索引，重复 id 会导致高亮/展开串节点。
           // 锚点定位走 href 的 hash，不依赖 node.id。
           id: `frameworks-${g}`,
+          icon: frameworkGroupIcons[g],
           label: frameworkGroupAlias[g],
           tooltip: `${frameworkGroupMeta[g]} ${frameworkGroupMetaEn[g]}`,
           route: "/frameworks",
@@ -199,6 +372,7 @@ export function SidebarNav() {
       {
         id: "components",
         label: "法器",
+        icon: topLevelIcons.components,
         tooltip: "前端组件 Components",
         href: "/components",
         route: "/components",
@@ -208,6 +382,7 @@ export function SidebarNav() {
         ),
         children: componentCategories.map((cat) => ({
           id: `components-${cat}`,
+          icon: componentCategoryIcons[cat],
           label: componentCategoryAlias[cat],
           tooltip: `${componentCategoryMeta[cat]} ${componentCategoryMetaEn[cat]}`,
           route: "/components",
@@ -227,12 +402,14 @@ export function SidebarNav() {
       {
         id: "backend",
         label: "灵脉",
+        icon: topLevelIcons.backend,
         tooltip: "后端相关 Backend",
         href: "/backend",
         route: "/backend",
         count: backendTopics.length,
         children: backendTopics.map((t) => ({
           id: `backend-${t.id}`,
+          icon: backendTopicIcons[t.id],
           label: backendTopicAlias[t.id],
           tooltip: `${t.name} ${backendTopicMetaEn[t.id]}`,
           route: "/backend",
@@ -243,12 +420,14 @@ export function SidebarNav() {
       {
         id: "resources",
         label: "藏经阁",
+        icon: topLevelIcons.resources,
         tooltip: "参考资源 Resources",
         href: "/resources",
         route: "/resources",
         count: resources.length,
         children: resourceCategories.map((cat) => ({
           id: `resources-${cat}`,
+          icon: resourceCategoryIcons[cat],
           label: resourceCategoryAlias[cat],
           tooltip: `${cat} ${resourceCategoryMetaEn[cat]}`,
           route: "/resources",
