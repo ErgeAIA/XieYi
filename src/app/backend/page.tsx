@@ -167,6 +167,22 @@ export default function BackendPage() {
             ))}
           </div>
         </div>
+
+        {/* 延伸阅读：站内交叉引用 */}
+        {t.related && t.related.length > 0 && (
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-sm">
+            <span className="text-xs text-muted-foreground">延伸阅读：</span>
+            {t.related.map((r) => (
+              <a
+                key={r.href}
+                href={r.href}
+                className="text-primary hover:underline"
+              >
+                {r.label}
+              </a>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

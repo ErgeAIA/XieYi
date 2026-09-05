@@ -36,6 +36,8 @@ export interface BackendTopic {
   terms: TermDef[];
   pitfalls: Pitfall[];
   prompts: PromptExample[];
+  /** 延伸阅读：站内相关概念/词条链接（交叉引用） */
+  related?: { href: string; label: string }[];
 }
 
 export const backendTopicMetaEn: Record<BackendTopicId, string> = {
@@ -153,6 +155,10 @@ export const backendTopics: BackendTopic[] = [
         text: "我的后端目录越写越乱：routes/posts.js 里有 300 行，包含 SQL 查询和鉴权逻辑。帮我把它重构成 service + repository 分层，并列出重构前后的调用关系对照。",
       },
     ],
+    related: [
+      { href: "/concepts#routing", label: "筑基·路由" },
+      { href: "/concepts#frontend-backend", label: "筑基·前端与后端" },
+    ],
   },
   {
     id: "api",
@@ -195,6 +201,10 @@ export const backendTopics: BackendTopic[] = [
         label: "排错",
         text: "前端 fetch POST /api/posts 返回 415，请求体是 JSON。帮我排查 Content-Type、路由中间件配置可能的问题，并给出能正常工作的最小示例。",
       },
+    ],
+    related: [
+      { href: "/concepts#api", label: "筑基·API" },
+      { href: "/concepts#frontend-backend", label: "筑基·前端与后端" },
     ],
   },
   {
@@ -241,6 +251,7 @@ export const backendTopics: BackendTopic[] = [
         text: "这个 Prisma 查询在文章多了之后要 3 秒。帮我分析是不是 N+1 查询，给出 include/select 的优化写法和需要的索引。",
       },
     ],
+    related: [{ href: "/concepts#database", label: "筑基·数据库" }],
   },
   {
     id: "cache",
@@ -284,6 +295,10 @@ export const backendTopics: BackendTopic[] = [
         text: "加了 Redis 缓存后偶尔返回别的用户的数据。帮我排查缓存 key 是否带了用户维度，给出按用户隔离的 key 设计。",
       },
     ],
+    related: [
+      { href: "/glossary#ops-cache", label: "玉简·缓存" },
+      { href: "/concepts#database", label: "筑基·数据库" },
+    ],
   },
   {
     id: "storage",
@@ -326,6 +341,7 @@ export const backendTopics: BackendTopic[] = [
         text: "浏览器直传 S3 报 CORS 错误。帮我列出 S3 桶需要的 CORS 配置，以及后端预签名代码需要修改的地方。",
       },
     ],
+    related: [{ href: "/glossary#ops-cdn", label: "玉简·CDN" }],
   },
   {
     id: "auth",
@@ -371,6 +387,10 @@ export const backendTopics: BackendTopic[] = [
         text: "登录成功但一刷新就掉线。帮我排查 session 策略（jwt/database）、cookie 的 httpOnly/secure 配置和回调 URL 设置。",
       },
     ],
+    related: [
+      { href: "/glossary#auth-login", label: "玉简·登录" },
+      { href: "/concepts#state", label: "筑基·状态" },
+    ],
   },
   {
     id: "security",
@@ -414,6 +434,11 @@ export const backendTopics: BackendTopic[] = [
         text: "前端跨域请求报 CORS 错误，浏览器提示 No 'Access-Control-Allow-Origin'。帮我排查后端 CORS 配置和 credentials 设置。",
       },
     ],
+    related: [
+      { href: "/glossary#sec-xss", label: "玉简·XSS" },
+      { href: "/glossary#sec-csrf", label: "玉简·CSRF" },
+      { href: "/glossary#ops-ratelimit", label: "玉简·限流" },
+    ],
   },
   {
     id: "env",
@@ -456,6 +481,7 @@ export const backendTopics: BackendTopic[] = [
         text: "线上部署后 Prisma 报 'DATABASE_URL is missing'，本地正常。帮我排查托管平台的环境变量配置和构建时的注入时机。",
       },
     ],
+    related: [{ href: "/concepts#environment", label: "筑基·环境" }],
   },
   {
     id: "jobs",
@@ -542,6 +568,10 @@ export const backendTopics: BackendTopic[] = [
         label: "排错",
         text: "Vercel 部署构建失败，报错日志如下（粘贴日志）。帮我定位是依赖版本、Node 版本还是环境变量注入时机的问题。",
       },
+    ],
+    related: [
+      { href: "/concepts#deploy", label: "筑基·部署" },
+      { href: "/concepts#build", label: "筑基·构建" },
     ],
   },
 ];

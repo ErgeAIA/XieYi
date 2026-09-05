@@ -2527,3 +2527,26 @@ export const glossary: GlossaryTerm[] = [
       "请防止表单重复提交：点击提交后立即禁用按钮并显示加载中，用唯一标识或后端幂等避免同一次请求被处理两遍，网络慢时也不会重复生效。",
   },
 ];
+
+// ===== 交叉引用：玉简 → 灵脉/藏经阁（集中维护；label 用「分区雅称·名」） =====
+const glossaryLinks: Record<string, { href: string; label: string }[]> = {
+  "ops-cache": [
+    { href: "/backend#cache", label: "灵脉·镜花缓存" },
+    { href: "/resources#upstash-redis", label: "藏经阁·Upstash Redis" },
+  ],
+  "ops-cdn": [{ href: "/backend#storage", label: "灵脉·玉匣文件存储" }],
+  "ops-ratelimit": [{ href: "/backend#security", label: "灵脉·结界安全" }],
+  "sec-xss": [{ href: "/backend#security", label: "灵脉·结界安全" }],
+  "sec-csrf": [{ href: "/backend#security", label: "灵脉·结界安全" }],
+  "auth-login": [
+    { href: "/backend#auth", label: "灵脉·关防鉴权" },
+    { href: "/resources#authjs", label: "藏经阁·Auth.js" },
+  ],
+  "interaction-validation": [{ href: "/resources#zod", label: "藏经阁·Zod" }],
+  "dev-ci": [{ href: "/backend#deploy", label: "灵脉·布阵部署" }],
+  "dev-cd": [{ href: "/backend#deploy", label: "灵脉·布阵部署" }],
+};
+for (const t of glossary) {
+  const links = glossaryLinks[t.id];
+  if (links) t.related = [...(t.related ?? []), ...links];
+}

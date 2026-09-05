@@ -80,6 +80,22 @@ export default function ResourcesPage() {
                           {r.ai}
                         </p>
                       )}
+                      {r.related && r.related.length > 0 && (
+                        <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs">
+                          <span className="font-medium text-foreground/70">
+                            相关：
+                          </span>
+                          {r.related.map((rel) => (
+                            <a
+                              key={rel.href}
+                              href={rel.href}
+                              className="text-primary hover:underline"
+                            >
+                              {rel.label}
+                            </a>
+                          ))}
+                        </p>
+                      )}
                     </CardContent>
                   </Card>
                 </Reveal>

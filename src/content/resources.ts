@@ -20,6 +20,8 @@ export interface ResourceItem {
   stack?: boolean;
   /** 对 AI 说：直接可抄的一句话需求示例 */
   ai?: string;
+  /** 相关阅读：站内概念/词条/板块链接（交叉引用） */
+  related?: { href: string; label: string }[];
 }
 
 // 生成稳定的锚点 id（侧栏三级跳转用），与页面卡片 id 保持一致。
@@ -349,3 +351,54 @@ export const resources: ResourceItem[] = [
     ai: "按这份 Figma 设计稿还原页面，组件尽量用 shadcn。",
   },
 ];
+
+// ===== 交叉引用：藏经阁 → 站内相关（集中维护；label 用「分区雅称·名」） =====
+const resourceLinks: Record<string, { href: string; label: string }[]> = {
+  "shadcn/ui": [
+    { href: "/concepts#component", label: "筑基·组件" },
+    { href: "/components", label: "法器·全部组件" },
+  ],
+  "Base UI": [{ href: "/concepts#component", label: "筑基·组件" }],
+  "Tailwind CSS": [
+    { href: "/concepts#html-css-js", label: "筑基·HTML/CSS/JS" },
+    { href: "/concepts#responsive", label: "筑基·响应式" },
+  ],
+  "Radix UI": [{ href: "/concepts#component", label: "筑基·组件" }],
+  "React Aria": [{ href: "/concepts#component", label: "筑基·组件" }],
+  "Framer Motion": [
+    { href: "/glossary#visual-transition", label: "玉简·过渡" },
+    { href: "/glossary#ui-microinteraction", label: "玉简·微交互" },
+  ],
+  "Claude Code": [{ href: "/prompts", label: "真言·提示词指南" }],
+  Cursor: [{ href: "/prompts", label: "真言·提示词指南" }],
+  "v0 by Vercel": [{ href: "/components", label: "法器·前端组件" }],
+  Prisma: [
+    { href: "/concepts#database", label: "筑基·数据库" },
+    { href: "/backend#database", label: "灵脉·仓廪数据库" },
+  ],
+  "Drizzle ORM": [{ href: "/concepts#database", label: "筑基·数据库" }],
+  "Auth.js": [
+    { href: "/glossary#auth-login", label: "玉简·登录" },
+    { href: "/backend#auth", label: "灵脉·关防鉴权" },
+  ],
+  Zod: [
+    { href: "/glossary#interaction-validation", label: "玉简·表单校验" },
+    { href: "/backend#security", label: "灵脉·结界安全" },
+  ],
+  "Upstash Redis": [
+    { href: "/glossary#ops-cache", label: "玉简·缓存" },
+    { href: "/backend#cache", label: "灵脉·镜花缓存" },
+  ],
+  "Vercel Blob": [{ href: "/backend#storage", label: "灵脉·玉匣文件存储" }],
+  "Next.js 文档": [
+    { href: "/concepts#routing", label: "筑基·路由" },
+    { href: "/concepts#deploy", label: "筑基·部署" },
+  ],
+  "React 官方": [{ href: "/concepts#component", label: "筑基·组件" }],
+  "shadcn/ui 文档": [{ href: "/components", label: "法器·前端组件" }],
+  "shadcn/ui Blocks": [{ href: "/examples", label: "图卷·页面画廊" }],
+};
+for (const r of resources) {
+  const links = resourceLinks[r.name];
+  if (links) r.related = links;
+}
