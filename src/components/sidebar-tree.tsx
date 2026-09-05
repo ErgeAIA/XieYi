@@ -92,6 +92,21 @@ export function TreeMenu({
     return h ? decodeURIComponent(h) : null;
   };
 
+  // 锚点滚动：短距离平滑滑动，长距离（如玉简 216 词条的大页面）瞬时落点——
+  // 原生平滑滚动滚上万像素要好几秒，观感等同「点了没反应」。
+  const scrollToAnchor = (anchor: string | null) => {
+    const el = anchor ? document.getElementById(anchor) : null;
+    if (!el) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const far = el.getBoundingClientRect().top > 1600;
+    el.scrollIntoView({
+      behavior: far ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
   const [openSet, setOpenSet] = React.useState<Set<string>>(new Set());
   const [instantSet, setInstantSet] = React.useState<Set<string>>(new Set());
 
@@ -133,9 +148,7 @@ export function TreeMenu({
     setManualActiveId(null);
     if (leaf) {
       const t = window.setTimeout(() => {
-        const anchor = anchorOf(leaf);
-        const el = anchor ? document.getElementById(anchor) : null;
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        scrollToAnchor(anchorOf(leaf));
         setInstantSet(new Set());
       }, 80);
       return () => window.clearTimeout(t);
@@ -173,15 +186,7 @@ export function TreeMenu({
       history.replaceState(null, "", node.href);
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
-          const anchor = anchorOf(node);
-          const el = anchor ? document.getElementById(anchor) : null;
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth", block: "start" });
-          } else {
-            // 一级菜单等没有对应锚点元素，点击后回到页顶，避免当前滚动位置
-            // 停留在原锚点导致页头被顶栏遮住。
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }
+          scrollToAnchor(anchorOf(node));
           setInstantSet(new Set());
         })
       );
