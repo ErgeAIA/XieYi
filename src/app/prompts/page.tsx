@@ -35,7 +35,12 @@ export default function PromptsPage() {
           (p) => (p.origin ?? "official") === group.id
         );
         return (
-          <section key={group.id} className="space-y-4">
+          <section
+            key={group.id}
+            id={group.id}
+            data-spy-group={group.id}
+            className="scroll-anchor space-y-4"
+          >
             <div>
               <GroupLabel>
                 {group.alias}·{group.name}

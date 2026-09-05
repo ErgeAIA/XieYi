@@ -17,7 +17,7 @@ import {
   conceptGroupMetaEn,
   conceptGroupAlias,
 } from "@/content/concepts";
-import { promptLibrary } from "@/content/prompt-library";
+import { promptLibrary, promptOriginGroups } from "@/content/prompt-library";
 import {
   resources,
   resourceCategories,
@@ -96,6 +96,17 @@ export function SidebarNav() {
         href: "/prompts",
         route: "/prompts",
         count: promptLibrary.length,
+        children: promptOriginGroups.map((g) => ({
+          id: `prompts-${g.id}`,
+          label: g.alias,
+          tooltip: `${g.name} ${g.en}`,
+          route: "/prompts",
+          href: `/prompts#${g.id}`,
+          spyGroup: g.id,
+          count:
+            promptLibrary.filter((p) => (p.origin ?? "official") === g.id)
+              .length || undefined,
+        })),
       },
       {
         id: "examples",
