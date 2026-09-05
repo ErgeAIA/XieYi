@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
+import { consumeContentNav } from "@/lib/content-nav";
 import {
   Tooltip,
   TooltipTrigger,
@@ -126,6 +127,9 @@ export function TreeMenu({
   // 故需借 pathname 变化重新触发，才能处理「点击其他页菜单跳到本页锚点」。
   /* eslint-disable react-hooks/set-state-in-effect -- 深链/初始定位必须在 effect 内更新展开状态，属该规则的合法例外（与 components-view 同类模式） */
   React.useEffect(() => {
+    // 内容链跳转（词典/藏经阁等的「参考/延伸」链接）不关联导航：
+    // 右侧精确展示内容即可，侧栏只保留一级路由展开与高亮，不展开相关子菜单。
+    const fromContent = consumeContentNav();
     const hash = decodeURIComponent(window.location.hash.slice(1));
     const params = new URLSearchParams(window.location.search);
     const cat = params.get("cat");
@@ -142,13 +146,18 @@ export function TreeMenu({
     } else if (cat) {
       leaf = findByRoute((n) => n.spyGroup === cat || n.id === cat);
     }
-    if (leaf) {
+    if (leaf && !fromContent) {
       ancestors(leaf.id).forEach((a) => open.add(a));
       open.add(leaf.id);
     }
     setOpenSet(open);
     setInstantSet(new Set(open));
-    setManualActiveId(null);
+    if (fromContent) {
+      // 只高亮一级路由，用户手动滚动后交还 scroll-spy
+      setManualActiveId(top?.id ?? null);
+    } else {
+      setManualActiveId(null);
+    }
     if (leaf) {
       const t = window.setTimeout(() => {
         scrollToAnchor(anchorOf(leaf));

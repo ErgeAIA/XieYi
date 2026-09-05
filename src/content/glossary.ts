@@ -114,7 +114,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "你点左边不同的菜单，右边内容切换，而左边的导航一直都在，不容易迷路。",
     aiPrompt:
       "请给我的后台页面做一个左右两栏的布局：左边是固定宽度的侧边栏（放导航菜单和 Logo），右边是自适应宽度的主内容区。在电脑上两侧并排显示，在手机上侧边栏能收起成一个按钮。",
-    related: [{ href: "/examples", label: "参考：应用骨架示例" }],
+    related: [{ href: "/examples#shell", label: "参考：应用骨架示例" }],
   },
   {
     id: "layout-masonry",
@@ -148,7 +148,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "信息被一块块分开，扫一眼就知道哪块讲什么；鼠标移上去卡片轻轻浮起，有「可按」的暗示。",
     aiPrompt:
       "请用卡片样式展示我的内容列表：每张卡片有圆角、浅色背景和柔和投影，里面放一张缩略图、一个标题和一行描述。鼠标悬停时卡片轻微上浮并加深阴影，暗示可以点击。",
-    related: [{ href: "/components?cat=display#Card", label: "组件：Card" }],
+    related: [{ href: "/components?cat=layout#Card", label: "组件：Card" }],
   },
   {
     id: "layout-accordion",
@@ -160,7 +160,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "页面一下子变短了，你只看到关心的那几条，不会被一长串文字吓退。",
     aiPrompt:
       "请给我做一个折叠面板（手风琴）来放常见问题：每个标题一行，点击展开看到答案，再点收起。同一时间可以只展开一个，也可以允许多个同时展开，请按我的说明来。",
-    related: [{ href: "/components?cat=display#Accordion", label: "组件：Accordion" }],
+    related: [{ href: "/components?cat=layout#Accordion", label: "组件：Accordion" }],
   },
   {
     id: "layout-drawer",
@@ -220,7 +220,6 @@ export const glossary: GlossaryTerm[] = [
     effect: "一小块地方能讲好几件事，你不用往下滑就能看到不同卖点；也可手动左右翻。",
     aiPrompt:
       "请做一个首页轮播图：3 到 5 张横幅图自动每 5 秒切换，底部有小圆点指示当前第几张，也能用左右箭头手动翻。鼠标悬停时暂停自动播放，切换要有平滑滑动动画。",
-    related: [{ href: "/components?cat=display#Carousel", label: "组件：Carousel" }],
   },
   {
     id: "layout-tabs",
@@ -232,7 +231,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "同一块区域能装下好几组内容，你点标签来回翻，页面不拉长、不跳走。",
     aiPrompt:
       "请做一个标签页组件：顶部一排标签（如「介绍 / 评价 / 常见问题」），点击切换下方内容，当前标签高亮并有底部滑动的下划线。切换时内容淡入，不要整个页面跳动。",
-    related: [{ href: "/components?cat=navigation#Tabs", label: "组件：Tabs" }],
+    related: [{ href: "/components?cat=layout#Tabs", label: "组件：Tabs" }],
   },
   {
     id: "layout-stepper",
@@ -244,7 +243,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "填表或下单时你心里有数：已完成的是绿色对勾，当前这步高亮，后面灰着等你走。",
     aiPrompt:
       "请做一个步骤条放在表单顶部：用圆圈加连线表示「填写信息 → 确认 → 完成」三步，已完成的步骤显示对勾和绿色，当前步骤高亮，未到的灰色。点击已完成的步骤可以跳回去修改。",
-    related: [{ href: "/components?cat=navigation#Stepper", label: "组件：Stepper" }],
+    related: [{ href: "/components?cat=extra#Steps", label: "组件：Steps" }],
   },
   {
     id: "layout-timeline",
@@ -256,7 +255,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "你一眼看清事情先后：订单状态、项目进展、活动记录都顺着线往下排，谁先谁后一目了然。",
     aiPrompt:
       "请做一个竖向时间线来展示我的订单状态：中间一条竖线，每个节点一个圆点加日期和一句话说明（如「已发货」），已完成节点用绿色，当前节点高亮并带脉冲效果。",
-    related: [{ href: "/components?cat=display#Timeline", label: "组件：Timeline" }],
+    related: [{ href: "/examples#timeline", label: "示例：时间轴页面" }],
   },
   {
     id: "layout-pagination",
@@ -292,7 +291,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "界面干净了，需要时才点开那一串选项，选完它又收起来。",
     aiPrompt:
       "请做一个下拉菜单：点一个「更多」按钮，在它下方弹出一个小菜单列出几个操作（如编辑、删除、分享），选中某项就执行并收起；点别处自动关闭，键盘上下键也能选择。",
-    related: [{ href: "/components?cat=navigation#Dropdown", label: "组件：Dropdown" }],
+    related: [{ href: "/components?cat=navigation#Dropdown%20Menu", label: "组件：Dropdown Menu" }],
   },
   {
     id: "layout-navbar",
@@ -349,7 +348,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "你遇到空列表不懵，图上配一句话加一个按钮，直接告诉你下一步点哪。",
     aiPrompt:
       "请给空列表做一个空状态：中间放一个简洁的插画或图标，下面一句温柔的提示（如「还没有订单哦」），再配一个主按钮引导用户去创建（如「去逛逛」）。不要用一片空白敷衍。",
-    related: [{ href: "/components?cat=feedback#Empty", label: "组件：Empty" }],
+    related: [{ href: "/components?cat=display#Empty", label: "组件：Empty" }],
   },
   {
     id: "layout-placeholder",
@@ -753,7 +752,7 @@ export const glossary: GlossaryTerm[] = [
     effect: "你填错立刻在框下看到红字提醒，不用提交完才被泼冷水，改完就能过。",
     aiPrompt:
       "请给表单做校验：必填项为空、邮箱或手机号格式不对、两次密码不一致时，在对应输入框下方用红字提示原因，并阻止提交；输入正确后提示消失。提交成功前按钮显示加载中。",
-    related: [{ href: "/components?cat=form#Form", label: "组件：表单" }],
+    related: [{ href: "/components?cat=form#Field", label: "组件：Field" }],
   },
   {
     id: "interaction-success",
@@ -2540,7 +2539,7 @@ const glossaryLinks: Record<string, { href: string; label: string }[]> = {
   "sec-csrf": [{ href: "/backend#security", label: "灵脉·结界安全" }],
   "auth-login": [
     { href: "/backend#auth", label: "灵脉·关防鉴权" },
-    { href: "/resources#authjs", label: "藏经阁·Auth.js" },
+    { href: "/resources#auth-js", label: "藏经阁·Auth.js" },
   ],
   "interaction-validation": [{ href: "/resources#zod", label: "藏经阁·Zod" }],
   "dev-ci": [{ href: "/backend#deploy", label: "灵脉·布阵部署" }],

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/motion/reveal";
 import { PageContainer, PageHeader, GroupLabel } from "@/components/page-shell";
+import { markContentNav } from "@/lib/content-nav";
 import {
   resources,
   resourceCategories,
@@ -89,6 +90,7 @@ export default function ResourcesPage() {
                             <a
                               key={rel.href}
                               href={rel.href}
+                              onClick={markContentNav}
                               className="text-primary hover:underline"
                             >
                               {rel.label}

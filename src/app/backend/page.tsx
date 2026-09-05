@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
 import { PageContainer, PageHeader, FieldLabel, GroupLabel } from "@/components/page-shell";
 import { CopyBlock } from "@/components/copy-block";
+import { markContentNav } from "@/lib/content-nav";
 import {
   backendTopics,
   backendGroups,
@@ -176,6 +177,7 @@ export default function BackendPage() {
               <a
                 key={r.href}
                 href={r.href}
+                onClick={markContentNav}
                 className="text-primary hover:underline"
               >
                 {r.label}
